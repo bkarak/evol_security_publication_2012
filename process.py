@@ -170,11 +170,13 @@ class RunFindbugs:
 
     def on_channel_open(self, channel_):
         """
-        Called when a channel has been opened. Declares the log exchange
-        and the log queue.
+        Called when a channel has been opened.
         """
 
         self.chan = channel_
+
+        log.info("Setting message prefetch count to 1")
+        self.chan.basic_qos(prefetch_count=1)
 
         log.info("Channel opened, declaring exchanges and queues")
         self.chan.exchange_declare(exchange=self.options.queue_exchange,
