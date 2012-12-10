@@ -36,6 +36,7 @@ import logging
 import pymongo
 import time
 import urllib
+from subprocess import Popen, PIPE, STDOUT
 from signal import signal, SIGINT, SIGUSR1, SIGTERM
 from daemon import daemon
 
@@ -62,7 +63,7 @@ ch.setFormatter(formatter)
 log.addHandler(ch)
 
 
-class MongoLogger:
+class RunFindbugs:
     options = None
     clienttags = []
     chan = None
@@ -196,17 +197,30 @@ class MongoLogger:
         self.chan.basic_consume(self.run_findbugs, queue='urls')
 
     def run_findbugs(self, channel, method, header, body):
-        """
-        """
         try:
+            body = body.strip()
             file = os.path.basename(body)
+            findbugs_output = "%s.xml" % file
+
+
             # Download jar
-            urllib.urlretrieve(body, file)
+            if not os.path.exists(file):
+                log.info("Downloading URL %s to file %s", body, file)
+                urllib.urlretrieve(body, file)
 
             # Exec findbugs
-            out = check_output("ls -la", shell=True)
+            cmd = '%s -textui -xml -output %s %s' % (os.path.join(os.path.curdir, "findbugs", "bin", "findbugs"), findbugs_output, file)
+            log.info("Cmd line: %s" % cmd)
+            ret = os.system(cmd)
 
-            self.store_to_mongo(dict())
+
+            # Read output
+            findbugs_xml = open(findbugs_output, "r").read()
+
+            # Convert to JSON
+
+            # Save it
+            self.store_to_mongo({'xml': findbugs_xml})
             channel.basic_ack(method.delivery_tag)
             self.msgs_acked += 1
         except Exception as e:
@@ -214,17 +228,17 @@ class MongoLogger:
             channel.basic_reject(method.delivery_tag)
             self.msgs_rejected += 1
         finally:
-            os.remove("")
+            os.remove(findbugs_output)
+            os.remove(file)
 
-    def store_to_mongo(self, data):
+    def store_to_mongo(self, json):
         if self.db is None:
             self.get_mongo_db()
             if self.db is None:
                 log.error("Cannot connect to MongoDB")
 
         coll = self.db[self.options.mongo_collection]
-        msg = json.loads(data)
-        coll.insert(msg)
+        coll.insert(json)
 
     def get_mongo_db(self):
         """
@@ -321,7 +335,7 @@ def debug(opts):
     signal(SIGINT, _exit_handler)
     signal(SIGUSR1, _usr1_handler)
     signal(SIGTERM, _exit_handler)
-    MongoLogger(opts)
+    RunFindbugs(opts)
 
 def daemon_mode(opts):
     global children
@@ -345,7 +359,7 @@ def daemon_mode(opts):
     if newpid == 0:
         signal(SIGINT, _exit_handler)
         signal(SIGTERM, _exit_handler)
-        MongoLogger(opts)
+        RunFindbugs(opts)
         sys.exit(1)
     else:
         log.debug("%d, forked child: %d", os.getpid(), newpid)
