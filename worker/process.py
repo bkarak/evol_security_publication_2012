@@ -222,10 +222,8 @@ class RunFindbugs:
             # Convert to JSON
             ## bkarak
 
-            def __convert_findbugs_xml(findbugs_xml):
-                import xlmdict
-
-                
+            #def __convert_findbugs_xml(findbugs_xml):
+            #    import xlmdict
 
             # Save it
             self.store_to_mongo({'xml': findbugs_xml})
