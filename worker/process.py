@@ -220,13 +220,13 @@ class RunFindbugs:
             findbugs_xml = open(findbugs_output, "r").read()
 
             # Convert to JSON
-            ## bkarak
-
-            #def __convert_findbugs_xml(findbugs_xml):
-            #    import xlmdict
+            ## XXX: convert xml to json and store it to mongo
+            def __convert_findbugs_xml(findbugs_xml):
+                import xlmdict, json
+                return json.dumps(xmldict.parse(findbugs_xml)).replace('"@','"')
 
             # Save it
-            self.store_to_mongo({'xml': findbugs_xml})
+            self.store_to_mongo(__convert_findbugs_xml(findbugs_xml))
             channel.basic_ack(method.delivery_tag)
             self.msgs_acked += 1
         except Exception as e:
