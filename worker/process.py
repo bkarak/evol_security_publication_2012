@@ -222,7 +222,7 @@ class RunFindbugs:
             # Convert to JSON
             ## XXX: convert xml to json and store it to mongo
             def __convert_findbugs_xml(findbugs_xml):
-                import xlmdict, json
+                import xmldict, json
                 return json.dumps(xmldict.parse(findbugs_xml)).replace('"@','"')
 
             # Save it
