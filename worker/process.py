@@ -260,7 +260,7 @@ class RunFindbugs:
                     
                     log.info('Downloading %s -> %s' % (_metadata_url, _metadata_filename))
                     urllib.urlretrieve(_metadata_url, _metadata_filename)
-                    _version_number = 0
+                    _version_order = 0
 
                     if os.path.exists(_metadata_filename):
                         try:
@@ -269,10 +269,10 @@ class RunFindbugs:
                             _versions = [x.strip() for x in _versions]
                             print '%s in %s' % (_version, _versions)
                             try:
-                                _version_number = _versions.index(_version.strip()) + 1
+                                _version_order = _versions.index(_version.strip()) + 1
                             except ValueError, ve:
                                 log.warn('Could not find version (%s)' % ())
-                                _version_number = 0
+                                _version_order = 0
                         except Exception, e:
                             log.warn('Could not download/parse data from %s' % (_metadata_filename,))
 
@@ -282,7 +282,7 @@ class RunFindbugs:
                                                   'version':_version,
                                                   'artifact_id':_artifact_id,
                                                   'group_id':_group_id,
-                                                  'version_number' :_version_number,
+                                                  'version_order' :_version_order,
                                                   'dependencies':_dependencies}
 
                     print result_json['JarMetadata']
