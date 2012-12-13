@@ -78,25 +78,24 @@ class RunFindbugs:
     def __init__(self, opts):
         self.options = opts
         self.amqp_nodes = self.options.queue_hosts.split(",")
-        self.connect(True)
+        self.amqp_node = self.amqp_nodes.pop(0)
+        self.connect()
 
-    def connect(self, same):
+    def connect(self):
         """
         Connects to an AMQP host. The same argument defines whether the host
         to connect to will be the same as the one used before or whether
         a new host from the host list will be tried.
         """
-        self._connect_to(same, 1)
+        self._connect_to(1)
 
-    def _connect_to(self, same, depth):
+    def _connect_to(self, depth):
         """
         Connects to an AMQP host.
         """
         if depth > 10:
             log.error("Failed 10 attempts to connect to RabbitMQ")
             return
-
-        self.amqp_node = self.amqp_nodes.pop(0)
 
         log.info("Trying to connect to %s", self.amqp_node)
         credentials = pika.PlainCredentials(self.options.queue_uname,
@@ -117,8 +116,7 @@ class RunFindbugs:
             conn.close()
         except Exception:
             log.warn("Could not connect to AMQP node %s" % self.amqp_node)
-            if same is False:
-                return self._connect_to(True, depth + 1)
+            self._connect_to(depth + 1)
 
     def on_connected(self, connection):
         """
@@ -175,7 +173,7 @@ class RunFindbugs:
 
         log.info("Channel opened, declaring exchanges and queues")
         self.chan.exchange_declare(exchange=self.options.queue_exchange,
-                                   type="topic", durable=True,
+                                   exchange_type="topic", durable=True,
                                    auto_delete=False)
         # Declare a queue
         self.chan.queue_declare(queue="urls", durable=True,
@@ -237,7 +235,7 @@ class RunFindbugs:
             channel.basic_ack(method.delivery_tag)
             self.msgs_acked += 1
         except Exception as e:
-            log.exception("Unexpected error, msg: %s", body)
+            log.exception("Unexpected error %s, msg: %s" % (e.message, body))
             channel.basic_reject(method.delivery_tag)
             self.msgs_rejected += 1
         finally:
