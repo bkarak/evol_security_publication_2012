@@ -199,34 +199,46 @@ class RunFindbugs:
         self.chan.basic_consume(self.run_findbugs, queue='urls')
 
     def run_findbugs(self, channel, method, header, body):
+        import zipfile
+
+        def has_classes(filename):
+            z = zipfile.ZipFile(filename)
+            for f in z.namelist():
+                if f.endswith('.class'):
+                    return True
+
+            return False
+
         try:
             body = body.strip()
             file = os.path.basename(body)
             findbugs_output = "%s.xml" % file
-
 
             # Download jar
             if not os.path.exists(file):
                 log.info("Downloading URL %s to file %s", body, file)
                 urllib.urlretrieve(body, file)
 
-            # Exec findbugs
-            cmd = '%s -textui -xml -output %s %s' % (os.path.join(os.path.curdir, "findbugs", "bin", "findbugs"), findbugs_output, file)
-            log.info("Cmd line: %s" % cmd)
-            ret = os.system(cmd)
+            if has_classes(file):
+                # Exec findbugs
+                cmd = '%s -textui -xml -output %s %s' % (os.path.join(os.path.curdir, "findbugs", "bin", "findbugs"), findbugs_output, file)
+                log.info("Cmd line: %s" % cmd)
+                ret = os.system(cmd)
 
+                # Read output
+                findbugs_xml = open(findbugs_output, "r").read()
 
-            # Read output
-            findbugs_xml = open(findbugs_output, "r").read()
+                # Convert to JSON
+                ## XXX: convert xml to json and store it to mongo
+                def __convert_findbugs_xml(findbugs_xml):
+                    import xmldict, json
+                    return json.loads(json.dumps(xmldict.parse(findbugs_xml)).replace('"@','"'))
 
-            # Convert to JSON
-            ## XXX: convert xml to json and store it to mongo
-            def __convert_findbugs_xml(findbugs_xml):
-                import xmldict, json
-                return json.loads(json.dumps(xmldict.parse(findbugs_xml)).replace('"@','"'))
+                # Save it
+                self.store_to_mongo(__convert_findbugs_xml(findbugs_xml))
+            else:
+                log.warn('%s contains no .class files' % (file,))
 
-            # Save it
-            self.store_to_mongo(__convert_findbugs_xml(findbugs_xml))
             channel.basic_ack(method.delivery_tag)
             self.msgs_acked += 1
         except Exception as e:
