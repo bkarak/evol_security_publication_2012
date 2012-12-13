@@ -243,9 +243,7 @@ if __name__ == '__main__': # pragma: no cover
         return True
 
     try:
-        root = parse(sys.stdin,
-            item_depth=item_depth,
-            item_callback=handle_item)
+        root = parse(sys.stdin, item_depth=item_depth, item_callback=handle_item)
         if item_depth == 0:
             handle_item([], root)
     except KeyboardInterrupt:

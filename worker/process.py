@@ -195,12 +195,15 @@ class RunFindbugs:
         import zipfile
 
         def has_classes(filename):
-            z = zipfile.ZipFile(filename)
-            for f in z.namelist():
-                if f.endswith('.class'):
-                    return True
+            try:
+                z = zipfile.ZipFile(filename)
+                for f in z.namelist():
+                    if f.endswith('.class'):
+                        return True
 
-            return False
+                return False
+            except Exception, e:
+                return False
 
         try:
             body = body.strip()
@@ -230,14 +233,35 @@ class RunFindbugs:
                     url_arr = url.split('/')
 
                     # -1: jar, -2: version, -3: artifact_id, -4: group_id
-
+                    _jar_filename = url_arr[-1]
                     _version = url_arr[-2]
                     _artifact_id = url_arr[-3]
                     _group_id = url_arr[-4]
 
+                    _version_number = 0
+                    _pom_url = url.replace('.jar', '.pom')
+                    _pom_filename = _jar_filename.replace('.jar', '.pom')
+
+                    # get pom information
+                    log.info('Downloading POM: %s -> %s' % (_pom_url, _pom_filename))
+                    urllib.urlretrieve(_pom_url, _pom_filename)
+                    _dependencies = []
+
+                    if os.path.exists(_pom_filename):
+                        try:
+                            _pom_json = json.loads(json.dumps(xmldict.parse(open(_pom_filename, 'r').read())))
+                            _dependencies = _pom_json.get('project', {}).get('dependencies', {}).get('dependency', [])
+                        except Exception, e:
+                            log.warn('Could get data from %s' % (_pom_filename,))
+
+                    # get xml information
+                    
+
                     result_json['JarMetadata'] = {'version':_version,
                                                   'artifact_id':_artifact_id,
-                                                  'group_id':_group_id}
+                                                  'group_id':_group_id,
+                                                  'version_number' :_version_number,
+                                                  'dependencies':_dependencies}
 
                     print result_json['JarMetadata']
 
