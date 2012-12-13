@@ -69,8 +69,7 @@ class RunFindbugs:
     chan = None
     conn = None
     closing = False
-    amqp_nodes = None
-    current_amqp_node = None
+    amqp_node = None
     db = None
     msgs = 0
     msgs_acked = 0
@@ -79,33 +78,29 @@ class RunFindbugs:
     def __init__(self, opts):
         self.options = opts
         self.amqp_nodes = self.options.queue_hosts.split(",")
-        self.connect(False)
+        self.amqp_node = self.amqp_nodes.pop(0)
+        self.connect()
 
-    def connect(self, same):
+    def connect(self):
         """
         Connects to an AMQP host. The same argument defines whether the host
         to connect to will be the same as the one used before or whether
         a new host from the host list will be tried.
         """
-        self._connect_to(same, 1)
+        self._connect_to(1)
 
-    def _connect_to(self, same, depth):
+    def _connect_to(self, depth):
         """
         Connects to an AMQP host.
         """
-        if depth > len(self.amqp_nodes):
-            log.error("No more nodes to connect to, failing")
+        if depth > 10:
+            log.error("Failed 10 attempts to connect to RabbitMQ")
             return
 
-        if same is False:
-            first = self.amqp_nodes.pop(0)
-            self.amqp_nodes.append(first)
-            self.current_amqp_node = first
-
-        log.info("Attempting to connect to %s", self.current_amqp_node)
+        log.info("Trying to connect to %s", self.amqp_node)
         credentials = pika.PlainCredentials(self.options.queue_uname,
                                             self.options.queue_passwd)
-        params = pika.ConnectionParameters(host=self.current_amqp_node,
+        params = pika.ConnectionParameters(host=self.amqp_node,
                                            credentials=credentials,
                                            virtual_host="/")
         try:
@@ -120,10 +115,8 @@ class RunFindbugs:
             self.closing = True
             conn.close()
         except Exception:
-            log.warn("Could not connect to AMQP node %s" %
-                     self.current_amqp_node)
-            if same is False:
-                return self._connect_to(False, depth + 1)
+            log.warn("Could not connect to AMQP node %s" % self.amqp_node)
+            self._connect_to(depth + 1)
 
     def on_connected(self, connection):
         """
@@ -180,7 +173,7 @@ class RunFindbugs:
 
         log.info("Channel opened, declaring exchanges and queues")
         self.chan.exchange_declare(exchange=self.options.queue_exchange,
-                                   type="topic", durable=True,
+                                   exchange_type="topic", durable=True,
                                    auto_delete=False)
         # Declare a queue
         self.chan.queue_declare(queue="urls", durable=True,
@@ -236,8 +229,17 @@ class RunFindbugs:
                     result_json = json.loads(json.dumps(xmldict.parse(findbugs_xml)).replace('"@','"'))
                     url_arr = url.split('/')
 
-                    print url_arr 
+                    # -1: jar, -2: version, -3: artifact_id, -4: group_id
 
+                    _version = url_arr[-2]
+                    _artifact_id = url_arr[-3]
+                    _group_id = url_arr[-4]
+
+                    result_json['JarMetadata'] = {'version':_version,
+                                                  'artifact_id':_artifact_id,
+                                                  'group_id':_group_id}
+
+                    print result_json['JarMetadata']
 
                     return result_json
 
@@ -317,10 +319,9 @@ def parse_arguments(args):
 
     parser = ArgumentParser()
     parser.add_argument("-d", "--debug", action="store_true", default=False,
-                      dest="debug", help="Enable debug mode")
-    parser.add_argument("-p", "--pid-file", dest="pid_file",
-                      default=default_pid_file,
-                      help="Save PID to file (default: %s)" % default_pid_file)
+                        dest="debug", help="Enable debug mode")
+    parser.add_argument("-P", "--workers", default=1, dest="workers",
+                        help="Workers to spawn", type=int)
 
     # Queue connection info
     parser.add_argument("-a", "--queue-username", required=True,
@@ -362,49 +363,40 @@ def debug(opts):
     signal(SIGTERM, _exit_handler)
     RunFindbugs(opts)
 
-def daemon_mode(opts):
+def spawn_workers(opts):
     global children
 
-    # Create pidfile,
-    # take care of differences between python-daemon versions
-    try:
-        pidf = pidfile.TimeoutPIDLockFile(opts.pid_file, 10)
-    except:
-        pidf = pidlockfile.TimeoutPIDLockFile(opts.pid_file, 10)
-
-    pidf.acquire()
-
-    log.info("Became a daemon")
+    log.info("Spawning %s workers" % opts.workers)
     # Fork workers
     children = []
     i = 0
 
     while i < opts.workers:
-        newpid = os.fork()
-    if newpid == 0:
-        signal(SIGINT, _exit_handler)
-        signal(SIGTERM, _exit_handler)
-        RunFindbugs(opts)
-        sys.exit(1)
-    else:
-        log.debug("%d, forked child: %d", os.getpid(), newpid)
-        children.append(newpid)
-        i += 1
+        try:
+            newpid = os.fork()
+            if newpid == 0:
+                signal(SIGINT, _exit_handler)
+                signal(SIGTERM, _exit_handler)
+                RunFindbugs(opts)
+                sys.exit(1)
+            else:
+                log.debug("%d, forked child: %d", os.getpid(), newpid)
+                children.append(newpid)
+        except Exception:
+            log.debug("Error spawning worker %d" % i)
+        finally:
+            i += 1
 
     # Catch signals to ensure graceful shutdown
     signal(SIGINT, _parent_handler)
     signal(SIGTERM, _parent_handler)
 
     # Wait for all children processes to die, one by one
-    try:
-        for pid in children:
-            try:
-                os.waitpid(pid, 0)
-            except Exception:
-                pass
-    finally:
-        pidf.release()
-
+    for pid in children:
+        try:
+            os.waitpid(pid, 0)
+        except Exception:
+            pass
 
 def main():
     opts = parse_arguments(sys.argv[1:])
@@ -414,25 +406,11 @@ def main():
         debug(opts)
         return
 
-    files_preserve = []
-    for handler in log.handlers:
-        stream = getattr(handler, 'stream')
-        if stream and hasattr(stream, 'fileno'):
-            files_preserve.append(handler.stream)
-
-    daemon_context = daemon.DaemonContext(
-        files_preserve=files_preserve,
-        umask=022)
-
-    daemon_context.open()
-
     # Catch every exception, make sure it gets logged properly
     try:
-        daemon_mode(opts)
+        spawn_workers(opts)
     except Exception:
         log.exception("Unknown error")
-    raise
-
 
 if __name__ == "__main__":
     sys.exit(main())
