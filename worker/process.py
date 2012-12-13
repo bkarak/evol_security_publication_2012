@@ -285,8 +285,6 @@ class RunFindbugs:
                                                   'version_order' :_version_order,
                                                   'dependencies':_dependencies}
 
-                    print result_json['JarMetadata']
-
                     return result_json
 
                 # Save it
