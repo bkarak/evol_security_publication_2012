@@ -69,8 +69,7 @@ class RunFindbugs:
     chan = None
     conn = None
     closing = False
-    amqp_nodes = None
-    current_amqp_node = None
+    amqp_node = None
     db = None
     msgs = 0
     msgs_acked = 0
@@ -79,7 +78,7 @@ class RunFindbugs:
     def __init__(self, opts):
         self.options = opts
         self.amqp_nodes = self.options.queue_hosts.split(",")
-        self.connect(False)
+        self.connect(True)
 
     def connect(self, same):
         """
@@ -93,19 +92,16 @@ class RunFindbugs:
         """
         Connects to an AMQP host.
         """
-        if depth > len(self.amqp_nodes):
-            log.error("No more nodes to connect to, failing")
+        if depth > 10:
+            log.error("Failed 10 attempts to connect to RabbitMQ")
             return
 
-        if same is False:
-            first = self.amqp_nodes.pop(0)
-            self.amqp_nodes.append(first)
-            self.current_amqp_node = first
+        self.amqp_node = self.amqp_nodes.pop(0)
 
-        log.info("Attempting to connect to %s", self.current_amqp_node)
+        log.info("Trying to connect to %s", self.amqp_node)
         credentials = pika.PlainCredentials(self.options.queue_uname,
                                             self.options.queue_passwd)
-        params = pika.ConnectionParameters(host=self.current_amqp_node,
+        params = pika.ConnectionParameters(host=self.amqp_node,
                                            credentials=credentials,
                                            virtual_host="/")
         try:
@@ -120,10 +116,9 @@ class RunFindbugs:
             self.closing = True
             conn.close()
         except Exception:
-            log.warn("Could not connect to AMQP node %s" %
-                     self.current_amqp_node)
+            log.warn("Could not connect to AMQP node %s" % self.amqp_node)
             if same is False:
-                return self._connect_to(False, depth + 1)
+                return self._connect_to(True, depth + 1)
 
     def on_connected(self, connection):
         """
@@ -402,8 +397,6 @@ def main():
         spawn_workers(opts)
     except Exception:
         log.exception("Unknown error")
-    raise
-
 
 if __name__ == "__main__":
     sys.exit(main())
