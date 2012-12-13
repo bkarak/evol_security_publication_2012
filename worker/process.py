@@ -310,10 +310,9 @@ def parse_arguments(args):
 
     parser = ArgumentParser()
     parser.add_argument("-d", "--debug", action="store_true", default=False,
-                      dest="debug", help="Enable debug mode")
-    parser.add_argument("-p", "--pid-file", dest="pid_file",
-                      default=default_pid_file,
-                      help="Save PID to file (default: %s)" % default_pid_file)
+                        dest="debug", help="Enable debug mode")
+    parser.add_argument("-P", "--workers", default=1, dest="workers",
+                        help="Workers to spawn", type=int)
 
     # Queue connection info
     parser.add_argument("-a", "--queue-username", required=True,
@@ -355,49 +354,40 @@ def debug(opts):
     signal(SIGTERM, _exit_handler)
     RunFindbugs(opts)
 
-def daemon_mode(opts):
+def spawn_workers(opts):
     global children
 
-    # Create pidfile,
-    # take care of differences between python-daemon versions
-    try:
-        pidf = pidfile.TimeoutPIDLockFile(opts.pid_file, 10)
-    except:
-        pidf = pidlockfile.TimeoutPIDLockFile(opts.pid_file, 10)
-
-    pidf.acquire()
-
-    log.info("Became a daemon")
+    log.info("Spawning %s workers" % opts.workers)
     # Fork workers
     children = []
     i = 0
 
     while i < opts.workers:
-        newpid = os.fork()
-    if newpid == 0:
-        signal(SIGINT, _exit_handler)
-        signal(SIGTERM, _exit_handler)
-        RunFindbugs(opts)
-        sys.exit(1)
-    else:
-        log.debug("%d, forked child: %d", os.getpid(), newpid)
-        children.append(newpid)
-        i += 1
+        try:
+            newpid = os.fork()
+            if newpid == 0:
+                signal(SIGINT, _exit_handler)
+                signal(SIGTERM, _exit_handler)
+                RunFindbugs(opts)
+                sys.exit(1)
+            else:
+                log.debug("%d, forked child: %d", os.getpid(), newpid)
+                children.append(newpid)
+        except Exception:
+            log.debug("Error spawning worker %d" % i)
+        finally:
+            i += 1
 
     # Catch signals to ensure graceful shutdown
     signal(SIGINT, _parent_handler)
     signal(SIGTERM, _parent_handler)
 
     # Wait for all children processes to die, one by one
-    try:
-        for pid in children:
-            try:
-                os.waitpid(pid, 0)
-            except Exception:
-                pass
-    finally:
-        pidf.release()
-
+    for pid in children:
+        try:
+            os.waitpid(pid, 0)
+        except Exception:
+            pass
 
 def main():
     opts = parse_arguments(sys.argv[1:])
@@ -407,21 +397,9 @@ def main():
         debug(opts)
         return
 
-    files_preserve = []
-    for handler in log.handlers:
-        stream = getattr(handler, 'stream')
-        if stream and hasattr(stream, 'fileno'):
-            files_preserve.append(handler.stream)
-
-    daemon_context = daemon.DaemonContext(
-        files_preserve=files_preserve,
-        umask=022)
-
-    daemon_context.open()
-
     # Catch every exception, make sure it gets logged properly
     try:
-        daemon_mode(opts)
+        spawn_workers(opts)
     except Exception:
         log.exception("Unknown error")
     raise
