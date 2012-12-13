@@ -230,12 +230,19 @@ class RunFindbugs:
 
                 # Convert to JSON
                 ## XXX: convert xml to json and store it to mongo
-                def __convert_findbugs_xml(findbugs_xml):
+                def __convert_findbugs_xml(url, findbugs_xml):
                     import xmldict, json
-                    return json.loads(json.dumps(xmldict.parse(findbugs_xml)).replace('"@','"'))
+
+                    result_json = json.loads(json.dumps(xmldict.parse(findbugs_xml)).replace('"@','"'))
+                    url_arr = url.split('/')
+
+                    print url_arr 
+
+
+                    return result_json
 
                 # Save it
-                self.store_to_mongo(__convert_findbugs_xml(findbugs_xml))
+                self.store_to_mongo(__convert_findbugs_xml(body, findbugs_xml))
             else:
                 log.warn('%s contains no .class files' % (file,))
 
@@ -243,7 +250,7 @@ class RunFindbugs:
             self.msgs_acked += 1
         except Exception as e:
             log.exception("Unexpected error, msg: %s", body)
-            channel.basic_reject(method.delivery_tag)
+            channel.basic_reject(method.delivery_tag, requeue=false)
             self.msgs_rejected += 1
         finally:
             os.remove(findbugs_output)
