@@ -187,8 +187,7 @@ class RunFindbugs:
                              routing_key="url.#")
 
     def on_queue_bound(self, frame):
-        log.info("Binding %s(%s) to queue %s with handler %s",
-                  self.options.queue_exchange, "urls" , "urls", "run_findbugs")
+        log.info("Binding %s(%s) to queue %s with handler %s", self.options.queue_exchange, "urls" , "urls", "run_findbugs")
         self.chan.basic_consume(self.run_findbugs, queue='urls')
 
     def run_findbugs(self, channel, method, header, body):
@@ -238,12 +237,11 @@ class RunFindbugs:
                     _artifact_id = url_arr[-3]
                     _group_id = url_arr[-4]
 
-                    _version_number = 0
+                    # get pom information
                     _pom_url = url.replace('.jar', '.pom')
                     _pom_filename = _jar_filename.replace('.jar', '.pom')
 
-                    # get pom information
-                    log.info('Downloading POM: %s -> %s' % (_pom_url, _pom_filename))
+                    log.info('Downloading POM: %s -> %s' % (_pom_url, _pom_filename))                    
                     urllib.urlretrieve(_pom_url, _pom_filename)
                     _dependencies = []
 
@@ -252,12 +250,36 @@ class RunFindbugs:
                             _pom_json = json.loads(json.dumps(xmldict.parse(open(_pom_filename, 'r').read())))
                             _dependencies = _pom_json.get('project', {}).get('dependencies', {}).get('dependency', [])
                         except Exception, e:
-                            log.warn('Could get data from %s' % (_pom_filename,))
+                            log.warn('Could not download/parse data from %s' % (_pom_filename,))
 
-                    # get xml information
+                        os.remove(_pom_filename)
+
+                    # get xml information                    
+                    _metadata_url = url.replace('%s/%s' % (_version, _jar_filename), 'maven-metadata.xml')
+                    _metadata_filename = '%s-metadata.xml' % (_jar_filename,)
                     
+                    log.info('Downloading %s -> %s' % (_metadata_url, _metadata_filename))
+                    urllib.urlretrieve(_metadata_url, _metadata_filename)
+                    _version_number = 0
 
-                    result_json['JarMetadata'] = {'version':_version,
+                    if os.path.exists(_metadata_filename):
+                        try:
+                            _metadata_json = json.loads(json.dumps(xmldict.parse(open(_metadata_filename, 'r').read())))
+                            _versions = _metadata_json.get('metadata', {}).get('versioning', {}).get('versions', {}).get('version', [])
+                            _versions = [x.strip() for x in _versions]
+                            print '%s in %s' % (_version, _versions)
+                            try:
+                                _version_number = _versions.index(_version.strip()) + 1
+                            except ValueError, ve:
+                                log.warn('Could not find version (%s)' % ())
+                                _version_number = 0
+                        except Exception, e:
+                            log.warn('Could not download/parse data from %s' % (_metadata_filename,))
+
+                        os.remove(_metadata_filename)
+
+                    result_json['JarMetadata'] = {'jar_filename':_jar_filename,
+                                                  'version':_version,
                                                   'artifact_id':_artifact_id,
                                                   'group_id':_group_id,
                                                   'version_number' :_version_number,
