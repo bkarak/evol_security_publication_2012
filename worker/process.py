@@ -70,6 +70,7 @@ class RunFindbugs:
     conn = None
     closing = False
     amqp_node = None
+    retries = 0
     db = None
     msgs = 0
     msgs_acked = 0
@@ -87,13 +88,14 @@ class RunFindbugs:
         to connect to will be the same as the one used before or whether
         a new host from the host list will be tried.
         """
-        self._connect_to(1)
+        self._connect_to()
 
-    def _connect_to(self, depth):
+    def _connect_to(self):
         """
         Connects to an AMQP host.
         """
-        if depth > 10:
+        self.retries += 1
+        if self.retries > 10:
             log.error("Failed 10 attempts to connect to RabbitMQ")
             return
 
@@ -106,17 +108,20 @@ class RunFindbugs:
         try:
             conn = pika.SelectConnection(parameters=params,
                                          on_open_callback=self.on_connected)
+            self.retries = 0
             conn.ioloop.start()
         except StatsException:
             self.stats()
-            return self._connect_to(True, depth)
+            return self._connect_to()
         except SystemExit:
             log.info("System exit caught, exiting")
             self.closing = True
             conn.close()
         except Exception:
-            log.warn("Could not connect to AMQP node %s" % self.amqp_node)
-            self._connect_to(depth + 1)
+            log.exception("Could not connect to AMQP node %s" % self.amqp_node)
+            if not conn is None and conn.is_open:
+                conn.close()
+            self._connect_to()
 
     def on_connected(self, connection):
         """
