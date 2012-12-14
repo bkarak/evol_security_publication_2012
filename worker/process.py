@@ -301,11 +301,16 @@ class RunFindbugs:
             self.msgs_acked += 1
         except Exception as e:
             log.exception("Unexpected error, msg: %s", body)
-            channel.basic_reject(method.delivery_tag, requeue=false)
+            channel.basic_reject(method.delivery_tag, requeue=False)
             self.msgs_rejected += 1
         finally:
-            os.remove(findbugs_output)
-            os.remove(file)
+            # The following is supposed to be the "Pythonic" way of doing file deletions!
+            # http://stackoverflow.com/questions/10840533/most-pythonic-way-to-delete-a-file-which-may-not-exist
+            try:
+                os.remove(file)
+                os.remove(findbugs_output)
+            except OSError:
+                pass
 
     def store_to_mongo(self, json):
         if self.db is None:
@@ -432,7 +437,7 @@ def spawn_workers(opts):
                 log.debug("%d, forked child: %d", os.getpid(), newpid)
                 children.append(newpid)
         except Exception:
-            log.debug("Error spawning worker %d" % i)
+            log.exception("Error spawning worker %d" % i)
         finally:
             i += 1
 
