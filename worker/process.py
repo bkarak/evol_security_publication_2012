@@ -208,6 +208,18 @@ class RunFindbugs:
                 return False
             except Exception, e:
                 return False
+    
+        def get_jar_size(filename):
+            size = 0
+            if zipfile.is_zipfile(filename):
+                try:
+                    z = zipfile.ZipFile(filename)
+                    for info in z.infolist():
+                        if info.filename.endswith('.class'):
+                            size += info.file_size
+                    return size
+                except Exception, e:
+                    return 0
 
         try:
             body = body.strip()
@@ -283,7 +295,11 @@ class RunFindbugs:
 
                         os.remove(_metadata_filename)
 
+                    _jar_date = os.stat(file).st_mtime
+                    _jar_size = get_jar_size(file)
                     result_json['JarMetadata'] = {'jar_filename':_jar_filename,
+                                                  'jar_last_modification_date':_jar_date,
+                                                  'jar_size':_jar_size,
                                                   'version':_version,
                                                   'artifact_id':_artifact_id,
                                                   'group_id':_group_id,
