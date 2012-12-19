@@ -221,10 +221,26 @@ class RunFindbugs:
                 except Exception, e:
                     return 0
 
+        def get_metadata_from_url(url):
+            url_arr = url.split('/')
+            # -1: jar, -2: version, -3: artifact_id, remaining up to /maven2 -> groupId
+            metadata = dict()
+            metadata['jar_filename'] = url_arr[-1]
+            metadata['version'] = url_arr[-2]
+            metadata['artifact_id'] = url_arr[-3]
+            metadata['group_id'] = reduce(lambda acc, x: acc + "." + x, url_arr[4:-3], "")[1:]
+            return metadata
+
         try:
             body = body.strip()
-            file = os.path.basename(body)
+            metadata = get_metadata_from_url(body)
+            file = metadata['jar_filename']
             findbugs_output = "%s.xml" % file
+
+            # See if result already in DB
+            if self.record_exists(metadata):
+                channel.basic_ack(method.delivery_tag)
+                return
 
             # Download jar
             if not os.path.exists(file):
@@ -246,13 +262,13 @@ class RunFindbugs:
                     import xmldict, json
 
                     result_json = json.loads(json.dumps(xmldict.parse(findbugs_xml)).replace('"@','"'))
-                    url_arr = url.split('/')
+                    url_arr = get_metadata_from_url(url)
 
                     # -1: jar, -2: version, -3: artifact_id, -4: group_id
-                    _jar_filename = url_arr[-1]
-                    _version = url_arr[-2]
-                    _artifact_id = url_arr[-3]
-                    _group_id = url_arr[-4]
+                    _jar_filename = metadata['jar_filename']
+                    _version = metadata['version']
+                    _artifact_id = metadata['artifact_id']
+                    _group_id = metadata['group_id']
 
                     # get pom information
                     _pom_url = url.replace('.jar', '.pom')
@@ -328,14 +344,29 @@ class RunFindbugs:
             except OSError:
                 pass
 
-    def store_to_mongo(self, json):
+    def get_collection(self):
         if self.db is None:
             self.get_mongo_db()
             if self.db is None:
                 log.error("Cannot connect to MongoDB")
 
         coll = self.db[self.options.mongo_collection]
-        coll.insert(json)
+        return coll
+
+    def store_to_mongo(self, json):
+        id = self.get_collection().insert(json)
+        log.debug("Stored with ID: " + str(id))
+
+    def record_exists(self, metadata):
+        q = dict()
+        q['JarMetadata'] = dict()
+        q['JarMetadata']['group_id'] = metadata['group_id']
+        q['JarMetadata']['artifact_id'] = metadata['artifact_id']
+        q['JarMetadata']['version'] = metadata['version']
+        if self.get_collection().find_one(q) is None:
+            return False
+        else:
+            return True
 
     def get_mongo_db(self):
         """
