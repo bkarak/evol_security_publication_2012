@@ -317,7 +317,8 @@ class RunFindbugs:
                     return result_json
 
                 # Save it
-                self.store_to_mongo(__convert_findbugs_xml(body, findbugs_xml))
+                if not self.record_exists(metadata):
+                    self.store_to_mongo(__convert_findbugs_xml(body, findbugs_xml))
             else:
                 log.warn('%s contains no .class files' % (file,))
 
@@ -346,19 +347,29 @@ class RunFindbugs:
         return coll
 
     def store_to_mongo(self, json):
-        id = self.get_collection().insert(json)
-        log.debug("Stored with ID: " + str(id))
+        try:
+            id = self.get_collection().insert(json)
+            log.debug("Stored with ID: " + str(id))
+        except pymongo.errors.AutoReconnect, ae:
+            log.warning('Mongo Connection is Down. Reconnecting! (store_to_mongo, %s)' % (ae,))
+            self.store_to_mongo(json)
 
     def record_exists(self, metadata):
-        q = dict()
-        q['JarMetadata'] = dict()
-        q['JarMetadata']['group_id'] = metadata['group_id']
-        q['JarMetadata']['artifact_id'] = metadata['artifact_id']
-        q['JarMetadata']['version'] = metadata['version']
-        if self.get_collection().find_one(q) is None:
-            return False
-        else:
-            return True
+        try:
+            q = dict()
+            q['JarMetadata'] = dict()
+            q['JarMetadata']['group_id'] = metadata['group_id']
+            q['JarMetadata']['artifact_id'] = metadata['artifact_id']
+            q['JarMetadata']['version'] = metadata['version']
+            if self.get_collection().find_one(q, timeout=False) is None:                
+                log.info('findone() -  False')
+                return False
+            else:
+                log.info('findone() - True')
+                return True
+        except pymongo.errors.AutoReconnect, ae:
+            log.warning('Mongo Connection is Down. Reconnecting! (record_exists, %s)' % (ae,))
+            return self.record_exists(metadata)
 
     def get_mongo_db(self):
         """
