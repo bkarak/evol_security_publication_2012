@@ -211,12 +211,14 @@ class RunFindbugs:
     
         def get_jar_size(filename):
             size = 0
+            
             if zipfile.is_zipfile(filename):
                 try:
                     z = zipfile.ZipFile(filename)
                     for info in z.infolist():
                         if info.filename.endswith('.class'):
                             size += info.file_size
+
                     return size
                 except Exception, e:
                     return 0
