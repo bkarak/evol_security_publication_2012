@@ -362,6 +362,7 @@ class RunFindbugs:
             log.debug("Stored with ID: " + str(id))
         except pymongo.errors.AutoReconnect, ae:
             log.warning('Mongo Connection is Down. Reconnecting! (store_to_mongo, %s)' % (ae,))
+            self.store_to_mongo(json)
 
     def record_exists(self, metadata):
         try:
@@ -378,7 +379,7 @@ class RunFindbugs:
                 return True
         except pymongo.errors.AutoReconnect, ae:
             log.warning('Mongo Connection is Down. Reconnecting! (record_exists, %s)' % (ae,))
-            return record_exists(metadata)
+            return self.record_exists(metadata)
 
     def get_mongo_db(self):
         """
