@@ -37,14 +37,6 @@ import pymongo
 import time
 import urllib
 from subprocess import Popen, PIPE, STDOUT
-from signal import signal, SIGINT, SIGUSR1, SIGTERM
-from daemon import daemon
-
-# Take care of differences between python-daemon versions.
-try:
-    from daemon import pidfile
-except:
-    from daemon import pidlockfile
 
 __author__ = 'Georgios Gousios <gousiosg@gmail.com>, Vassilios Karakoidas (vassilios.karakoidas@gmail.com), Dimitrios Mitropoulos (dimitro@aueb.gr)'
 
@@ -211,14 +203,12 @@ class RunFindbugs:
     
         def get_jar_size(filename):
             size = 0
-            
             if zipfile.is_zipfile(filename):
                 try:
                     z = zipfile.ZipFile(filename)
                     for info in z.infolist():
                         if info.filename.endswith('.class'):
                             size += info.file_size
-
                     return size
                 except Exception, e:
                     return 0
@@ -389,24 +379,6 @@ class RunFindbugs:
         log.info("Msgs acked: %d" % self.msgs_acked)
         log.info("Msgs rejected: %d" % self.msgs_rejected)
 
-def _exit_handler(signum, frame):
-    """"Catch exit signal in children processes"""
-    global log
-    log.info("Caught signal %d, will raise SystemExit", signum)
-    raise SystemExit
-
-
-def _usr1_handler(signum, frame):
-    global log
-    log.info("Caught signal %d, will print statistics to log", signum)
-    raise StatsException("stats")
-
-def _parent_handler(signum):
-    """"Catch exit signal in parent process and forward it to children."""
-    global children
-
-    log.info("Caught signal %d, sending SIGTERM to children %s", signum, children)
-    [os.kill(pid, SIGTERM) for pid in children]
 
 class StatsException():
     def __init__(self, msg):
@@ -461,45 +433,16 @@ def parse_arguments(args):
 
 
 def debug(opts):
-    signal(SIGINT, _exit_handler)
-    signal(SIGUSR1, _usr1_handler)
-    signal(SIGTERM, _exit_handler)
     RunFindbugs(opts)
 
 def spawn_workers(opts):
-    global children
-
     log.info("Spawning %s workers" % opts.workers)
-    # Fork workers
-    children = []
     i = 0
 
     while i < opts.workers:
-        try:
-            newpid = os.fork()
-            if newpid == 0:
-                signal(SIGINT, _exit_handler)
-                signal(SIGTERM, _exit_handler)
-                RunFindbugs(opts)
-                sys.exit(1)
-            else:
-                log.debug("%d, forked child: %d", os.getpid(), newpid)
-                children.append(newpid)
-        except Exception:
-            log.exception("Error spawning worker %d" % i)
-        finally:
-            i += 1
-
-    # Catch signals to ensure graceful shutdown
-    signal(SIGINT, _parent_handler)
-    signal(SIGTERM, _parent_handler)
-
-    # Wait for all children processes to die, one by one
-    for pid in children:
-        try:
-            os.waitpid(pid, 0)
-        except Exception:
-            pass
+        Thread(target=RunFindbugs, args=[opts])
+        RunFindbugs(opts)
+        i += 1
 
 def main():
     opts = parse_arguments(sys.argv[1:])
