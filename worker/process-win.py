@@ -356,12 +356,11 @@ class RunFindbugs:
 
     def record_exists(self, metadata):
         try:
-            q = dict()
-            q['JarMetadata'] = dict()
-            q['JarMetadata']['group_id'] = metadata['group_id']
-            q['JarMetadata']['artifact_id'] = metadata['artifact_id']
-            q['JarMetadata']['version'] = metadata['version']
-            if self.get_collection().find_one(q, timeout=False) is None:                
+            q = {'JarMetadata.group_id' : metadata['group_id'],
+                'JarMetadata.artifact_id' : metadata['artifact_id'],
+                'JarMetadata.version' : metadata['version']}
+            
+            if self.get_collection().find(q, timeout=False).count() <= 0:              
                 log.info('findone() -  False')
                 return False
             else:
