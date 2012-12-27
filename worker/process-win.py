@@ -413,41 +413,21 @@ def parse_arguments(args):
     default_pid_file = os.path.join("var", "run", "process", "process.pid")
 
     parser = ArgumentParser()
-    parser.add_argument("-d", "--debug", action="store_true", default=False,
-                        dest="debug", help="Enable debug mode")
-    parser.add_argument("-P", "--workers", default=1, dest="workers",
-                        help="Workers to spawn", type=int)
+    parser.add_argument("-d", "--debug", action="store_true", default=False, dest="debug", help="Enable debug mode")
+    parser.add_argument("-P", "--workers", default=1, dest="workers", help="Workers to spawn", type=int)
 
     # Queue connection info
-    parser.add_argument("-a", "--queue-username", required=True,
-                      default="", dest="queue_uname",
-                      help="Username to connect to the queue")
-    parser.add_argument("-b", "--queue-password", required=True,
-                      default="", dest="queue_passwd",
-                      help="Password to connect to the queue")
-    parser.add_argument("-c", "--queue-hosts", required=True,
-                      default="127.0.0.1", dest="queue_hosts",
-                      help="Comma separated list of hosts running AMQP")
-    parser.add_argument("-e", "--queue-exchange", required=True,
-                      default="", dest="queue_exchange",
-                      help="Exchange name to bind to")
+    parser.add_argument("-a", "--queue-username", required=True, default="", dest="queue_uname", help="Username to connect to the queue")
+    parser.add_argument("-b", "--queue-password", required=True, default="", dest="queue_passwd", help="Password to connect to the queue")
+    parser.add_argument("-c", "--queue-hosts", required=True, default="127.0.0.1", dest="queue_hosts", help="Comma separated list of hosts running AMQP")
+    parser.add_argument("-e", "--queue-exchange", required=True, default="", dest="queue_exchange", help="Exchange name to bind to")
 
     # MongoDB connection info
-    parser.add_argument("-u", "--mongo-username", required=True,
-                      default="", dest="mongo_uname",
-                      help="Username to connect to MongoDB")
-    parser.add_argument("-w", "--mongo-passwd", required=True,
-                      default="", dest="mongo_passwd",
-                      help="Password to connect to MongoDB")
-    parser.add_argument("-x", "--mongo-host", required=True,
-                      default="127.0.0.1", dest="mongo_host",
-                      help="Host running MongoDB")
-    parser.add_argument("-y", "--mongo-database", required=True,
-                      default="", dest="mongo_db",
-                      help="Database to use for storing messages")
-    parser.add_argument("-z", "--mongo-collection", required=True,
-                      default="", dest="mongo_collection",
-                      help="Collection to use for storing messages")
+    parser.add_argument("-u", "--mongo-username", required=True, default="", dest="mongo_uname", help="Username to connect to MongoDB")
+    parser.add_argument("-w", "--mongo-passwd", required=True, default="", dest="mongo_passwd", help="Password to connect to MongoDB")
+    parser.add_argument("-x", "--mongo-host", required=True, default="127.0.0.1", dest="mongo_host", help="Host running MongoDB")
+    parser.add_argument("-y", "--mongo-database", required=True, default="", dest="mongo_db", help="Database to use for storing messages")
+    parser.add_argument("-z", "--mongo-collection", required=True, default="", dest="mongo_collection", help="Collection to use for storing messages")
 
     return parser.parse_args(args)
 
