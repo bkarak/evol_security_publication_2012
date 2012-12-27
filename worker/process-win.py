@@ -324,11 +324,12 @@ class RunFindbugs:
                     channel.basic_ack(method.delivery_tag)
             else:
                 log.warn('%s contains no .class files' % (jar_file,))
+                channel.basic_reject(method.delivery_tag, requeue=False)
             
             self.msgs_acked += 1
         except Exception as e:
             log.exception("Unexpected error:%s,  msg: %s" % (e, body))
-            #channel.basic_reject(method.delivery_tag, requeue=False)
+            channel.basic_reject(method.delivery_tag, requeue=False)
             self.msgs_rejected += 1
         finally:
             # The following is supposed to be the "Pythonic" way of doing file deletions!
