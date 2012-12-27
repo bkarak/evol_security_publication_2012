@@ -162,19 +162,13 @@ class RunFindbugs:
         self.chan.basic_qos(prefetch_count=1)
 
         log.info("Channel opened, declaring exchanges and queues")
-        self.chan.exchange_declare(exchange=self.options.queue_exchange,
-                                   exchange_type="topic", durable=True,
-                                   auto_delete=False)
+        self.chan.exchange_declare(exchange=self.options.queue_exchange, exchange_type="topic", durable=True, auto_delete=False)
         # Declare a queue
-        self.chan.queue_declare(queue="urls", durable=True,
-                                exclusive=False, auto_delete=False,
-                                callback=self.on_queue_declared)
+        self.chan.queue_declare(queue="urls", durable=True, exclusive=False, auto_delete=False, callback=self.on_queue_declared)
 
     def on_queue_declared(self, frame):
         log.info("Queue declared")
-        self.chan.queue_bind(callback=self.on_queue_bound,
-                             queue='urls', exchange=self.options.queue_exchange,
-                             routing_key="url.#")
+        self.chan.queue_bind(callback=self.on_queue_bound, queue='urls', exchange=self.options.queue_exchange, routing_key="url.#")
 
     def on_queue_bound(self, frame):
         log.info("Binding %s(%s) to queue %s with handler %s", self.options.queue_exchange, "urls" , "urls", "run_findbugs")
