@@ -184,13 +184,19 @@ class RunFindbugs:
 
         def has_classes(filename):
             try:
-                z = zipfile.ZipFile(filename)
-                for f in z.namelist():
-                    if f.endswith('.class'):
-                        return True
+                if zipfile.is_zipfile(filename):
+                    z = zipfile.ZipFile(filename)
+
+                    for f in z.namelist():
+                        if f.endswith('.class'):
+                            log.info('%s contains JAR files!' % (filename,))
+                            return True
+                else:
+                    log.warn('%s is not a JAR file!' % (filename,))
 
                 return False
             except Exception, e:
+                log.error('Invalid JAR File: %s (%s)' % (filename, e))
                 return False
     
         def get_jar_size(filename):
@@ -201,25 +207,31 @@ class RunFindbugs:
                     for info in z.infolist():
                         if info.filename.endswith('.class'):
                             size += info.file_size
+
                     return size
                 except Exception, e:
+                    log.error('get_jar_size(): %s' % (e,))
                     return 0
+            else:
+                log.warn('%s is not a JAR file!' % (filename,))
+                return 0
 
         def get_metadata_from_url(url):
             url_arr = url.split('/')
             # -1: jar, -2: version, -3: artifact_id, remaining up to /maven2 -> groupId
-            metadata = dict()
-            metadata['jar_filename'] = url_arr[-1]
-            metadata['version'] = url_arr[-2]
-            metadata['artifact_id'] = url_arr[-3]
-            metadata['group_id'] = reduce(lambda acc, x: acc + "." + x, url_arr[4:-3], "")[1:]
+
+            metadata = {'jar_filename':url_arr[-1],
+                        'version':url_arr[-2],
+                        'artifact_id':url_arr[-3],
+                        'group_id':reduce(lambda acc, x: acc + "." + x, url_arr[4:-3], "")[1:]}
+
             return metadata
 
         try:
             body = body.strip()
             metadata = get_metadata_from_url(body)
-            file = metadata['jar_filename']
-            findbugs_output = "%s.xml" % file
+            jar_file = metadata['jar_filename']
+            findbugs_output = "%s.xml" % (jar_file,)
 
             # See if result already in DB
             if self.record_exists(metadata):
@@ -227,14 +239,14 @@ class RunFindbugs:
                 return
 
             # Download jar
-            if not os.path.exists(file):
-                log.info("Downloading URL %s to file %s", body, file)
-                urllib.urlretrieve(body, file)
+            if not os.path.exists(jar_file):
+                log.info("Downloading URL %s to file %s", body, jar_file)
+                urllib.urlretrieve(body, jar_file)
 
-            if has_classes(file):
+            if has_classes(jar_file):
                 # Exec findbugs
-                cmd = '%s -textui -xml -output %s %s' % (os.path.join(os.path.curdir, "findbugs", "bin", "findbugs"), findbugs_output, file)
-                log.info("Cmd line: %s" % cmd)
+                cmd = '%s -textui -xml -output %s %s' % (os.path.join(os.path.curdir, "findbugs", "bin", "findbugs"), findbugs_output, jar_file)
+                log.info("Cmd line: %s" % (cmd,))
                 ret = os.system(cmd)
 
                 # Read output
@@ -284,19 +296,19 @@ class RunFindbugs:
                             _metadata_json = json.loads(json.dumps(xmldict.parse(open(_metadata_filename, 'r').read())))
                             _versions = _metadata_json.get('metadata', {}).get('versioning', {}).get('versions', {}).get('version', [])
                             _versions = [x.strip() for x in _versions]
-                            print '%s in %s' % (_version, _versions)
+                            
                             try:
                                 _version_order = _versions.index(_version.strip()) + 1
                             except ValueError, ve:
-                                log.warn('Could not find version (%s)' % ())
+                                log.warn('Could not find version (%s in %s)' % (_version, _versions))
                                 _version_order = 0
                         except Exception, e:
                             log.warn('Could not download/parse data from %s' % (_metadata_filename,))
 
                         os.remove(_metadata_filename)
 
-                    _jar_date = os.stat(file).st_mtime
-                    _jar_size = get_jar_size(file)
+                    _jar_date = os.stat(jar_file).st_mtime
+                    _jar_size = get_jar_size(jar_file)
                     result_json['JarMetadata'] = {'jar_filename':_jar_filename,
                                                   'jar_last_modification_date':_jar_date,
                                                   'jar_size':_jar_size,
@@ -311,23 +323,23 @@ class RunFindbugs:
                 # Save it
                 if not self.record_exists(metadata):
                     self.store_to_mongo(__convert_findbugs_xml(body, findbugs_xml))
+                    channel.basic_ack(method.delivery_tag)
             else:
-                log.warn('%s contains no .class files' % (file,))
-
-            channel.basic_ack(method.delivery_tag)
+                log.warn('%s contains no .class files' % (jar_file,))
+            
             self.msgs_acked += 1
         except Exception as e:
-            log.exception("Unexpected error, msg: %s", body)
-            channel.basic_reject(method.delivery_tag, requeue=False)
+            log.exception("Unexpected error:%s,  msg: %s" % (e, body))
+            #channel.basic_reject(method.delivery_tag, requeue=False)
             self.msgs_rejected += 1
         finally:
             # The following is supposed to be the "Pythonic" way of doing file deletions!
             # http://stackoverflow.com/questions/10840533/most-pythonic-way-to-delete-a-file-which-may-not-exist
             try:
-                os.remove(file)
+                os.remove(jar_file)
                 os.remove(findbugs_output)
-            except OSError:
-                pass
+            except OSError, ose:
+                log.error('Could not delete: %s' % (ose,))
 
     def get_collection(self):
         if self.db is None:
@@ -336,6 +348,7 @@ class RunFindbugs:
                 log.error("Cannot connect to MongoDB")
 
         coll = self.db[self.options.mongo_collection]
+
         return coll
 
     def store_to_mongo(self, json):
@@ -366,12 +379,9 @@ class RunFindbugs:
         """
         Gets a connection to MongoDB
         """
-        conn = pymongo.Connection(host=self.options.mongo_host,
-                                  max_pool_size=10,
-                                  network_timeout=1)
+        conn = pymongo.Connection(host=self.options.mongo_host, max_pool_size=10, network_timeout=1)
         mongo_db = conn[self.options.mongo_db]
-        mongo_db.authenticate(self.options.mongo_uname,
-                              self.options.mongo_passwd)
+        mongo_db.authenticate(self.options.mongo_uname, self.options.mongo_passwd)
         self.db = mongo_db
 
     def stats(self):
