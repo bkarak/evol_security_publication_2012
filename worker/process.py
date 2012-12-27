@@ -200,10 +200,14 @@ class RunFindbugs:
 
         def has_classes(filename):
             try:
-                z = zipfile.ZipFile(filename)
-                for f in z.namelist():
-                    if f.endswith('.class'):
-                        return True
+                if zipfile.is_zipfile(filename):
+                    z = zipfile.ZipFile(filename)
+                    for f in z.namelist():
+                        if f.endswith('.class'):
+                            log.info('Valid JAR file: %s' % (filename,))
+                            return True
+                else:
+                    log.warn('%s is not a zipfile (has_classes)' % (filename,))
 
                 return False
             except Exception, e:
@@ -222,6 +226,9 @@ class RunFindbugs:
                     return size
                 except Exception, e:
                     return 0
+            else:
+                log.warn('%s is not a zipfile (get_jar_size)' % (filename,))
+                return 0
 
         def get_metadata_from_url(url):
             url_arr = url.split('/')
@@ -302,7 +309,7 @@ class RunFindbugs:
                             _metadata_json = json.loads(json.dumps(xmldict.parse(open(_metadata_filename, 'r').read())))
                             _versions = _metadata_json.get('metadata', {}).get('versioning', {}).get('versions', {}).get('version', [])
                             _versions = [x.strip() for x in _versions]
-                            print '%s in %s' % (_version, _versions)
+
                             try:
                                 _version_order = _versions.index(_version.strip()) + 1
                             except ValueError, ve:
