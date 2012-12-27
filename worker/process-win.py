@@ -297,18 +297,16 @@ class RunFindbugs:
                             _metadata_json = json.loads(json.dumps(xmldict.parse(open(_metadata_filename, 'r').read())))
                             _versions = _metadata_json.get('metadata', {}).get('versioning', {}).get('versions', {}).get('version', [])
 
-                            if isinstance(_versions, list):
-                                _versions = [x.strip() for x in _versions]                            
-                                try:
-                                    _version_order = _versions.index(_version.strip()) + 1
-                                except ValueError, ve:
-                                    log.warn('Could not find version (%s in %s)' % (_version, _versions))
-                            else:
-                                if _versions.strip() == _version.strip():
-                                    _version_order = 1
-                                _versions = [_version]
+                            if not isinstance(_versions, list):
+                                _versions = [_versions]
+
+                            _versions = [x.strip() for x in _versions]                            
+                            try:
+                                _version_order = _versions.index(_version.strip()) + 1
+                            except ValueError, ve:
+                                log.warn('Could not find version (%s in %s): %s' % (_version, _versions, ve))
                         except Exception, e:
-                            log.warn('Could not download/parse data from %s' % (_metadata_filename,))
+                            log.warn('Could not parse data from %s: %s' % (_metadata_filename, e))
 
                         os.remove(_metadata_filename)
 
