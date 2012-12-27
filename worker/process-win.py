@@ -27,15 +27,8 @@
 Findbugs, store the results to a MongoDB collection.
 
 """
-import json
+import json, pika, sys, os, logging, pymongo, time, urllib
 
-import pika
-import sys
-import os
-import logging
-import pymongo
-import time
-import urllib
 from subprocess import Popen, PIPE, STDOUT
 
 __author__ = 'Georgios Gousios <gousiosg@gmail.com>, Vassilios Karakoidas (vassilios.karakoidas@gmail.com), Dimitrios Mitropoulos (dimitro@aueb.gr)'
@@ -49,8 +42,7 @@ log = logging.getLogger("process")
 log.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(name)s(%(process)d) -"
-                              "%(levelname)s - %(message)s")
+formatter = logging.Formatter("%(asctime)s - %(name)s(%(process)d) - %(levelname)s - %(message)s")
 ch.setFormatter(formatter)
 log.addHandler(ch)
 
@@ -459,14 +451,15 @@ def main():
 
     # Debug mode, process messages without going to the background
     if opts.debug:
-        debug(opts)
-        return
+        debug(opts)        
 
     # Catch every exception, make sure it gets logged properly
     try:
         spawn_workers(opts)
+        return 1
     except Exception:
         log.exception("Unknown error")
+        return 0
 
 if __name__ == "__main__":
     sys.exit(main())
