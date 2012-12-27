@@ -306,6 +306,7 @@ class RunFindbugs:
                             else:
                                 if _versions.strip() == _version.strip():
                                     _version_order = 1
+                                _versions = [_version]
                         except Exception, e:
                             log.warn('Could not download/parse data from %s' % (_metadata_filename,))
 
@@ -317,6 +318,7 @@ class RunFindbugs:
                                                   'jar_last_modification_date':_jar_date,
                                                   'jar_size':_jar_size,
                                                   'version':_version,
+                                                  'version_list':_versions,
                                                   'artifact_id':_artifact_id,
                                                   'group_id':_group_id,
                                                   'version_order' :_version_order,
@@ -340,8 +342,10 @@ class RunFindbugs:
             # The following is supposed to be the "Pythonic" way of doing file deletions!
             # http://stackoverflow.com/questions/10840533/most-pythonic-way-to-delete-a-file-which-may-not-exist
             try:
-                os.remove(jar_file)
-                os.remove(findbugs_output)
+                if os.path.exists(jar_file):
+                    os.remove(jar_file)
+                if os.path.exists(findbugs_output):
+                    os.remove(findbugs_output)
             except OSError, ose:
                 log.error('Could not delete: %s' % (ose,))
 
