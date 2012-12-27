@@ -190,7 +190,7 @@ class RunFindbugs:
 
                     for f in z.namelist():
                         if f.endswith('.class'):
-                            log.info('%s contains JAR files!' % (filename,))
+                            log.info('%s (jar) contains .class files!' % (filename,))
                             return True
                 else:
                     log.warn('%s is not a JAR file!' % (filename,))
@@ -367,10 +367,10 @@ class RunFindbugs:
                  'JarMetadata.version' : metadata['version']}
             
             if self.get_collection().find(q, timeout=False).count() <= 0:              
-                log.info('findone() -  False')
+                log.info('Record does not exist ... inserting new entry in mongodb')
                 return False
             else:
-                log.info('findone() - True')
+                log.warn('Record does not exist ... skipping')
                 return True
         except pymongo.errors.AutoReconnect, ae:
             log.warning('Mongo Connection is Down. Reconnecting! (record_exists, %s)' % (ae,))
