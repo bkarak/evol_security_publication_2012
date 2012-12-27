@@ -30,6 +30,7 @@ Findbugs, store the results to a MongoDB collection.
 import json, pika, sys, os, logging, pymongo, time, urllib
 
 from subprocess import Popen, PIPE, STDOUT
+from threading import Thread
 
 __author__ = 'Georgios Gousios <gousiosg@gmail.com>, Vassilios Karakoidas (vassilios.karakoidas@gmail.com), Dimitrios Mitropoulos (dimitro@aueb.gr)'
 
