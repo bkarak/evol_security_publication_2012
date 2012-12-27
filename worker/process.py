@@ -177,19 +177,13 @@ class RunFindbugs:
         self.chan.basic_qos(prefetch_count=1)
 
         log.info("Channel opened, declaring exchanges and queues")
-        self.chan.exchange_declare(exchange=self.options.queue_exchange,
-                                   exchange_type="topic", durable=True,
-                                   auto_delete=False)
+        self.chan.exchange_declare(exchange=self.options.queue_exchange, exchange_type="topic", durable=True, auto_delete=False)
         # Declare a queue
-        self.chan.queue_declare(queue="urls", durable=True,
-                                exclusive=False, auto_delete=False,
-                                callback=self.on_queue_declared)
+        self.chan.queue_declare(queue="urls", durable=True, exclusive=False, auto_delete=False, callback=self.on_queue_declared)
 
     def on_queue_declared(self, frame):
         log.info("Queue declared")
-        self.chan.queue_bind(callback=self.on_queue_bound,
-                             queue='urls', exchange=self.options.queue_exchange,
-                             routing_key="url.#")
+        self.chan.queue_bind(callback=self.on_queue_bound, queue='urls', exchange=self.options.queue_exchange, routing_key="url.#")
 
     def on_queue_bound(self, frame):
         log.info("Binding %s(%s) to queue %s with handler %s", self.options.queue_exchange, "urls" , "urls", "run_findbugs")
@@ -308,15 +302,19 @@ class RunFindbugs:
                         try:
                             _metadata_json = json.loads(json.dumps(xmldict.parse(open(_metadata_filename, 'r').read())))
                             _versions = _metadata_json.get('metadata', {}).get('versioning', {}).get('versions', {}).get('version', [])
+
+                            if not isinstance(_versions, list):
+                                _versions = [_versions]
+
                             _versions = [x.strip() for x in _versions]
 
                             try:
                                 _version_order = _versions.index(_version.strip()) + 1
                             except ValueError, ve:
-                                log.warn('Could not find version (%s)' % ())
+                                log.warn('Could not find version (%s): %s' % (_version, ve))
                                 _version_order = 0
                         except Exception, e:
-                            log.warn('Could not download/parse data from %s' % (_metadata_filename,))
+                            log.warn('Could not parse data from %s: %s' % (_metadata_filename, e))
 
                         os.remove(_metadata_filename)
 
@@ -326,6 +324,7 @@ class RunFindbugs:
                                                   'jar_last_modification_date':_jar_date,
                                                   'jar_size':_jar_size,
                                                   'version':_version,
+                                                  'version_list':_versions,
                                                   'artifact_id':_artifact_id,
                                                   'group_id':_group_id,
                                                   'version_order' :_version_order,
@@ -349,10 +348,13 @@ class RunFindbugs:
             # The following is supposed to be the "Pythonic" way of doing file deletions!
             # http://stackoverflow.com/questions/10840533/most-pythonic-way-to-delete-a-file-which-may-not-exist
             try:
-                os.remove(file)
-                os.remove(findbugs_output)
-            except OSError:
-                pass
+                if os.path.exists(file):
+                    os.remove(file)
+
+                if os.path.exists(findbugs_output):
+                    os.remove(findbugs_output)                    
+            except OSError, ose:
+                log.error('Could not remove: %s' % (ose,))
 
     def get_collection(self):
         if self.db is None:
@@ -361,6 +363,7 @@ class RunFindbugs:
                 log.error("Cannot connect to MongoDB")
 
         coll = self.db[self.options.mongo_collection]
+
         return coll
 
     def store_to_mongo(self, json):
@@ -438,41 +441,21 @@ def parse_arguments(args):
     default_pid_file = os.path.join("var", "run", "process", "process.pid")
 
     parser = ArgumentParser()
-    parser.add_argument("-d", "--debug", action="store_true", default=False,
-                        dest="debug", help="Enable debug mode")
-    parser.add_argument("-P", "--workers", default=1, dest="workers",
-                        help="Workers to spawn", type=int)
+    parser.add_argument("-d", "--debug", action="store_true", default=False, dest="debug", help="Enable debug mode")
+    parser.add_argument("-P", "--workers", default=1, dest="workers", help="Workers to spawn", type=int)
 
     # Queue connection info
-    parser.add_argument("-a", "--queue-username", required=True,
-                      default="", dest="queue_uname",
-                      help="Username to connect to the queue")
-    parser.add_argument("-b", "--queue-password", required=True,
-                      default="", dest="queue_passwd",
-                      help="Password to connect to the queue")
-    parser.add_argument("-c", "--queue-hosts", required=True,
-                      default="127.0.0.1", dest="queue_hosts",
-                      help="Comma separated list of hosts running AMQP")
-    parser.add_argument("-e", "--queue-exchange", required=True,
-                      default="", dest="queue_exchange",
-                      help="Exchange name to bind to")
+    parser.add_argument("-a", "--queue-username", required=True, default="", dest="queue_uname", help="Username to connect to the queue")
+    parser.add_argument("-b", "--queue-password", required=True, default="", dest="queue_passwd", help="Password to connect to the queue")
+    parser.add_argument("-c", "--queue-hosts", required=True, default="127.0.0.1", dest="queue_hosts", help="Comma separated list of hosts running AMQP")
+    parser.add_argument("-e", "--queue-exchange", required=True, default="", dest="queue_exchange", help="Exchange name to bind to")
 
     # MongoDB connection info
-    parser.add_argument("-u", "--mongo-username", required=True,
-                      default="", dest="mongo_uname",
-                      help="Username to connect to MongoDB")
-    parser.add_argument("-w", "--mongo-passwd", required=True,
-                      default="", dest="mongo_passwd",
-                      help="Password to connect to MongoDB")
-    parser.add_argument("-x", "--mongo-host", required=True,
-                      default="127.0.0.1", dest="mongo_host",
-                      help="Host running MongoDB")
-    parser.add_argument("-y", "--mongo-database", required=True,
-                      default="", dest="mongo_db",
-                      help="Database to use for storing messages")
-    parser.add_argument("-z", "--mongo-collection", required=True,
-                      default="", dest="mongo_collection",
-                      help="Collection to use for storing messages")
+    parser.add_argument("-u", "--mongo-username", required=True, default="", dest="mongo_uname", help="Username to connect to MongoDB")
+    parser.add_argument("-w", "--mongo-passwd", required=True, default="", dest="mongo_passwd", help="Password to connect to MongoDB")
+    parser.add_argument("-x", "--mongo-host", required=True, default="127.0.0.1", dest="mongo_host", help="Host running MongoDB")
+    parser.add_argument("-y", "--mongo-database", required=True, default="", dest="mongo_db", help="Database to use for storing messages")
+    parser.add_argument("-z", "--mongo-collection", required=True, default="", dest="mongo_collection", help="Collection to use for storing messages")
 
     return parser.parse_args(args)
 
@@ -524,13 +507,15 @@ def main():
     # Debug mode, process messages without going to the background
     if opts.debug:
         debug(opts)
-        return
+        return 1
 
     # Catch every exception, make sure it gets logged properly
     try:
         spawn_workers(opts)
+        return 1
     except Exception:
         log.exception("Unknown error")
+        return 0
 
 if __name__ == "__main__":
     sys.exit(main())
