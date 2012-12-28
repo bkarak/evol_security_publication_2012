@@ -46,7 +46,8 @@ ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s(%(process)d) - %(levelname)s - %(message)s")
 ch.setFormatter(formatter)
 log.addHandler(ch)
-
+fh = logging.FileHandler('run.log', mode='a')
+log.addHandler(fh)
 
 class RunFindbugs:
     options = None
@@ -132,23 +133,20 @@ class RunFindbugs:
 
         log.warn("Connection closed unexpectedly, attempting reconnect")
         self.conn = None
-        attemts = 0
+        attempts = 0
         while self.conn == None:
             if attemts == RETRY_ATTEMPTS:
-                log.warn("Failed all %d attempts to connect to %s, \
-                          trying with remaining nodes" %
-                         (RETRY_ATTEMPTS, self.current_amqp_node))
+                log.warn("Failed all %d attempts to connect to %s, trying with remaining nodes" % (RETRY_ATTEMPTS, self.current_amqp_node))
                 self.connect(False)
-                attemts = 0
+                attempts = 0
                 continue
 
             try:
-                attemts += 1
+                attempts += 1
                 self.connect(True)
             except Exception, e:
-                retry = attemts * RETRY_ATTEMPTS
-                log.warn("Cannot connect to %s after %d attempts, retrying\
-                after %d sec" % (self.current_amqp_node, attemts, retry))
+                retry = attempts * RETRY_ATTEMPTS
+                log.warn("Cannot connect to %s after %d attempts, retrying after %d sec" % (self.current_amqp_node, attempts, retry))
                 time.sleep(retry)
 
     def on_channel_open(self, channel_):
@@ -321,15 +319,15 @@ class RunFindbugs:
                 # Save it
                 if not self.record_exists(metadata):
                     self.store_to_mongo(__convert_findbugs_xml(body, findbugs_xml))
-                    channel.basic_ack(method.delivery_tag)
+                    channel.basic_ack(method.delivery_tag)                    
             else:
                 log.warn('%s contains no .class files' % (jar_file,))
-                channel.basic_reject(method.delivery_tag, requeue=False)
-            
+                channel.basic_reject(method.delivery_tag)
+
             self.msgs_acked += 1
         except Exception as e:
-            log.exception("Unexpected error:%s,  msg: %s" % (e, body))
-            channel.basic_reject(method.delivery_tag, requeue=False)
+            log.exception("Unexpected error: %s,  msg: %s" % (e, body))
+            channel.basic_reject(method.delivery_tag)
             self.msgs_rejected += 1
         finally:
             # The following is supposed to be the "Pythonic" way of doing file deletions!
@@ -367,10 +365,10 @@ class RunFindbugs:
                  'JarMetadata.version' : metadata['version']}
             
             if self.get_collection().find(q, timeout=False).count() <= 0:              
-                log.info('Record does not exist ... inserting new entry in mongodb')
+                log.info('Record does not exist ... continuing! (%s-%s-%s)' % (metadata['group_id'], metadata['artifact_id'], metadata['version']))
                 return False
             else:
-                log.warn('Record does not exist ... skipping')
+                log.warn('Record exists ... skipping! (%s-%s-%s)' % (metadata['group_id'], metadata['artifact_id'], metadata['version']))
                 return True
         except pymongo.errors.AutoReconnect, ae:
             log.warning('Mongo Connection is Down. Reconnecting! (record_exists, %s)' % (ae,))
