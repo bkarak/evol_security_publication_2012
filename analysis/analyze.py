@@ -45,7 +45,6 @@ def count_security_category_records(col_obj, skip=0):
         print 'Mongo Connection is Down. Reconnecting! (record_exists, %s)' % (ae,)
         count_security_category_records(col_obj, skip=counter)
                     
-            
 
 def main():
     mongo_db = get_mongo_db()
