@@ -11,11 +11,15 @@ def get_mongo_db():
     """
     Gets a connection to MongoDB
     """
-    conn = pymongo.Connection(host=MONGO_HOST, max_pool_size=10, network_timeout=1)
+    conn = pymongo.Connection(host=MONGO_HOST, max_pool_size=10)
     mongo_db = conn[MONGO_DB]
     mongo_db.authenticate(MONGO_UNAME, MONGO_PASSWD)
 
     return mongo_db
+
+
+#def get_mongo_client():
+#    pymongo.MongoClient(host=MONGO_HOST, )
 
 
 def get_project_versions(col_obj, group_id, artifact_id):
