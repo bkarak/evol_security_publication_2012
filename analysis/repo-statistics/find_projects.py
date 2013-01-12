@@ -1,29 +1,24 @@
-import json
+import json, data_helper, mongo_helper
+
+
 
 def main():
-    results = {}
-    fp = open('maven_jars_only.text', 'r')
+    results = data_helper.ArrayCount()
+    miter = mongo_helper.MongoDocumentIterator()
 
-    for l in fp:
-        try:
-            data_arr = l.split(' maven/')[1].strip().split('/')
+    print 'Found %d Documents' % (miter.total(),)
 
-            group_id = data_arr[-4]
-            artifact_id = data_arr[-3]
+    while miter.has_next():
+        d = miter.next()
 
-            project_key = '%s.%s' % (group_id, artifact_id)
+        if d is not None:
+            group_id = d['JarMetadata']['group_id']
+            artifact_id = d['JarMetadata']['artifact_id']
+            ga = '%s||%s' % (group_id, artifact_id)
+            results.incr(ga)
+            print 'Working %d of %d' % (miter.count(), miter.total(), )
 
-            if project_key not in results:
-                results[project_key] = {'group_id':group_id, 'artifact_id':artifact_id}
-                print 'Found %d Projects' % (len(results,))
-        except (IndexError, ValueError), e:
-            print 'ERROR: %s' % (l.strip(),)
-
-    fp.close()
-
-    fp = open('projects.json', 'w')
-    fp.write(json.dumps(results.values()))
-    fp.close()
+    data_helper.save_to_file('new_projects.json', json.dumps(results.get_series()))
 
 
 if __name__ == "__main__":
