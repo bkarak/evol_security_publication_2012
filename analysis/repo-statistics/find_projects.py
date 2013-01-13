@@ -1,15 +1,18 @@
-import json, data_helper, mongo_helper
+import json
 
+from helpers.mongo_helper import MongoDocumentIterator
+from helpers.data_helper import ArrayCount, save_to_file
 
 #
-# This script generated the number of projects
+# This script generates the "data/projects.json", which is a json dict (object)
+# with
 #
 
 __author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
 
 def main():
-    results = data_helper.ArrayCount()
-    miter = mongo_helper.MongoDocumentIterator()
+    results = ArrayCount()
+    miter = MongoDocumentIterator()
 
     print 'Found %d Documents' % (miter.total(),)
 
@@ -23,7 +26,7 @@ def main():
             results.incr(ga)
             print 'Working %d of %d' % (miter.count(), miter.total(),)
 
-    data_helper.save_to_file('projects.json', json.dumps(results.get_series()))
+    save_to_file('projects.json', json.dumps(results.get_series()))
 
 
 if __name__ == "__main__":
