@@ -6,6 +6,7 @@ MONGO_COL    = 'findbugs'
 MONGO_UNAME  = 'findbugs'
 MONGO_PASSWD = 'findbags'
 
+__author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
 
 class MongoDocumentIterator(object):
     def __init__(self):

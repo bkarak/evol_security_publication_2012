@@ -5,7 +5,7 @@ from helpers.data_helper import ArrayCount, save_to_file
 
 #
 # This script generates the "data/projects.json", which is a json dict (object)
-# with
+# with the following structure {<group_id>||<artifact_id> : version_count}
 #
 
 __author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"

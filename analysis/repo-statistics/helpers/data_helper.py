@@ -1,5 +1,6 @@
 import os, json
 
+__author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
 
 class ArrayCount(object):
     def __init__(self):
