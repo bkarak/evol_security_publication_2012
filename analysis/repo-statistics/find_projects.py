@@ -23,7 +23,7 @@ def main():
             results.incr(ga)
             print 'Working %d of %d' % (miter.count(), miter.total(),)
 
-    data_helper.save_to_file('new_projects.json', json.dumps(results.get_series()))
+    data_helper.save_to_file('projects.json', json.dumps(results.get_series()))
 
 
 if __name__ == "__main__":
