@@ -58,10 +58,6 @@ def get_mongo_connection():
     return mongo_db
 
 
-#def get_mongo_client():
-#    pymongo.MongoClient(host=MONGO_HOST, )
-
-
 def get_project_versions(col_obj, group_id, artifact_id):
     try:
         result = []
