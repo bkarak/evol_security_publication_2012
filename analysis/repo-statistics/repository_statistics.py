@@ -24,6 +24,5 @@ def main():
     print "1st Qrt: %d" % (version_list[statistics.first_quartile(version_list)])
     print "3rd Qrt: %d" % (version_list[statistics.third_quartile(version_list)])
 
-
 if __name__ == "__main__":
     main()
