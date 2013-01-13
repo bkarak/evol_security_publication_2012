@@ -1,5 +1,7 @@
 
 
+__author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
+
 class Project(object):
     def __init__(self, group_id, artifact_id):
         super(Project, self).__init__()
