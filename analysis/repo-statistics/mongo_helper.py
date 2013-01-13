@@ -32,7 +32,7 @@ class MongoDocumentIterator(object):
         try:
             d = None
 
-            for c in self.__collection.find(skip=self.__doc_count, limit=1):
+            for c in self.__collection.find(skip=self.__doc_count, limit=1, fields=['JarMetadata.group_id', 'JarMetadata.artifact_id']):
                 d = c
             self.__doc_count += 1
             return d
