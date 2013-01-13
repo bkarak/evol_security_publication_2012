@@ -1,3 +1,4 @@
+import os, json
 
 
 class ArrayCount(object):
@@ -22,3 +23,22 @@ def save_to_file(filename, data):
     fp = open(filename, 'w')
     fp.write(data)
     fp.close()
+
+
+def load_projects_json():
+    from models.project import Project
+
+    if not os.path.exists('data/projects.json'):
+        print '[ERROR]: data/projects.json does not exist!'
+        return []
+
+    project_list = []
+    fp = open('data/projects.json', 'r')
+    prj_json = json.load(fp)
+    fp.close()
+
+    for (k, v) in prj_json.iteritems():
+        project_list.append(Project.parse_project(k, v))
+
+    return project_list
+
