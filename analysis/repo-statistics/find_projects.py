@@ -1,6 +1,11 @@
 import json, data_helper, mongo_helper
 
 
+#
+# This script generated the number of projects
+#
+
+__author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
 
 def main():
     results = data_helper.ArrayCount()
@@ -16,7 +21,7 @@ def main():
             artifact_id = d['JarMetadata']['artifact_id']
             ga = '%s||%s' % (group_id, artifact_id)
             results.incr(ga)
-            print 'Working %d of %d' % (miter.count(), miter.total(), )
+            print 'Working %d of %d' % (miter.count(), miter.total(),)
 
     data_helper.save_to_file('new_projects.json', json.dumps(results.get_series()))
 
