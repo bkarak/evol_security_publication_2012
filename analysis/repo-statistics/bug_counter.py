@@ -14,6 +14,10 @@ def main():
         bug_counter = 0
 
         for bi in d.get('BugCollection', {}).get('BugInstance', []):
+            if not isinstance(bi, dict):
+                print d
+                continue
+
             if bi.get('category', '') == 'SECURITY':
                 bug_counter += 1
 
