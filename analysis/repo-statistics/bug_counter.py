@@ -12,16 +12,19 @@ def main():
         d = miter.next()
 
         bug_counter = 0
+        total_counter = 0
 
         for bi in d.get('BugCollection', {}).get('BugInstance', []):
+            total_counter += 1
+
             if not isinstance(bi, dict):
-                print d
+                print bi
                 continue
 
             if bi.get('category', '') == 'SECURITY':
                 bug_counter += 1
 
-        print '%s/%s-%s.jar: %d' % (d['JarMetadata']['group_id'], d['JarMetadata']['artifact_id'], d['JarMetadata']['version'], bug_counter)
+        print '%s/%s-%s.jar: %d (%d)' % (d['JarMetadata']['group_id'], d['JarMetadata']['artifact_id'], d['JarMetadata']['version'], bug_counter, total_counter)
 
 if __name__ == "__main__":
     main()
