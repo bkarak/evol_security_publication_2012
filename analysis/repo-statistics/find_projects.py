@@ -12,7 +12,7 @@ __author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
 
 def main():
     results = ArrayCount()
-    miter = MongoDocumentIterator()
+    miter = MongoDocumentIterator(fields=['JarMetadata.group_id', 'JarMetadata.artifact_id'])
 
     print 'Found %d Documents' % (miter.total(),)
 

@@ -9,17 +9,28 @@ MONGO_PASSWD = 'findbags'
 __author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
 
 class MongoDocumentIterator(object):
-    def __init__(self):
+    def __init__(self, query=None, fields=None):
         super(MongoDocumentIterator, self).__init__()
         self.__doc_count = 0
         self.__total_count = 0
         self.__connection = get_mongo_connection()
         self.__collection = self.__connection[MONGO_COL]
+
+        if fields is None:
+            self.__fields = []
+        else:
+            self.__fields = fields
+
+        if query is None:
+            self.__query = {}
+        else:
+            self.__query = {}
+
         self.__count_documents()
 
     def __count_documents(self):
         try:
-            self.__total_count = self.__collection.find(timeout=False).count()
+            self.__total_count = self.__collection.find(self.__query, timeout=False).count()
         except pymongo.errors.AutoReconnect, ar:
             print '__count_documents() - %s (reconnecting)' % (ar,)
 
@@ -33,7 +44,7 @@ class MongoDocumentIterator(object):
         try:
             d = None
 
-            for c in self.__collection.find(skip=self.__doc_count, limit=1, fields=['JarMetadata.group_id', 'JarMetadata.artifact_id']):
+            for c in self.__collection.find(self.__query, skip=self.__doc_count, limit=1, fields=self.__fields):
                 d = c
             self.__doc_count += 1
             return d
