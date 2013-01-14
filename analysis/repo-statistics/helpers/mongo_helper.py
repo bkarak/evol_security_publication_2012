@@ -24,7 +24,7 @@ class MongoDocumentIterator(object):
         if query is None:
             self.__query = {}
         else:
-            self.__query = {}
+            self.__query = query
 
         self.__count_documents()
 
