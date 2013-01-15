@@ -12,12 +12,35 @@ def main():
     while miter.has_next():
         d = miter.next()
         
+        # counter for all bugs
+        total_counter = 0
+        
+        # SECURITY category counters
         sec_high_bug_counter = 0
         sec_low_bug_counter = 0
         sec_total_counter = 0
-        mal_bug_counter = 0
-        total_counter = 0
         both_categories = 0
+        
+        # MALICIOUS_CODE
+        mal_bug_counter = 0
+        
+        # BAD_PRACTICE
+        bad_practice_counter = 0
+        
+        # PERFORMANCE
+        perform_counter = 0
+        
+        # CORRECTNESS
+        correctness_counter = 0
+        
+        #STYLE
+        style_counter = 0
+        
+        # Internationalization - I18N
+        inter_counter = 0
+        
+        # MT_CORRECTNESS
+        multi_counter = 0 
 
         for bi in d.get('BugCollection', {}).get('BugInstance', []):
             total_counter += 1
@@ -35,10 +58,30 @@ def main():
             if bi.get('category', '') == 'MALICIOUS_CODE':
                 mal_bug_counter += 1
                 
+            if bi.get('category', '') == 'BAD_PRACTICE':
+                bad_practice_counter += 1
+            
+            if bi.get('category', '') == 'PERFORMANCE':
+                perform_counter += 1
+                
+            if bi.get('category', '') == 'CORRECTNESS':
+                correctness_counter += 1
+                
+            if bi.get('category', '') == 'STYLE':
+                style_counter += 1
+                
+            if bi.get('category', '') == 'I18N':
+                inter_counter += 1
+                
+            if bi.get('category', '') == 'MT_CORRECTNESS':
+                multi_counter += 1
+                
         sec_total_counter = sec_high_bug_counter + sec_low_bug_counter
         both_categories = sec_total_counter + mal_bug_counter
 
         print '%s/%s-%s.jar. Data: size %d order %d and last modification date %d Bugs: sec / high %d sec / high: %d sec / total %d mal: %d from both categories %d (total:%d)' % (d['JarMetadata']['group_id'], d['JarMetadata']['artifact_id'], d['JarMetadata']['version'], d['JarMetadata']['jar_size'], d['JarMetadata']['version_order'], d['JarMetadata']['jar_last_modification_date'], sec_high_bug_counter, sec_low_bug_counter, sec_total_counter, mal_bug_counter, both_categories, total_counter)
+        
+        print 'bad practice bugs: %d performance bugs: %d correctness bugs: %d style bugs: %d internationalization bugs: %d multithreaded bugs: %d' % (bad_practice_counter, perform_counter, correctness_counter, style_counter, inter_counter, multi_counter)
         
 if __name__ == "__main__":
     main()
