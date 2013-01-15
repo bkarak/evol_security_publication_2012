@@ -29,7 +29,7 @@ def save_to_file(filename, data):
 def load_projects_json():
     from models.project import Project
 
-    if not os.path.exists('data/projects.json'):
+    if not os.path.exists('data/project_versions.json'):
         print '[ERROR]: data/projects.json does not exist!'
         return []
 
