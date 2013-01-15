@@ -8,6 +8,7 @@ MONGO_PASSWD = 'findbags'
 
 __author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
 
+
 class MongoDocumentIterator(object):
     def __init__(self, query=None, fields=None):
         super(MongoDocumentIterator, self).__init__()
@@ -37,6 +38,7 @@ class MongoDocumentIterator(object):
     def reset(self):
         self.__doc_count = 0
 
+
     def has_next(self):
         return self.__doc_count < self.__total_count
 
@@ -46,7 +48,9 @@ class MongoDocumentIterator(object):
 
             for c in self.__collection.find(self.__query, skip=self.__doc_count, limit=1, fields=self.__fields):
                 d = c
+
             self.__doc_count += 1
+
             return d
         except pymongo.errors.AutoReconnect, ar:
             print 'next() - %s (reconnecting)' % (ar,)
@@ -57,6 +61,35 @@ class MongoDocumentIterator(object):
 
     def count(self):
         return self.__doc_count
+
+
+class MongoProjectIterator(MongoDocumentIterator):
+    def __init__(self, group_id, artifact_id, query=None, fields=None):
+        __q = {'JarMetadata.group_id' : group_id,
+               'JarMetadata.artifact_id' : artifact_id}
+
+        __f = ['JarMetadata.version_order']
+
+        if query is not None:
+            __q.update(query)
+
+        if fields is not None:
+            __f.extend(fields)
+
+        super(MongoProjectIterator, self).__init__(query=__q,fields=__f)
+
+    def documents_list(self):
+        docs = []
+
+        while self.has_next():
+            d = self.next()
+
+            if d is not None:
+                docs.append(d)
+
+        docs.sort(key=lambda doc: doc['JarMetadata']['version_order'])
+
+        return docs
 
 
 def get_mongo_connection():
