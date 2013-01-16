@@ -4,7 +4,6 @@ __author__ = 'Dimitris Mitropoulos (dimitro@aueb.gr)'
 
 
 def main():
-    
     miter = MongoDocumentIterator(query={'BugCollection.BugInstance.category':'MALICIOUS_CODE'},fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.jar_size', 'JarMetadata.version_order', 'JarMetadata.jar_last_modification_date', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type'])
 
     print 'Found %d Documents' % (miter.total(),)

@@ -26,6 +26,20 @@ def save_to_file(filename, data):
     fp.close()
 
 
+def load_vuln_projects_json():
+    from models.project import Project
+
+    fp = open('data/vuln_projects.json', 'r')
+    prj_json = json.load(fp)
+    fp.close()
+
+    project_list = []
+
+    for pk in prj_json:
+        project_list.append(Project.parse_project(pk, 0))
+
+    return project_list
+
 def load_projects_json():
     from models.project import Project
 
