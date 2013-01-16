@@ -6,7 +6,7 @@ from helpers.mongo_helper import MongoProjectIterator
 
 def main():
     projects = load_vuln_projects_json()
-    results = []
+    results = {}
     security_bugs = ['HRS_REQUEST_PARAMETER_TO_COOKIE',
                      'HRS_REQUEST_PARAMETER_TO_HTTP_HEADER',
                      'PT_ABSOLUTE_PATH_TRAVERSAL',
@@ -23,7 +23,9 @@ def main():
     for p in projects:
         piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.jar_size', 'JarMetadata.version_order', 'JarMetadata.jar_last_modification_date', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type', 'BugCollection.BugInstance.Class.classname','BugCollection.BugInstance.priority'])
         doc_list = piter.documents_list()
+        documents = []
         count += 1
+
         print '[%d:%d] %s||%s: %d versions' % (count, total_projects, p.group_id(), p.artifact_id(), len(doc_list))
 
         for d in doc_list:
@@ -72,7 +74,15 @@ def main():
 
             doc_results['Counters'] = doc_array_count.get_series()
             doc_results['SecurityBugs'] = sec_instances
-            results.append(doc_results)
+            documents.append(doc_results)
+
+        key = '%s||%s' % (p.group_id(), p.artifact_id())
+        results[key] = {'group_id' : p.group_id(),
+                        'artifact_id' : p.artifact_id(),
+                        'version_count' : len(doc_list),
+                        'versions' : documents}
+
+        print results
 
     save_to_file('project_counters.json', json.dumps(results))
 
