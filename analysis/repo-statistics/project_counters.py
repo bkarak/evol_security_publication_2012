@@ -16,12 +16,15 @@ def main():
                      'XSS_REQUEST_PARAMETER_TO_SEND_ERROR',
                      'XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER']
 
-    print 'Found %d Projects' % (len(projects),)
+    total_projects = len(projects)
+    count = 0
+    print 'Found %d Projects' % (total_projects,)
 
     for p in projects:
         piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.jar_size', 'JarMetadata.version_order', 'JarMetadata.jar_last_modification_date', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type', 'BugCollection.BugInstance.Class.classname','BugCollection.BugInstance.priority'])
         doc_list = piter.documents_list()
-        print 'Project: %s||%s: %d documents' % (p.group_id(), p.artifact_id(), len(doc_list))
+        count += 1
+        print '[%d:%d] %s||%s: %d versions' % (count, total_projects, p.group_id(), p.artifact_id(), len(doc_list))
 
         for d in doc_list:
             doc_results = {'JarMetadata': d['JarMetadata']}
@@ -69,8 +72,6 @@ def main():
 
             doc_results['Counters'] = doc_array_count.get_series()
             doc_results['SecurityBugs'] = sec_instances
-
-            print doc_results
             results.append(doc_results)
 
     save_to_file('project_counters.json', json.dumps(results))
