@@ -19,13 +19,14 @@ def main():
     print 'Found %d Projects' % (len(projects),)
 
     for p in projects:
-        piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.jar_size', 'JarMetadata.version_order', 'JarMetadata.jar_last_modification_date', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type'])
+        piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.jar_size', 'JarMetadata.version_order', 'JarMetadata.jar_last_modification_date', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type', 'BugCollection.BugInstance.Class'])
         doc_list = piter.documents_list()
         print 'Project: %s||%s: %d documents' % (p.group_id(), p.artifact_id(), len(doc_list))
 
         for d in doc_list:
             doc_results = {'JarMetadata': d['JarMetadata']}
             doc_array_count = ArrayCount()
+            sec_instances = []
 
             for bi in d.get('BugCollection', {}).get('BugInstance', []):
                 if not isinstance(bi, dict):
@@ -34,6 +35,14 @@ def main():
 
                 bug_category = bi.get('category', '')
 
+                # method
+                if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
+                    sec_dict = {'Category' : bug_category,
+                                'Type' : bi.get('type', ''),
+                                'Class' : bi.get('Class', {})}
+                    sec_instances.append(sec_dict)
+
+                # counters
                 if bug_category == 'SECURITY':
                     bug_type = bi.get('type', None)
 
@@ -49,6 +58,9 @@ def main():
                     doc_array_count.incr(bug_category)
 
             doc_results['Counters'] = doc_array_count.get_series()
+            doc_results['SecurityBugs'] = sec_instances
+
+            print doc_results
             results.append(doc_results)
 
     save_to_file('project_counters.json', json.dumps(results))
