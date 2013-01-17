@@ -16,7 +16,7 @@
 \IEEEauthorblockN{Dimitris Mitropoulos \and Vassilios Karakoidas \and Panos Louridas \and Diomidis Spinellis}
 \IEEEauthorblockA{Department of Management Science and Technology\\
 Athens University of Economics and Business\\
-Email: \{dimitro, bkarak, gousiosg, louridas, dds\}@aueb.gr}
+Email: \{dimitro, bkarak, louridas, dds\}@aueb.gr}
 \and
 \IEEEauthorblockN{Georgios Gousios}
 \IEEEauthorblockA{Department of Software and Computer Technology\\
@@ -32,7 +32,8 @@ The abstract goes here.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Software Vulnerabilities, Static Analysis, Software Evolution, Maven, FindBugs.
+Software Vulnerabilities, Static Analysis, Software Evolution, Software
+Security, Maven, FindBugs.
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
@@ -42,9 +43,12 @@ Software Vulnerabilities, Static Analysis, Software Evolution, Maven, FindBugs.
 A security-related bug is a programming error that introduces a potentially
 exploitable weakness into a computer system. This weakness could lead to a
 security breach with unfortunate consequences in different layers, like databases,
-native code, applications, libraries and others. One of the most common
-approaches to identify software vulnerabilities is {\it static analysis}. This
-kind of analysis is performed by automated tools either on the program's source
+native code, applications, libraries and others. Despite the significant
+effort to detect and eliminate such bugs, little attention has been paid to
+study them in relation to software evolution.
+
+One of the most common approaches to identify software vulnerabilities is {\it static analysis}.
+This kind of analysis is performed by automated tools either on the program's source
 or object code and without actually executing it.
 
 Cite this~\cite{MNN11}.
@@ -58,6 +62,13 @@ Cite this~\cite{ZAH11}.
 
 \subsection{Data Provenance and Processing}
 \label{sec:data}
+
+The subject of our study was a snapshot of the maven repository. Before
+analyzing the data of the repository we performed a number of functional fits
+on the data.
+
+First, we obtained the repository snapshot (January 2012) that was previously
+used by -- et. al~\cite{}.
 
 \begin{table}
 \centering
@@ -77,8 +88,6 @@ Range & 336\\
 \hline
 \end{tabular}
 \end{table}
-
-A snapshot of the maven repository - January 2012.
 
 \subsection{Experiment}
 \label{sec:exp}
