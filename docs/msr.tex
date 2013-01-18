@@ -44,12 +44,20 @@ A security-related bug is a programming error that introduces a potentially
 exploitable weakness into a computer system. This weakness could lead to a
 security breach with unfortunate consequences in different layers, like databases,
 native code, applications, libraries and others. Despite the significant
-effort to detect and eliminate such bugs, little attention has been paid to
-study them in relation to software evolution.
+effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
+study them in relation to software evolution~\cite{L96, LRWPT97}. In this paper we present how we
+used a large software ecosystem to analyze how evolving software packages are
+related to the different types of software vulnerabilities.
 
-One of the most common approaches to identify software vulnerabilities is {\it static analysis}.
-This kind of analysis is performed by automated tools either on the program's source
-or object code and without actually executing it.
+One of the most common approaches to identify software vulnerabilities is
+{\it static analysis}~\cite{CW07}. This kind of analysis is performed by automated tools
+either on the program's source or object code and without actually executing
+it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
+an effective static analysis tool that has already been used in
+research~\cite{AP10, HP07}. Specifically, we ran FindBugs on all the project
+versions of all the projects that exist in the Maven repoistory (280GB of
+data). Then we observed the changes that involved the security bugs per project
+version.
 
 Cite this~\cite{MNN11}.
 
