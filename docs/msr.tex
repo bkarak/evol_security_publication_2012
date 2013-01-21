@@ -40,8 +40,8 @@ Security, Maven, FindBugs.
 
 \section{Introduction}
 
-A security-related bug is a programming error that introduces a potentially
-exploitable weakness into a computer system. This weakness could lead to a
+A security bug is a programming error that introduces a potentially
+exploitable weakness into a computer system~\cite{SSL12}. This weakness could lead to a
 security breach with unfortunate consequences in different layers, like databases,
 native code, applications, libraries and others. Despite the significant
 effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
@@ -50,23 +50,42 @@ used a large software ecosystem to analyze how evolving software packages are
 related to the different types of software vulnerabilities.
 
 One of the most common approaches to identify software vulnerabilities is
-{\it static analysis}~\cite{CW07}. This kind of analysis is performed by automated tools
-either on the program's source or object code and without actually executing
+{\it static analysis}~\cite{CW07}. This kind of analysis involves the
+inspection of the program's source or object code without executing
 it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
-an effective static analysis tool that has already been used in
+a popular static analysis tool that has already been used in
 research~\cite{AP10, HP07}. Specifically, we ran FindBugs on all the project
-versions of all the projects that exist in the Maven repoistory (265GB of
-data). Then we observed the changes that involved the security bugs and their
-characteristics, per project version.
+versions of all the projects that exist in the Maven\footnote{\url{http://maven.apache.org/}}
+repository (approximately 265GB of data). Then we observed the changes that
+involved the security bugs and their characteristics.
 
-We chose to focus our study on the security-related bugs rather than other
-software bugs for a number of reasons.
+We chose to focus our study on the security bugs rather than other
+software bugs because compared to the other software bugs,
+security bugs have a distinct feature: they are critical. Specifically, a software bug can
+lead to a mulfunction of a software application that runs under specific
+requirements but a security bug can allow a malicious user to alter the
+execution of the entire application. In this case, such bugs could span a wide range
+of security and privacy issues, like viewing sensitive information, the destruction or
+modification of sensitive data, denial of service and others.
+Hence, one of the basic pursuits in every new software release should be the
+mitigation of such bugs.
 
-Cite this~\cite{MNN11}.
+The main contributions of this research are:
 
-\section{Related Work}
+\begin{itemize}
+	\item the analysis of how security bugs evolve in time. To achieve
+this, we inspect every project per version.
+	\item the relation of security bugs to the component's size.
+	\item bug persistense between versions.
+	\item the correlation of security bugs with other bug categories.
+	\item the relation of dependencies and security bugs.
+\end{itemize}
 
-Cite this~\cite{ZAH11}.
+In the rest of this paper we
+describe the processing of our data and our experiment (Section \ref{sec:meth}),
+present and discuss the results we obtained (Section \ref{sec:res},
+outline related work (Section \ref{sec:rel}),
+and end up with an conclusion and directions for future work (Section \ref{sec:con}).
 
 \section{Methodology}
 \label{sec:meth}
@@ -106,7 +125,12 @@ Range & 336\\
 \section{Results and Analysis}
 \label{sec:res}
 
-\section{Conclusion}
+\section{Related Work}
+\label{sec:rel}
+
+Cite this~\cite{ZAH11} and this~\cite{MNN11}.
+
+\section{Conclusions and Future Work}
 \label{sec:con}
 The conclusion goes here.
 
