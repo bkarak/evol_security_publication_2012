@@ -19,24 +19,29 @@ def main():
     while miter.has_next():
         d = miter.next()
 
-        if d is not None:
-            print 'Working %d of %d' % (miter.count(), miter.total(),)
-            node_key = '%s||%s||%s' % (d['JarMetadata']['group_id'], d['JarMetadata']['artifact_id'], d['JarMetadata']['version'])
+        try:
+            if d is not None:
+                print 'Working %d of %d' % (miter.count(), miter.total(),)
+                node_key = '%s||%s||%s' % (d['JarMetadata']['group_id'], d['JarMetadata']['artifact_id'], d['JarMetadata']['version'])
+                deps = []
 
-            deps = []
+                for dep in d.get('JarMetadata', {}).get('dependencies', {}):
+                    if isinstance(dep, dict):
+                        dep_group_id = dep.get('groupId', None)
+                        dep_artifact_id = dep.get('artifactId', None)
+                        dep_version = dep.get('version', None)
 
-            for dep in d['JarMetadata']['dependencies']:
-                if isinstance(dep, dict):
-                    dep_group_id = dep['groupId']
-                    dep_artifact_id = dep['artifactId']
-                    dep_version = dep.get('version', None)
+                        if dep_group_id is None or dep_artifact_id is None:
+                            continue
 
-                    if dep_version is None:
-                        deps.append('%s||%s' % (dep_group_id, dep_artifact_id))
-                    else:
-                        deps.append('%s||%s||%s' % (dep_group_id, dep_artifact_id, dep_version))
+                        if dep_version is None:
+                            deps.append('%s||%s' % (dep_group_id, dep_artifact_id))
+                        else:
+                            deps.append('%s||%s||%s' % (dep_group_id, dep_artifact_id, dep_version))
 
-            results[node_key] = deps
+                results[node_key] = deps
+        except Exception, e:
+            print d
 
     save_to_file('project_graph.json', json.dumps(results))
 
