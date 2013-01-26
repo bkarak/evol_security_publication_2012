@@ -131,10 +131,26 @@ Range & 336\\
 
 There are noumerous methods for mining software repositories in the context
 of software evolution~\cite{KCM07}. In this section we focus on the ones
-that highlight the relationship between software bugs and evolution. The key
-idea behind this concept is typically similar to ours: the combination of
-information like bug decriptions, documentation and others with the information
-retrieved from either the source or object code of a project version.
+that highlight the relationship between software bugs and evolution and try to
+extract useful conclusions. The key idea behind this concept is
+similar to ours: the combination of information like bug decriptions,
+documentation and others with the information retrieved from either the source
+or object code of a project version.
+
+{\it Refactoring identification} through software evolution is an approach used to
+relate refactorings with software bugs. Weibgerber et al. found that a high
+ratio of refactorings is usually followed by an increasing ratio of bug
+reports~\cite{WD06}. In addition, they found that software bugs are sometimes introduced
+after an incomplete refactoring~\cite{GW05}.
+Ratzinger et al.~\cite{RSG08} found that the number of bugs decreases, when the number of
+refactorings increases. Finally, Kim M. et al.~\cite{KCK11} showed that {\sc api}-level
+refactorings aid bug fixes.
+
+Using {\it micro patterns} is an approach proposed by Kim et al.~\cite{KPW06}
+to detect bug-prone patterns among source code. Micro patterns describe programming
+idioms like inheritance, data management, immutability and others. The approach involved
+the examination of all revisions of three open-source projects to extract bug
+introduction rates for each pattern.
 
 Cite this~\cite{ZAH11} and this~\cite{MNN11}.
 
