@@ -7,7 +7,6 @@ from helpers.mongo_helper import MongoProjectIterator
 def main():
     projects = load_projects_json()
     results = {}
-
     total_projects = len(projects)
     count = 0
 
@@ -16,16 +15,13 @@ def main():
     for p in projects:
         piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.version_order', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type', 'BugCollection.BugInstance.Class.classname','BugCollection.BugInstance.priority'])
         doc_list = piter.documents_list()
-        documents = []
+        proj_array_count = ArrayCount()
+        bug_list = []
         count += 1
 
         print '[%d:%d] %s||%s: %d versions' % (count, total_projects, p.group_id(), p.artifact_id(), len(doc_list))
 
         for d in doc_list:
-            doc_results = {'JarMetadata': d['JarMetadata']}
-            doc_array_count = ArrayCount()
-            sec_instances = []
-
             for bi in d.get('BugCollection', {}).get('BugInstance', []):
                 if not isinstance(bi, dict):
                     print bi
@@ -33,47 +29,32 @@ def main():
 
                 bug_category = bi.get('category', '')
 
+                # get class names
+                classnames = bi['Class']
+                classresults = []
+
+                if isinstance(classnames, list):
+                    for c in classnames:
+                        classresults.append(c.get('classname', 'NotSet'))
+                elif isinstance(classnames, dict):
+                    classresults.append(classnames.get('classname', 'NotSet'))
+
+                type = bi['type']
+                signatures = ['%s||%s||%s' % (bug_category, type, c) for c in classresults]
+
                 # method
-                if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
-                    classnames = bi['Class']
-                    classresults = []
+                for s in signatures:
+                    if s not in bug_list:
+                        bug_list.append(s)
 
-                    if isinstance(classnames, list):
-                        for c in classnames:
-                            classresults.append(c.get('classname', 'NotSet'))
-                    elif isinstance(classnames, dict):
-                        classresults.append(classnames.get('classname', 'NotSet'))
+                        if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
+                            proj_array_count.incr('SECURITY')
+                        else:
+                            proj_array_count.incr(bug_category)
 
-                    sec_dict = {'Category' : bug_category,
-                                'Type' : bi.get('type', 'NotSet'),
-                                'Priority' : int(bi.get('priority', 0)),
-                                'Class' : classresults}
-                    sec_instances.append(sec_dict)
+        results['%s||%s' % (p.group_id(), p.artifact_id())] = proj_array_count.get_series()
 
-                # counters
-                if bug_category == 'SECURITY':
-                    bug_type = bi.get('type', None)
-
-                    if bug_type is None:
-                        print 'Invalid Type!'
-                        continue
-
-                else:
-                    doc_array_count.incr(bug_category)
-
-            doc_results['Counters'] = doc_array_count.get_series()
-            doc_results['SecurityBugs'] = sec_instances
-            documents.append(doc_results)
-
-        key = '%s||%s' % (p.group_id(), p.artifact_id())
-        results[key] = {'group_id' : p.group_id(),
-                        'artifact_id' : p.artifact_id(),
-                        'version_count' : len(doc_list),
-                        'versions' : documents}
-
-        print results
-
-    save_to_file('project_counters.json', json.dumps(results))
+    save_to_file('bug_correlation_counters.json', json.dumps(results))
 
 
 if __name__ == "__main__":
