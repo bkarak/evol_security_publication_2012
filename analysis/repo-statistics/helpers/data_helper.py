@@ -48,7 +48,7 @@ def load_projects_json():
         return []
 
     project_list = []
-    fp = open('data/projects.json', 'r')
+    fp = open('data/project_versions.json', 'r')
     prj_json = json.load(fp)
     fp.close()
 
