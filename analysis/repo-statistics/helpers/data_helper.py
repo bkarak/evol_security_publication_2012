@@ -7,8 +7,8 @@ class ArrayCount(object):
         super(ArrayCount, self).__init__()
         self.__arrayDict = {}
 
-    def incr(self, item):
-        self.__arrayDict[item] = self.__arrayDict.get(item, 0) + 1
+    def incr(self, item, delta=1):
+        self.__arrayDict[item] = self.__arrayDict.get(item, 0) + delta
 
     def get_series(self):
         return self.__arrayDict
