@@ -7,14 +7,6 @@ from helpers.mongo_helper import MongoProjectIterator
 def main():
     projects = load_projects_json()
     results = {}
-    security_bugs = ['HRS_REQUEST_PARAMETER_TO_COOKIE',
-                     'HRS_REQUEST_PARAMETER_TO_HTTP_HEADER',
-                     'PT_ABSOLUTE_PATH_TRAVERSAL',
-                     'SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE',
-                     'SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING',
-                     'XSS_REQUEST_PARAMETER_TO_JSP_WRITER',
-                     'XSS_REQUEST_PARAMETER_TO_SEND_ERROR',
-                     'XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER']
 
     total_projects = len(projects)
     count = 0
@@ -22,7 +14,7 @@ def main():
     print 'Found %d Projects' % (total_projects,)
 
     for p in projects:
-        piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.jar_size', 'JarMetadata.version_order', 'JarMetadata.jar_last_modification_date', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type', 'BugCollection.BugInstance.Class.classname','BugCollection.BugInstance.priority'])
+        piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.version_order', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type', 'BugCollection.BugInstance.Class.classname','BugCollection.BugInstance.priority'])
         doc_list = piter.documents_list()
         documents = []
         count += 1
@@ -66,10 +58,6 @@ def main():
                         print 'Invalid Type!'
                         continue
 
-                    if bug_type in security_bugs:
-                        doc_array_count.incr('SECURITY_HIGH')
-                    else:
-                        doc_array_count.incr('SECURITY_LOW')
                 else:
                     doc_array_count.incr(bug_category)
 
