@@ -24,7 +24,7 @@ def main():
         for d in doc_list:
             for bi in d.get('BugCollection', {}).get('BugInstance', []):
                 if not isinstance(bi, dict):
-                    print bi
+                    print 'Invalid BugInstance (%s)' % (bi,)
                     continue
 
                 bug_category = bi.get('category', '')
