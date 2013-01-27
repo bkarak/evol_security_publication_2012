@@ -24,7 +24,7 @@ def main():
         for d in doc_list:
             for bi in d.get('BugCollection', {}).get('BugInstance', []):
                 if not isinstance(bi, dict):
-                    print 'Invalid BugInstance (%s)' % (bi,)
+                    #print 'Invalid BugInstance (%s)' % (bi,)
                     continue
 
                 bug_category = bi.get('category', '')
@@ -52,6 +52,13 @@ def main():
                         else:
                             proj_array_count.incr(bug_category)
 
+                    if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
+                        proj_array_count.incr('TOTAL_SECURITY')
+                    else:
+                        proj_array_count.incr('TOTAL_' + bug_category)
+
+
+        print proj_array_count.get_series()
         results['%s||%s' % (p.group_id(), p.artifact_id())] = proj_array_count.get_series()
 
     save_to_file('bug_correlation_counters.json', json.dumps(results))
