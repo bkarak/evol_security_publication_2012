@@ -46,7 +46,8 @@ def main():
                         'version_count' : len(doc_list),
                         'versions' : documents}
 
-        print results
+        # TODO: uncomment this to print out each entry
+        #print results
 
     save_to_file('project_counters.json', json.dumps(results))
 
