@@ -1,7 +1,7 @@
 import json
 
 from helpers.mongo_helper import MongoDocumentIterator
-from helpers.data_helper import ArrayCount, save_to_file
+from helpers.data_helper import save_to_file
 
 #
 # This script generates the "data/projects.json", which is a json dict (object)
@@ -39,7 +39,7 @@ def main():
                         else:
                             deps.append('%s||%s||%s' % (dep_group_id, dep_artifact_id, dep_version))
 
-                results[node_key] = deps
+                results[node_key] = {'dependencies ' : deps, 'timestamp' : d['JarMetadata'].get('jar_last_modification_date', 0), 'version_order' : d['JarMetadata']['version_order']}
         except Exception, e:
             print d
 
