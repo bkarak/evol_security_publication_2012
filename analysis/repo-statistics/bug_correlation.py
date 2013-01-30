@@ -59,8 +59,6 @@ def main():
                 type = bi['type']
                 signature = '%s||%s||%s' % (bug_category, type, '||'.join(signatures_ids))
 
-                print signature
-
                 # method
                 if signature not in bug_list:
                     bug_list.append(signature)
