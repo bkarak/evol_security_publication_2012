@@ -13,7 +13,7 @@ def main():
     print 'Found %d Projects' % (total_projects,)
 
     for p in projects:
-        piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.version_order', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type', 'BugCollection.BugInstance.Class.classname','BugCollection.BugInstance.priority'])
+        piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version', 'JarMetadata.version_order', 'BugCollection.BugInstance.category', 'BugCollection.BugInstance.type', 'BugCollection.BugInstance.Class.classname','BugCollection.BugInstance.Method.name', 'BugCollection.BugInstance.Field.name'])
         doc_list = piter.documents_list()
         proj_array_count = ArrayCount()
         bug_list = []
@@ -29,34 +29,51 @@ def main():
 
                 bug_category = bi.get('category', '')
 
-                # get class names
+                # create signature
+                signatures_ids = []
                 classnames = bi['Class']
-                classresults = []
 
                 if isinstance(classnames, list):
                     for c in classnames:
-                        classresults.append(c.get('classname', 'NotSet'))
+                        signatures_ids.append(c.get('classname', 'NotSet'))
                 elif isinstance(classnames, dict):
-                    classresults.append(classnames.get('classname', 'NotSet'))
+                    signatures_ids.append(classnames.get('classname', 'NotSet'))
+
+                # methods
+                methodnames = bi.get('Method', {})
+
+                if isinstance(methodnames, list):
+                    for m in methodnames:
+                        signatures_ids.append(m.get('name', 'NotSet'))
+                elif isinstance(methodnames, dict):
+                    signatures_ids.append(methodnames.get('name', 'NotSet'))
+
+                # fields
+                fieldnames = bi.get('Field', {})
+                if isinstance(fieldnames, list):
+                    for f in fieldnames:
+                        signatures_ids.append(f.get('name', 'NotSet'))
+                elif isinstance(fieldnames, dict):
+                    signatures_ids.append(fieldnames.get('name', 'NotSet'))
 
                 type = bi['type']
-                signatures = ['%s||%s||%s' % (bug_category, type, c) for c in classresults]
+                signature = '%s||%s||%s' % (bug_category, type, '||'.join(signatures_ids))
+
+                print signature
 
                 # method
-                for s in signatures:
-                    if s not in bug_list:
-                        bug_list.append(s)
-
-                        if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
-                            proj_array_count.incr('SECURITY')
-                        else:
-                            proj_array_count.incr(bug_category)
+                if signature not in bug_list:
+                    bug_list.append(signature)
 
                     if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
-                        proj_array_count.incr('TOTAL_SECURITY')
+                        proj_array_count.incr('SECURITY')
                     else:
-                        proj_array_count.incr('TOTAL_' + bug_category)
+                        proj_array_count.incr(bug_category)
 
+                if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
+                    proj_array_count.incr('TOTAL_SECURITY')
+                else:
+                    proj_array_count.incr('TOTAL_' + bug_category)
 
         print proj_array_count.get_series()
         results['%s||%s' % (p.group_id(), p.artifact_id())] = proj_array_count.get_series()
