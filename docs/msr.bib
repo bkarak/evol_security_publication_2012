@@ -108,6 +108,22 @@
  address = {New York, NY, USA},
 }
 
+@article{HP04,
+ author = {Hovemeyer, David and Pugh, William},
+ title = {Finding bugs is easy},
+ journal = {SIGPLAN Not.},
+ issue_date = {December 2004},
+ volume = {39},
+ number = {12},
+ month = dec,
+ year = {2004},
+ issn = {0362-1340},
+ pages = {92--106},
+ numpages = {15},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+
 % evolution of Linux
 
 @inproceedings{IB06,
@@ -190,10 +206,27 @@
   booktitle = {ICSM},
   year      = {2008},
   pages     = {412-415},
-  ee        = {http://dx.doi.org/10.1109/ICSM.2008.4658092},
-  crossref  = {DBLP:conf/icsm/2008},
-  bibsource = {DBLP, http://dblp.uni-trier.de}
-} 
+}
+
+@inproceedings{DL08,
+  author    = {Marco D'Ambros and
+               Michele Lanza},
+  title     = {A Flexible Framework to Support Collaborative Software Evolution
+               Analysis},
+  booktitle = {CSMR},
+  year      = {2008},
+  pages     = {3-12},
+}
+
+@incollection{ZNA08,
+  author    = {Thomas Zimmermann and
+               Nachiappan Nagappan and
+               Andreas Zeller},
+  title     = {Predicting Bugs from History},
+  booktitle = {Software Evolution},
+  year      = {2008},
+  pages     = {69-88},
+}
 
 % evolution and security bugs
 
@@ -238,22 +271,6 @@
  publisher = {Springer-Verlag},
  address = {Berlin, Heidelberg},
 }
-
-@article{HP04,
- author = {Hovemeyer, David and Pugh, William},
- title = {Finding bugs is easy},
- journal = {SIGPLAN Not.},
- issue_date = {December 2004},
- volume = {39},
- number = {12},
- month = dec,
- year = {2004},
- issn = {0362-1340},
- pages = {92--106},
- numpages = {15},
- publisher = {ACM},
- address = {New York, NY, USA},
-} 
 
 @inproceedings{BFG07,
   author = {Bakota, Tibor and Ferenc, Rudolf and Gyimóthy, Tibor},
@@ -371,6 +388,8 @@
  address = {New York, NY, USA},
 }
 
+% micro patterns
+
 @inproceedings{KPW06,
  author = {Kim, Sunghun and Pan, Kai and Whitehead,Jr., E. James},
  title = {Micro pattern evolution},
@@ -386,6 +405,21 @@
  acmid = {1137995},
  publisher = {ACM},
  address = {New York, NY, USA},
+} 
+
+@inproceedings{GM05,
+ author = {Gil, Joseph (Yossi) and Maman, Itay},
+ title = {Micro patterns in Java code},
+ booktitle = {Proceedings of the 20th annual ACM SIGPLAN conference on Object-oriented programming, systems, languages, and applications},
+ series = {OOPSLA '05},
+ year = {2005},
+ isbn = {1-59593-031-0},
+ location = {San Diego, CA, USA},
+ pages = {97--116},
+ numpages = {20},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {design patterns, implementation patterns, object-oriented programming, program analysis},
 } 
 
 % refactoring identification
@@ -481,21 +515,22 @@
 
 % querying
 
-@article{HG05,
+@inproceedings{HG05,
  author = {Hindle, Abram and German, Daniel M.},
- title = {SCQL: a formal model and a query language for source control repositories},
- journal = {SIGSOFT Softw. Eng. Notes},
- issue_date = {July 2005},
- volume = {30},
- number = {4},
- month = may,
+ title = {{SCQL}: a formal model and a query language for source control repositories},
+ booktitle = {Proceedings of the 2005 international workshop on Mining software repositories},
+ series = {MSR '05},
  year = {2005},
- issn = {0163-5948},
+ isbn = {1-59593-123-6},
+ location = {St. Louis, Missouri},
  pages = {1--5},
  numpages = {5},
+ url = {http://doi.acm.org/10.1145/1082983.1083161},
+ doi = {10.1145/1082983.1083161},
+ acmid = {1083161},
  publisher = {ACM},
  address = {New York, NY, USA},
-}
+} 
 
 @inproceedings{BN11b,
  author = {Bhattacharya, Pamela and Neamtiu, Iulian},
@@ -523,5 +558,16 @@
  publisher = {IEEE Computer Society},
  address = {Washington, DC, USA},
 } 
+
+@inproceedings{NZ10,
+  author    = {Lucas Nussbaum and
+               Stefano Zacchiroli},
+  title     = {The Ultimate Debian Database: Consolidating bazaar metadata
+               for Quality Assurance and data mining},
+  booktitle = {Proceedings of the 2010 international workshop on Mining software repositories},
+  series    = {MSR '10},
+  year      = {2010},
+  pages     = {52-61},
+}
 
 

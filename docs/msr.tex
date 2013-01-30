@@ -54,7 +54,7 @@ One of the most common approaches to identify software vulnerabilities is
 inspection of the program's source or object code without executing
 it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a popular static analysis tool that has already been used in
-research~\cite{AP10, HP07}. Specifically, we ran FindBugs on all the project
+research~\cite{AP10, HP07, HP04}. Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the Maven\footnote{\url{http://maven.apache.org/}}
 repository (approximately 265GB of data). Then we observed the changes that
 involved the security bugs and their characteristics. This research builds upon
@@ -142,32 +142,65 @@ relate refactorings with software bugs. Wei{\ss}gerber et al. found that a high
 ratio of refactorings is usually followed by an increasing ratio of bug
 reports~\cite{WD06}. In addition, they indicated that software bugs are sometimes introduced
 after an incomplete refactoring~\cite{GW05}.
-Ratzinger et al.~\cite{RSG08} found that the number of bugs decreases, when the number of
-refactorings increases. Finally, Kim M. et al.~\cite{KCK11} showed that {\sc api}-level
+Ratzinger et al.~\cite{RSG08} showed that the number of bugs decreases, when the number of
+refactorings increases. Finally, Kim M. et al.~\cite{KCK11} indicated that {\sc api}-level
 refactorings aid bug fixes.
 
-Using {\it Micro patterns} is a method proposed by Kim et al.~\cite{KPW06}
+Using {\it micro patterns} is a method proposed by Kim et al.~\cite{KPW06}
 to detect bug-prone patterns among source code. Micro patterns describe programming
 idioms like inheritance, data management, immutability and others. The approach involved
 the examination of all revisions of three open-source projects to extract bug
-introduction rates for each pattern.
+introduction rates for each pattern. Gil et al.~\cite{GM05} analyzed the
+prevalence of micro patterns across five Sun {\sc jdk} versions to conclude that
+pattern prevalence tends to be the same in software collections.
 
 {\it Querying techniques} are used to answer a broad range of questions
-regarding the evolution history of a project~\cite{HG05}. Bhattacharya et al.~\cite{BN11}
-proposed a framework that is based upon recursively enumerable languages. The
-framework can correlate software bugs with developers in various ways.
-For instanse, return the list of bugs fixed by a specific developer.
-Fischer et al.~\cite{FPG03} proposed an approach for
-populating a release history database that combines code information
-with bug tracking data. In this way, a developer can couple files that contain
-common bugs, estimate code maturity with respect to the bugs and others.
+regarding the evolution history of a project~\cite{HG05}. Bhattacharya et
+al.~\cite{BN11, B11} proposed a framework that is based upon
+recursively enumerable languages. The framework can correlate software
+bugs with developers in various ways. For instanse, return the list of
+bugs fixed by a specific developer. Fischer et al.~\cite{FPG03} proposed
+an approach for populating a release history database that combines code
+information with bug tracking data. In this way, a developer can couple files
+that contain common bugs, estimate code maturity with respect to the bugs
+and others. The ``Ultimate Debian Database''~\cite{NZ10} is an {\sc sql}-based
+framework that integrates information about the Debian project from various
+sources to answer queries related to software bugs and source code.
 
-Cite this~\cite{ZAH11} and this~\cite{MNN11}.
+D'Ambros et al. have used {\it bug history analysis} to detect
+the critical components of a project~\cite{D08}. This is done by using an
+evolutionary meta-model~\cite{DL08}. The same approach was
+also used by Zimmermann et al.~\cite{ZNA08} to check the correlation
+of bugs with software properties like code complexity, process quality and others
+and predict future properties.
+
+Contrary to the above, our work focuses on the subset of security bugs.
+Focusing on such bugs is not a new idea. Massacci et al.~\cite{MNN11} observed
+the evolution of software defects by examining six major versions of Firefox.
+To achieve this they created a database schema that contained information
+coming from the ``Mozilla Firefox-related Security Advisories'' ({\sc mfsa})
+list,~\footnote{\url{http://www.mozilla.org/projects/security/known-vulnerabilities.html}}
+Bugzilla entries and others. Their findings indicated that security bugs are
+persistent over time. They also showed that there are many web users that use
+old versions of Firefox, meaning that old attacks will continue to work.
+Zaman et al.~\cite{ZAH11} focused again on Firefox to study the relation of
+security bugs with performance bugs. This was also done by analyzing the project's
+Bugzilla. Their research showed that security bugs require more experienced developers
+to be fixed. In addittion, security bug fixes are more complex than the
+fixes of performance and other bugs.
+Shahzad et al.~\cite{SSL12} analyzed large sets of vulnerability data-sets to observe
+various features of the vulnerabilities that they considered critical. Such features
+were the functionality and the criticality of the defects. Their analysis
+included the observation of vulnerability disclosures, the behavior of
+hackers in releasing exploits for vulnerabilities, patching and others. In
+their findings they highlighted the most exploited defects and showed that
+the percentage of remotely exploitable vulnerabilities has gradually increased
+over the years.
 
 \section{Conclusions and Future Work}
 \label{sec:con}
 
-Our work could (?) aid bug-prediction models.
+Our work could (?) aid bug-prediction models in the same way as~\cite{BN11}.
 
 \section*{Acknowledgments}
 
