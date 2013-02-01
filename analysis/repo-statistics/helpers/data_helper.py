@@ -63,3 +63,4 @@ def load_projects_json():
 
     return project_list
 
+
