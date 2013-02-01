@@ -9,30 +9,31 @@
 
 \title{Dismal Code: Studying the Evolution of Security Vulnerabilities}
 
-\author{\IEEEauthorblockN{Dimitris Mitropoulos}
+\author{
+\IEEEauthorblockN{Dimitris Mitropoulos}
 \IEEEauthorblockA{Department of Management Science and Technology\\
 Athens University of Economics and Business\\
-Email: dimitro@aueb.gr}
+Email: dimitro@aueb.gr}\\
 \and
 \IEEEauthorblockN{Vassilios Karakoidas}
 \IEEEauthorblockA{Department of Management Science and Technology\\
 Athens University of Economics and Business\\
 Email: bkarak@aueb.gr}\\
 \and
+\IEEEauthorblockN{Georgios Gousios}
+\IEEEauthorblockA{Department of Software and Computer Technology\\
+Delft University of Technology\\
+Email: G.Gousios@tudelft.nl}\\
+\and
 \IEEEauthorblockN{Panos Louridas}
 \IEEEauthorblockA{Department of Management Science and Technology\\
 Athens University of Economics and Business\\
-Email: louridas@aueb.gr}
+Email: louridas@aueb.gr}\\
 \and
 \IEEEauthorblockN{Diomidis Spinellis}
 \IEEEauthorblockA{Department of Management Science and Technology\\
 Athens University of Economics and Business\\
-Email: dds@aueb.gr}
-\and
-\IEEEauthorblockN{Georgios Gousios}
-\IEEEauthorblockA{Department of Software and Computer Technology\\
-Delft University of Technology\\
-Email: G.Gousios@tudelft.nl}}
+Email: dds@aueb.gr}}
 
 \maketitle
 
@@ -114,7 +115,7 @@ used by -- et. al~\cite{}.
 \begin{figure*}
 	\centering
 	\includegraphics[scale=0.6]{version_count.pdf}
-	\caption{Distribution of version count amongst project population}
+	\caption{Distribution of version count among project population}
 	\label{fig:version-count}
 \end{figure*}
 
@@ -167,7 +168,8 @@ Bad Practice & Violations of recommended and essential
 coding practice. \\
 Correctness & Involves coding mistakes resulting in code
 that was probably not what the developer intended. \\
-Experimental & \\
+Experimental & Includes unsatisfied obligations. For instance,
+forgetting to close a file \\
 Internationalisation & Indicates the use of non-localized methods \\
 Multi-Threaded Correctness & Thread synchronization issues. \\
 Performance & Involves inefficient memory usageallocation, usage 
@@ -179,6 +181,9 @@ Malicious Code}. Involves code that could lead to security breach. \\
 \hline
 \end{tabular}
 \end{table}
+
+\subsection{Analysis}
+\label{sec:analysis}
 
 \section{Related Work}
 \label{sec:rel}
