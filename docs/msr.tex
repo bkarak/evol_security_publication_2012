@@ -149,18 +149,23 @@ Range & 336\\
 \centering
 \caption{Bug categorisation according to FindBugs}
 \label{tbl:bug-categorisation}
-\begin{tabular}{l r}
- \hline
+\begin{tabular}{l p{15em}}
+\hline
 Category & Description\\
 \hline
-Bad Practice & \\
-Correctness & \\
+Bad Practice & Violations of recommended and essential
+coding practice. \\
+Correctness & Involves coding mistakes resulting in code
+that was probably not what the developer intended. \\
 Experimental & \\
-Internationalisation & \\
-Multi-Threaded Correctness & \\
-Performance & \\
-Style & \\
-Security & \\
+Internationalisation & Indicates the use of non-localized methods \\
+Multi-Threaded Correctness & Thread synchronization issues. \\
+Performance & Involves inefficient memory usageallocation, usage 
+of non-static classes \\
+Style & Code that is confusing, or
+written in a way that leads to errors.\\
+Security & Contains two subcategories, namely: {\it Security} and {\it
+Malicious Code}. Involves code that could lead to security breach. \\
 \hline
 \end{tabular}
 \end{table}
