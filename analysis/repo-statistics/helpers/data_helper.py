@@ -1,6 +1,8 @@
 import os, json
 
+
 __author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
+
 
 class ArrayCount(object):
     def __init__(self):
@@ -9,6 +11,9 @@ class ArrayCount(object):
 
     def incr(self, item, delta=1):
         self.__arrayDict[item] = self.__arrayDict.get(item, 0) + delta
+
+    def get_item(self, item):
+        return self.__arrayDict.get(item, 0)
 
     def get_series(self):
         return self.__arrayDict
@@ -39,6 +44,7 @@ def load_vuln_projects_json():
         project_list.append(Project.parse_project(pk, 0))
 
     return project_list
+
 
 def load_projects_json():
     from models.project import Project
