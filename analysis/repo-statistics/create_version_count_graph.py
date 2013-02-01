@@ -11,7 +11,7 @@ def main():
     strio = StringIO.StringIO()
 
     for (k, v) in statistics.get_series().iteritems():
-        strio.write(str(k) + " - " + str(v) + "\n")
+        strio.write(str(k) + "," + str(v) + "\n")
 
     save_to_file('version_count.dat', strio.getvalue())
 
