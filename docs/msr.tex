@@ -74,7 +74,7 @@ our earlier work on the topic~\cite{MGS12}.
 We chose to focus our study on the security bugs rather than other
 software bugs because compared to the other software bugs,
 security bugs have a distinct feature: they are critical. Specifically, a software bug can
-lead to a mulfunction of a software application that runs under specific
+lead to a mulfunction of a software artifact that runs under specific
 requirements but a security bug can allow a malicious user to alter the
 execution of the entire application. In this case, such bugs could span a wide range
 of security and privacy issues, like viewing sensitive information, the destruction or
@@ -85,12 +85,20 @@ mitigation of such bugs.
 The main contributions of this research are:
 
 \begin{itemize}
-	\item the analysis of how security bugs evolve in time. To achieve
-this, we inspect every project per version.
-	\item the relation of security bugs to the component's size.
-	\item bug persistense between versions.
-	\item the correlation of security bugs with other bug categories.
-	\item the relation of software dependencies and security bugs.
+	\item The analysis of how security bugs evolve in time. To achieve
+this, we inspect every project per version. Our hypothesis is that security
+bugs must decrease as a project evolves since they are critical and developers
+should eliminate them.
+	\item The relation of security bugs to the artifact's size.  Here, size is
+defined in terms of bytecode.
+	\item Security bug persistense between versions. We check if specific bugs are
+eliminated between versions.
+	\item The correlation of security bugs with other bug categories. We
+present how such bugs are correlated with bugs that have to do with
+performance, coding practices and others.
+	\item The relation of software dependencies and security bugs. Our
+hypothesis is that an artifact that is a dependency of many other artifacts
+should have a low rate of security bugs. 
 \end{itemize}
 
 In the rest of this paper we
@@ -184,6 +192,16 @@ Malicious Code}. Involves code that could lead to security breach. \\
 
 \subsection{Analysis}
 \label{sec:analysis}
+
+\subsubsection{How Security Bugs Evolve Over Time}
+
+\subsubsection{The Relation of Defects with the size of an Artifact}
+
+\subsubsection{Persistense of Security Bugs}
+
+\subsubsection{Security Bugs {\sc vs} Other Bug Categories}
+
+\subsubsection{Critical Artifacts and their Defects}
 
 \section{Related Work}
 \label{sec:rel}
