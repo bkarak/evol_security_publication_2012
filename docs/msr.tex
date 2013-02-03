@@ -182,7 +182,7 @@ Initially, we obtained a snapshot (January 2012) of the maven repository and
 handled it locally to retreive a list of all the names of the project versions that existed in the
 repository. Our first problem was that Maven repository hosts projects from languages other than Java, typically languages that produce executable code for the {\sc jvm} (Java Virtual Machine), such as Scala, Groovy, Clojure etc. These projects were filtered out by a series of filter and checks in the repository data and metadata.
 
-In addition, we implemented a series of checks in the \textit{worker} scripts that checked if the jars are valid in terms of language implementation. After the project filtering we narrowed down our data set to 17,055 projects with 114,399 versions. Table \ref{tbl:repository} summarises the data set information and in addition provides the basic descriptive statistic measurements
+In addition, we implemented a series of checks in the \textit{worker} scripts that checked if the jars are valid in terms of language implementation. After the project filtering we narrowed down our data set to 17,055 projects with 114,399 versions. Table \ref{tbl:repository} summarises the data set information and in addition provides the basic descriptive statistic measurements. The distribution of version count among the selected projects is presented in Figure \ref{fig:version-count}.
 
 \begin{table}
 \centering
@@ -205,8 +205,6 @@ Range & 336\\
 \end{tabular}
 \end{table}
 
-We aforementioned that the Maven repository hosts software projects, typically libraries that are downloaded as dependencies with the maven tool. Each project has a series of versions.
-
 \begin{figure*}
 	\centering
 	\includegraphics[scale=0.6]{version_count.pdf}
@@ -214,6 +212,7 @@ We aforementioned that the Maven repository hosts software projects, typically l
 	\label{fig:version-count}
 \end{figure*}
 
+It was quite expected that the repository has many project with a few number of versions, than many projects with many versions each. The statistical mesurements presented in Table \ref{tbl:repository} indicate that we have 17,505 projects total and the data sets median is 3, which means that almost 50\% (8,753 projects) of the project population has 1 to 3 versions. There are a few projects with tens of versions and only a few with hundreds. The maximum number of versions for a project is 337. The 3$^{rd}$ quartile measurement also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
 
 \section{Results and Analysis}
 \label{sec:res}
