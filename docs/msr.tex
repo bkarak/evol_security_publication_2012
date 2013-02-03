@@ -82,6 +82,19 @@ modification of sensitive data, denial of service and others.
 Hence, one of the basic pursuits in every new software release should be the
 mitigation of such bugs.
 
+The motivation behind our work is to validate if programmers tend to care for
+such high-risk bugs when they release a new version of their software. In
+addition, we want to investigate other critical aspects associated with such
+vulnerabilities. For instance, we want to elaborate more on the relation of security
+bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
+did) but also with other bug categories. In the same manner, we want to check
+if the relation between an artifact's size and its' software bugs applies 
+to security bugs (citation needed). Finally, the structure of the Maven ecosystem,
+gives us the oportunity to see if artifacts that is a dependency to a high
+number of other artifacts contains a high rate of security bugs. In this case
+we can strenghten the relationship between Linus' Law and software security as
+Meneely et al. have already showed~\cite{MW10}.
+
 The main contributions of this research are:
 
 \begin{itemize}
@@ -89,12 +102,12 @@ The main contributions of this research are:
 this, we inspect every project per version. Our hypothesis is that security
 bugs must decrease as a project evolves since they are critical and developers
 should eliminate them.
-	\item The relation of security bugs to the artifact's size.  Here, size is
+	\item We show evidence of the relation between security bugs and the artifact's size.  Here, size is
 defined in terms of bytecode.
-	\item Security bug persistense between versions. We check if specific bugs are
-eliminated between versions.
+	\item Security bug persistense between versions. We show evidence that specific bugs are
+not eliminated between versions.
 	\item The correlation of security bugs with other bug categories. We
-present how such bugs are correlated with bugs that have to do with
+show evidence that such bugs are correlated with bugs that have to do with
 performance, coding practices and others.
 	\item The relation of software dependencies and security bugs. Our
 hypothesis is that an artifact that is a dependency of many other artifacts
