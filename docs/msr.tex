@@ -117,8 +117,9 @@ The subject of our study was a snapshot of the maven repository. Before
 analyzing the data of the repository we performed a number of functional fits
 on the data.
 
-First, we obtained the repository snapshot (January 2012) that was previously
-used by -- et. al~\cite{}.
+First, we obtained a snapshot (January 2012) of the maven repository and
+handled it locally to retreive a list of all the names of the artifacts that existed in the
+repository.
 
 \begin{figure*}
 	\centering
@@ -150,6 +151,10 @@ Range & 336\\
 
 \subsection{Experiment}
 \label{sec:exp}
+
+Our experiment involved three entities: a Rabbit{\sc mq}
+server,\footnote{\url{http://www.rabbitmq.com/}} a Python pool of worker
+processes and a mongo{\sc db}.\footnote{\url{http://www.mongodb.org/}}
 
 \section{Results and Analysis}
 \label{sec:res}
