@@ -58,9 +58,9 @@ native code, applications, libraries and others. Despite the significant
 effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
 study them in relation to software evolution~\cite{L96, LRWPT97, IB06}. In this paper we present how we
 used a large software ecosystem to analyze how evolving software packages are
-related to the different types of software vulnerabilities.
+related to the different types of security vulnerabilities.
 
-One of the most common approaches to identify software vulnerabilities is
+One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
 inspection of the program's source or object code without executing
 it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
@@ -72,8 +72,8 @@ involved the security bugs and their characteristics. This research builds upon
 our earlier work on the topic~\cite{MGS12}.
 
 We chose to focus our study on the security bugs rather than other
-software bugs because compared to the other software bugs,
-security bugs have a distinct feature: they are critical. Specifically, a software bug can
+software bugs. This is because compared to other bug categories,
+the category of security bugs has a distinct feature: it is critical. Specifically, a software bug can
 lead to a mulfunction of a software artifact that runs under specific
 requirements but a security bug can allow a malicious user to alter the
 execution of the entire application. In this case, such bugs could span a wide range
@@ -90,15 +90,15 @@ bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
 did) but also with other bug categories. In the same manner, we want to check
 if the relation between an artifact's size and its' software bugs applies 
 to security bugs (citation needed). Finally, the structure of the Maven ecosystem,
-gives us the oportunity to see if artifacts that is a dependency to a high
+gives us the oportunity to see if an artifact that is a dependency to a large
 number of other artifacts contains a high rate of security bugs. In this case
 we can strenghten the relationship between Linus' Law and software security as
-Meneely et al. have already showed~\cite{MW10}.
+Meneely et al. have already indicated~\cite{MW10}.
 
 The main contributions of this research are:
 
 \begin{itemize}
-	\item The analysis of how security bugs evolve in time. To achieve
+	\item The analysis of how security bugs evolve over time. To achieve
 this, we inspect every project per version. Our hypothesis is that security
 bugs must decrease as a project evolves since they are critical and developers
 should eliminate them.
