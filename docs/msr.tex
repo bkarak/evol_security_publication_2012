@@ -126,9 +126,11 @@ and end up with an conclusion and directions for future work (Section \ref{sec:c
 \subsection{Experiment}
 \label{sec:exp}
 
-Our experiment goal was to collect the metric results of the findbugs tool.
-The process involved three entities: a number of \textit{workers}, a \textit{task queue} mechanism,
-a \textit{data repository}, and the \textit{code repository}, which in our case it was the public Maven 
+Our experiment goal was to collect the metric results of the FindBugs tool.
+The process involved four entities: a number of {\it workers}, a
+{\it task queue} mechanism,\footnote{\url{http://www.rabbitmq.com/}}
+a {\it data repository},\footnote{\url{http://www.mongodb.org/}}
+and the {\it code repository}, which in our case it was the public Maven 
 repository\footnote{\url{http://mvnrepository.com}}.
 
 \begin{table}
@@ -147,26 +149,27 @@ code repository & Maven Repository & \\
 \end{tabular}
 \end{table}
 
-First, we scanned the Maven repository for appropriate jars. We discuss the the jar selection process in the next 
-section. With this list we created a series of processing tasks and added them to the \textit{task queue}. Then we
-executed 25 (unix-based) workers that checked out tasks from the queue, processed the data and stored the results to the \textit{data repository}.
+First, we scanned the Maven repository for appropriate {\sc jar}s.
+We discuss the {\sc jar} selection process in the next 
+section. With this list we created a series of processing tasks
+and added them to the task queue. Then we
+executed 25 (Unix-based) workers that checked out tasks from the queue,
+processed the data and stored the results to the data repository.
 
-A typical processing cycle included the following steps:
+A typical processing cycle of a worker included the following steps: after
+the worker spawns, it requests a task from the queue. This task contains
+the {\sc jar} name, which is typically a project version that is downloaded locally.
+First, specific {\sc jar} metadata are calculated and stored. Such metadata include the
+last modification date of the {\sc jar}, its size and dependencies and a number that
+represents the chronological order of the release. This order is derived from an {\sc xml} file that
+accompanies every project in the Maven repository called {\it
+maven-metadata.xml}. Then FindBugs is executed and its' results are also stored
+in the data repository. When the task is completed the queue is notified and
+the next task is requested.
 
-\begin{enumerate}
-	\item The worker spawns,
-	\item then it requests a task from the queue,
-	\begin{enumerate}
-		\item the tasks contains the {\sc jar}, which is typically a project version and it is downloaded,
-		\item and the {\sc jar} metadata and statistics are also analysed and stored,
-		\item then findbugs is executed,
-		\item and the results are stored in the data repository,
-		\item the queue is also notified that this task is completed,
-	\end{enumerate}
-	\item then the next task is requested from the queue.
-\end{enumerate}
-
-This process was executed for all the available {\sc jar}s in the \textit{task queue}. The experiment was executed 5 times in order to iron out various bugs in our scripts and validate the results. 
+This process was executed for all the available {\sc jar}s in the task queue.
+The experiment was executed five times in order to iron out various bugs in
+our scripts and validate the results. 
 
 \subsection{Data Provenance}
 \label{sec:data}
