@@ -123,7 +123,52 @@ and end up with an conclusion and directions for future work (Section \ref{sec:c
 \section{Methodology}
 \label{sec:meth}
 
-\subsection{Data Provenance and Processing}
+\subsection{Experiment}
+\label{sec:exp}
+
+Our experiment goal was to collect the metric results of the findbugs tool.
+The process involved three entities: a number of \textit{workers}, a \textit{task queue} mechanism,
+a \textit{data repository}, and the \textit{code repository}, which in our case it was the public Maven 
+repository\footnote{\url{http://mvnrepository.com}}.
+
+\begin{table}
+\centering
+\caption{Experiment software and versions}
+\label{tbl:soft-version}
+\begin{tabular}{r r r}
+\hline
+ & Software Package & version\\
+ \hline
+worker & Custom Python Script & 2.7\\
+task queue & RabbitMQ\footnote{\url{http://www.rabbitmq.com/}} & \\
+data repository & MongoDB\footnote{\url{http://www.mongodb.org/}} & \\
+code repository & Maven Repository & \\
+\hline
+\end{tabular}
+\end{table}
+
+First, we scanned the Maven repository for appropriate jars. We discuss the the jar selection process in the next 
+section. With this list we created a series of processing tasks and added them to the \textit{task queue}. Then we
+executed 25 (unix-based) workers that checked out tasks from the queue, processed the data and stored the results to the \textit{data repository}.
+
+A typical processing cycle included the following steps:
+
+\begin{enumerate}
+	\item The worker spawns,
+	\item then it requests a task from the queue,
+	\begin{enumerate}
+		\item the tasks contains the {\sc jar}, which is typically a project version and it is downloaded,
+		\item and the {\sc jar} metadata and statistics are also analysed and stored,
+		\item then findbugs is executed,
+		\item and the results are stored in the data repository,
+		\item the queue is also notified that this task is completed,
+	\end{enumerate}
+	\item then the next task is requested from the queue.
+\end{enumerate}
+
+This process was executed for all the available {\sc jar}s in the \textit{task queue}. The experiment was executed 5 times in order to iron out various bugs in our scripts and validate the results. 
+
+\subsection{Data Provenance}
 \label{sec:data}
 
 The subject of our study was a snapshot of the maven repository. Before
@@ -161,13 +206,6 @@ Range & 336\\
 \hline
 \end{tabular}
 \end{table}
-
-\subsection{Experiment}
-\label{sec:exp}
-
-Our experiment involved three entities: a Rabbit{\sc mq}
-server,\footnote{\url{http://www.rabbitmq.com/}} a Python pool of worker
-processes and a mongo{\sc db}.\footnote{\url{http://www.mongodb.org/}}
 
 \section{Results and Analysis}
 \label{sec:res}
