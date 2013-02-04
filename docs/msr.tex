@@ -58,9 +58,9 @@ native code, applications, libraries and others. Despite the significant
 effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
 study them in relation to software evolution~\cite{L96, LRWPT97, IB06}. In this paper we present how we
 used a large software ecosystem to analyze how evolving software packages are
-related to the different types of software vulnerabilities.
+related to the different types of security vulnerabilities.
 
-One of the most common approaches to identify software vulnerabilities is
+One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
 inspection of the program's source or object code without executing
 it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
@@ -72,8 +72,8 @@ involved the security bugs and their characteristics. This research builds upon
 our earlier work on the topic~\cite{MGS12}.
 
 We chose to focus our study on the security bugs rather than other
-software bugs because compared to the other software bugs,
-security bugs have a distinct feature: they are critical. Specifically, a software bug can
+software bugs. This is because compared to other bug categories,
+the category of security bugs has a distinct feature: it is critical. Specifically, a software bug can
 lead to a mulfunction of a software artifact that runs under specific
 requirements but a security bug can allow a malicious user to alter the
 execution of the entire application. In this case, such bugs could span a wide range
@@ -82,19 +82,32 @@ modification of sensitive data, denial of service and others.
 Hence, one of the basic pursuits in every new software release should be the
 mitigation of such bugs.
 
+The motivation behind our work is to validate if programmers tend to care for
+such high-risk bugs when they release a new version of their software. In
+addition, we want to investigate other critical aspects associated with such
+vulnerabilities. For instance, we want to elaborate more on the relation of security
+bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
+did) but also with other bug categories. In the same manner, we want to check
+if the relation between an artifact's size and its' software bugs applies 
+to security bugs (citation needed). Finally, the structure of the Maven ecosystem,
+gives us the oportunity to see if an artifact that is a dependency to a large
+number of other artifacts contains a high rate of security bugs. In this case
+we can strenghten the relationship between Linus' Law and software security as
+Meneely et al. have already indicated~\cite{MW10}.
+
 The main contributions of this research are:
 
 \begin{itemize}
-	\item The analysis of how security bugs evolve in time. To achieve
+	\item The analysis of how security bugs evolve over time. To achieve
 this, we inspect every project per version. Our hypothesis is that security
 bugs must decrease as a project evolves since they are critical and developers
 should eliminate them.
-	\item The relation of security bugs to the artifact's size.  Here, size is
+	\item We show evidence of the relation between security bugs and the artifact's size.  Here, size is
 defined in terms of bytecode.
-	\item Security bug persistense between versions. We check if specific bugs are
-eliminated between versions.
+	\item Security bug persistense between versions. We show evidence that specific bugs are
+not eliminated between versions.
 	\item The correlation of security bugs with other bug categories. We
-present how such bugs are correlated with bugs that have to do with
+show evidence that such bugs are correlated with bugs that have to do with
 performance, coding practices and others.
 	\item The relation of software dependencies and security bugs. Our
 hypothesis is that an artifact that is a dependency of many other artifacts
@@ -110,23 +123,66 @@ and end up with an conclusion and directions for future work (Section \ref{sec:c
 \section{Methodology}
 \label{sec:meth}
 
-\subsection{Data Provenance and Processing}
+\subsection{Experiment}
+\label{sec:exp}
+
+Our experiment goal was to collect the metric results of the FindBugs tool.
+The process involved four entities: a number of {\it workers}, a
+{\it task queue} mechanism,\footnote{\url{http://www.rabbitmq.com/}}
+a {\it data repository},\footnote{\url{http://www.mongodb.org/}}
+and the {\it code repository}, which in our case it was the public Maven 
+repository\footnote{\url{http://mvnrepository.com}}.
+
+\begin{table}
+\centering
+\caption{Experiment software and versions}
+\label{tbl:soft-version}
+\begin{tabular}{r r r}
+\hline
+ & Software Package & version\\
+ \hline
+worker & Custom Python Script & 2.7\\
+task queue & RabbitMQ\footnote{\url{http://www.rabbitmq.com/}} & \\
+data repository & MongoDB\footnote{\url{http://www.mongodb.org/}} & \\
+code repository & Maven Repository & \\
+\hline
+\end{tabular}
+\end{table}
+
+First, we scanned the Maven repository for appropriate {\sc jar}s.
+We discuss the {\sc jar} selection process in the next 
+section. With this list we created a series of processing tasks
+and added them to the task queue. Then we
+executed 25 (Unix-based) workers that checked out tasks from the queue,
+processed the data and stored the results to the data repository.
+
+A typical processing cycle of a worker included the following steps: after
+the worker spawns, it requests a task from the queue. This task contains
+the {\sc jar} name, which is typically a project version that is downloaded locally.
+First, specific {\sc jar} metadata are calculated and stored. Such metadata include the
+last modification date of the {\sc jar}, its size and dependencies and a number that
+represents the chronological order of the release. This order is derived from an {\sc xml} file that
+accompanies every project in the Maven repository called {\it
+maven-metadata.xml}. Then FindBugs is executed and its' results are also stored
+in the data repository. When the task is completed the queue is notified and
+the next task is requested.
+
+This process was executed for all the available {\sc jar}s in the task queue.
+The experiment was executed five times in order to iron out various bugs in
+our scripts and validate the results. 
+
+\subsection{Data Provenance}
 \label{sec:data}
 
 The subject of our study was a snapshot of the maven repository. Before
 analyzing the data of the repository we performed a number of functional fits
-on the data.
+on the data. 
 
-First, we obtained a snapshot (January 2012) of the maven repository and
-handled it locally to retreive a list of all the names of the artifacts that existed in the
-repository.
+Initially, we obtained a snapshot (January 2012) of the maven repository and
+handled it locally to retreive a list of all the names of the project versions that existed in the
+repository. Our first problem was that Maven repository hosts projects from languages other than Java, typically languages that produce executable code for the {\sc jvm} (Java Virtual Machine), such as Scala, Groovy, Clojure etc. These projects were filtered out by a series of filter and checks in the repository data and metadata.
 
-\begin{figure*}
-	\centering
-	\includegraphics[scale=0.6]{version_count.pdf}
-	\caption{Distribution of version count among project population}
-	\label{fig:version-count}
-\end{figure*}
+In addition, we implemented a series of checks in the \textit{worker} scripts that checked if the jars are valid in terms of language implementation. After the project filtering we narrowed down our data set to 17,055 projects with 114,399 versions. Table \ref{tbl:repository} summarises the data set information and in addition provides the basic descriptive statistic measurements. The distribution of version count among the selected projects is presented in Figure \ref{fig:version-count}.
 
 \begin{table}
 \centering
@@ -149,12 +205,14 @@ Range & 336\\
 \end{tabular}
 \end{table}
 
-\subsection{Experiment}
-\label{sec:exp}
+\begin{figure*}
+	\centering
+	\includegraphics[scale=0.6]{version_count.pdf}
+	\caption{Distribution of version count among project population}
+	\label{fig:version-count}
+\end{figure*}
 
-Our experiment involved three entities: a Rabbit{\sc mq}
-server,\footnote{\url{http://www.rabbitmq.com/}} a Python pool of worker
-processes and a mongo{\sc db}.\footnote{\url{http://www.mongodb.org/}}
+It was quite expected that the repository has many project with a few number of versions, than many projects with many versions each. The statistical mesurements presented in Table \ref{tbl:repository} indicate that we have 17,505 projects total and the data sets median is 3, which means that almost 50\% (8,753 projects) of the project population has 1 to 3 versions. There are a few projects with tens of versions and only a few with hundreds. The maximum number of versions for a project is 337. The 3$^{rd}$ quartile measurement also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
 
 \section{Results and Analysis}
 \label{sec:res}
