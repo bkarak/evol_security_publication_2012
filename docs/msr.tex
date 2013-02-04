@@ -52,13 +52,14 @@ Security, Maven, FindBugs.
 \section{Introduction}
 
 A security bug is a programming error that introduces a potentially
-exploitable weakness into a computer system~\cite{SSL12}. This weakness could lead to a
+exploitable weakness into a computer system~\cite{SSL12, TJBD11}. This weakness could lead to a
 security breach with unfortunate consequences in different layers, like databases,
 native code, applications, libraries and others. Despite the significant
 effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
-study them in relation to software evolution~\cite{L96, LRWPT97, IB06}. In this paper we present how we
-used a large software ecosystem to analyze how evolving software packages are
-related to the different types of security vulnerabilities.
+study them in relation to software evolution~\cite{L96, LRWPT97, IB06, RGMA06}.
+In this paper we present how we used a large software ecosystem to analyze
+how evolving software packages are related to the different types of security
+vulnerabilities.
 
 One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
@@ -73,14 +74,17 @@ our earlier work on the topic~\cite{MGS12}.
 
 We chose to focus our study on the security bugs rather than other
 software bugs. This is because compared to other bug categories,
-the category of security bugs has a distinct feature: it is critical. Specifically, a software bug can
+the category of security bugs has two distinct features: it is critical~\cite{SZ12}
+and it costs~\cite{BCL08}. Specifically, a software bug can
 lead to a mulfunction of a software artifact that runs under specific
-requirements but a security bug can allow a malicious user to alter the
-execution of the entire application. In this case, such bugs could span a wide range
-of security and privacy issues, like viewing sensitive information, the destruction or
+requirements but a security bug can allow a malicious user to alter the execution
+of the entire application. In this case, such bugs could span a wide
+range of security and privacy issues, like viewing sensitive information, the destruction or
 modification of sensitive data, denial of service and others.
-Hence, one of the basic pursuits in every new software release should be the
-mitigation of such bugs.
+Moreover, security bug disclosures lead to a negative and significant change
+in market value for a software vendor~\cite{TW07}.
+Hence, one of the basic pursuits in every new software release should
+be the mitigation of such bugs.
 
 The motivation behind our work is to validate if programmers tend to care for
 such high-risk bugs when they release a new version of their software. In
@@ -174,15 +178,26 @@ our scripts and validate the results.
 \subsection{Data Provenance}
 \label{sec:data}
 
-The subject of our study was a snapshot of the maven repository. Before
-analyzing the data of the repository we performed a number of functional fits
-on the data. 
+The subject of our study was the Maven repository. Before
+analyzing the data of the repository we performed a
+number of functional fits on the data. 
 
 Initially, we obtained a snapshot (January 2012) of the maven repository and
-handled it locally to retreive a list of all the names of the project versions that existed in the
-repository. Our first problem was that Maven repository hosts projects from languages other than Java, typically languages that produce executable code for the {\sc jvm} (Java Virtual Machine), such as Scala, Groovy, Clojure etc. These projects were filtered out by a series of filter and checks in the repository data and metadata.
+handled it locally to retreive a list of all the names of the project versions
+that existed in it. Our first problem was that the Maven repository
+hosts projects from languages other than Java, typically languages that produce
+executable code for the {\sc jvm} (Java Virtual Machine), such as Scala, Groovy,
+Clojure etc. These projects were filtered out by a series of checks in
+the repository data and metadata.
 
-In addition, we implemented a series of checks in the \textit{worker} scripts that checked if the jars are valid in terms of language implementation. After the project filtering we narrowed down our data set to 17,055 projects with 114,399 versions. Table \ref{tbl:repository} summarises the data set information and in addition provides the basic descriptive statistic measurements. The distribution of version count among the selected projects is presented in Figure \ref{fig:version-count}.
+In addition, we implemented a series of checks in the worker scripts that
+checked if the {\sc jar}s are valid in terms of implementation. For instance,
+for every {\sc jar} the worker checked if there were any {\it .class} files
+before invoking FindBugs. After the project filtering we narrowed down
+our data set to 17,055 projects with 114,399 versions.
+Table \ref{tbl:repository} summarises the data set information and
+provides the basic descriptive statistic measurements. The distribution of version
+count among the selected projects is presented in Figure \ref{fig:version-count}.
 
 \begin{table}
 \centering
@@ -212,7 +227,16 @@ Range & 336\\
 	\label{fig:version-count}
 \end{figure*}
 
-It was quite expected that the repository has many project with a few number of versions, than many projects with many versions each. The statistical mesurements presented in Table \ref{tbl:repository} indicate that we have 17,505 projects total and the data sets median is 3, which means that almost 50\% (8,753 projects) of the project population has 1 to 3 versions. There are a few projects with tens of versions and only a few with hundreds. The maximum number of versions for a project is 337. The 3$^{rd}$ quartile measurement also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
+The repository has many project with a
+few number of versions. On the contrary, there are numerous projects with a
+number of versions that is less than ten.
+The statistical mesurements presented in Table \ref{tbl:repository}
+indicate that we have 17,505 projects total and the data sets median
+is 3, which means that almost 50\% (8,753 projects) of the project
+population has 1 to 3 versions. There are a few projects containing ten
+versions and only a few with hundreds of versions. The maximum number of
+versions for a project is 337. The 3$^{rd}$ quartile measurement
+also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
 
 \section{Results and Analysis}
 \label{sec:res}
