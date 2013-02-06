@@ -7,7 +7,7 @@
 
 \begin{document}
 
-\title{Dismal Code: Studying the Evolution of Security Vulnerabilities}
+\title{Dismal Code: Studying the Evolution of Security Bugs}
 
 \author{
 \IEEEauthorblockN{Dimitris Mitropoulos}
@@ -46,15 +46,15 @@ In this paper, we present how we used the Maven repository to study the
 characteristics of security bugs individually and in relation to other software
 bugs. In particular, we analyzed every artifact of the repository by using a
 popular static analysis tool. Then by taking advantage of the various features of
-the repository (multiple versions for every project, dependencies) we studied
-the evolution of security bugs through time and their relationship with the
-size of the corresponding artifact and other bug categories. Also, based on the
+the repository (multiple versions for every project, dependencies and others) we studied
+the evolution of security bugs through time and their relationship with a) the
+size of the corresponding artifact and b) other bug categories. Also, based on the
 dependencies of artifacts we constructed the graph of the repository and
-studied the most popular nodes in terms of their PageRank. 
+examined the most popular nodes based on their PageRank. 
 \end{abstract}
 
 \begin{IEEEkeywords}
-Software Vulnerabilities, Static Analysis, Software Evolution, Software
+Software Bugs, Static Analysis, Software Evolution, Software
 Security, Maven, FindBugs.
 \end{IEEEkeywords}
 
@@ -76,7 +76,7 @@ One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
 inspection of the program's source or object code without executing
 it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
-a popular static analysis tool that has already been used in
+a static analysis tool that examines bytecode to detect software bugs and has already been used in
 research~\cite{AP10, HP07, HP04}. Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the Maven\footnote{\url{http://maven.apache.org/}}
 repository (approximately 265GB of data). Then we observed the changes that
@@ -169,7 +169,7 @@ First, we scanned the Maven repository for appropriate {\sc jar}s.
 We discuss the {\sc jar} selection process in the next 
 section. With this list we created a series of processing tasks
 and added them to the task queue. Then we
-executed 25 (Unix-based) workers that checked out tasks from the queue,
+executed twenty five (Unix-based) workers that checked out tasks from the queue,
 processed the data and stored the results to the data repository.
 
 A typical processing cycle of a worker included the following steps: after
@@ -207,7 +207,7 @@ checked if the {\sc jar}s are valid in terms of implementation. For instance,
 for every {\sc jar} the worker checked if there were any {\it .class} files
 before invoking FindBugs. After the project filtering we narrowed down
 our data set to 17,055 projects with 114,399 versions.
-Table \ref{tbl:repository} summarises the data set information and
+Table~\ref{tbl:repository} summarises the data set information and
 provides the basic descriptive statistic measurements. The distribution of version
 count among the selected projects is presented in Figure \ref{fig:version-count}.
 
@@ -242,7 +242,7 @@ Range & 336\\
 The repository has many project with a
 few number of versions. On the contrary, there are numerous projects with a
 number of versions that is less than ten.
-The statistical mesurements presented in Table \ref{tbl:repository}
+The statistical mesurements presented in Table~\ref{tbl:repository}
 indicate that we have 17,505 projects total and the data sets median
 is 3, which means that almost 50\% (8,753 projects) of the project
 population has 1 to 3 versions. There are a few projects containing ten
@@ -253,20 +253,23 @@ also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
 \section{Results and Analysis}
 \label{sec:res}
 
+Our findings can be analyzed at two levels. First, we discuss some
+primary observations concerning the security bugs of the Maven repository as a whole.
+Then, we provide a comprehensive analysis of the results and highlight our key findings.
+
 \subsection{Overview and Initial Results}
 \label{sec:overview}
 
-\begin{figure*}
-	\centering
-	\includegraphics[scale=0.6]{bug_percent}
-	\caption{Bug Percentage in Maven Repository}
-	\label{fig:bug-percentage}
-\end{figure*}
+FindBugs separates software bugs into seven categories (see
+Table~\ref{tbl:bug-cat}). Two of them involve security: {\it Security} and {\it
+Malicious Code}. Our early findings indicated that from the total number of the
+artifacts, 4,270 of them contained at least one bug coming from the first category
+and 45,145 from the second.
 
 \begin{table}
 \centering
 \caption{Bug categorisation according to FindBugs}
-\label{tbl:bug-categorisation}
+\label{tbl:bug-cat}
 \begin{tabular}{l p{15em}}
 \hline
 Category & Description\\
@@ -287,7 +290,24 @@ Security & Contains two subcategories, namely: {\it Security} and {\it
 Malicious Code}. Involves code that could lead to security breach. \\
 \hline
 \end{tabular}
-\end{table}
+\end{table}\begin{figure*}
+	\centering
+	\includegraphics[scale=0.6]{bug_percent}
+	\caption{Bug Percentage in Maven Repository}
+	\label{fig:bug-per}
+\end{figure*}
+
+Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
+repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
+security bugs (the sum of the {\it Security} and {\it Malicious Code}
+categories) are the most popular in the repository.
+
+\begin{figure*}
+	\centering
+	\includegraphics[scale=0.6]{bug_percent}
+	\caption{Bug Percentage in Maven Repository}
+	\label{fig:bug-percentage}4,270 
+\end{figure*}
 
 \subsection{Analysis}
 \label{sec:analysis}
@@ -330,7 +350,7 @@ introduction rates for each pattern. Gil et al.~\cite{GM05} analyzed the
 prevalence of micro patterns across five Sun {\sc jdk} versions to conclude that
 pattern prevalence tends to be the same in software collections.
 
-{\it Querying techniques} are used to answer a broad range of questions
+{\it findbugs Querying techniques} are used to answer a broad range of questions
 regarding the evolution history of a project~\cite{HG05}. Bhattacharya et
 al.~\cite{BN11, B11} proposed a framework that is based upon
 recursively enumerable languages. The framework can correlate software
