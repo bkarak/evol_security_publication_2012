@@ -39,7 +39,18 @@ Email: dds@aueb.gr}}
 
 \begin{abstract}
 %\boldmath
-The abstract goes here.
+Security bugs are critical programming errors that can lead to serious
+vulnerabilities in software. Such bugs may allow an attacker to take over
+an application, steal data or prevent the application from working at all.
+In this paper, we present how we used the Maven repository to study the
+characteristics of security bugs individually and in relation to other software
+bugs. In particular, we analyzed every artifact of the repository by using a
+popular static analysis tool. Then by taking advantage of the various features of
+the repository (multiple versions for every project, dependencies) we studied
+the evolution of security bugs through time and their relationship with the
+size of the corresponding artifact and other categories. Also, based on the
+dependencies of artifacts we constructed the graph of the repository and
+studied the most popular nodes in terms of their PageRank. 
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -94,12 +105,11 @@ bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
 did) but also with other bug categories. In the same manner, we want to check
 the relation between an artifact's size and its' security bugs knowing the
 that research has been contradictory on the the issue~\cite{BP84, SYTP85,
-NBZ06, GKMS00}.
-Finally, the structure of the Maven ecosystem, gives us the oportunity to see
-if an artifact that is a dependency to a large number of other artifacts
-contains a high rate of security bugs. In this case
-we can strenghten the relationship between Linus' Law and software security as
-Meneely et al. have already indicated~\cite{MW10}.
+NBZ06, GKMS00}. Finally, the structure of the Maven ecosystem,
+gives us the oportunity to see if an artifact that is a dependency to
+a large number of other artifacts contains a high rate of security bugs.
+In this case we can strenghten the relationship between Linus' Law and
+software security as Meneely et al. have already indicated~\cite{MW10}.
 
 The main contributions of this research are:
 
