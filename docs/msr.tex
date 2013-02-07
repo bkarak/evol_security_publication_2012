@@ -239,19 +239,6 @@ also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
 \section{Results and Analysis}
 \label{sec:res}
 
-Our findings can be analyzed at two levels. First, we discuss some
-primary observations concerning the security bugs of the Maven repository as a whole.
-Then, we provide a comprehensive analysis of the results and highlight our key findings.
-
-\subsection{Overview and Initial Results}
-\label{sec:overview}
-
-FindBugs separates software bugs into seven categories (see
-Table~\ref{tbl:bug-cat}). Two of them involve security: {\it Security} and {\it
-Malicious Code}. Our early findings indicated that from the total number of the
-artifacts, 4,270 of them contained at least one bug coming from the first category
-and 45,145 from the second.
-
 \begin{table}
 \centering
 \caption{Bug categorisation according to FindBugs}
@@ -278,13 +265,53 @@ Malicious Code}. Involves code that could lead to security breach. \\
 \end{tabular}
 \end{table}
 
+Our findings can be analyzed at two levels. First, we discuss some
+primary observations concerning the security bugs of the Maven repository as a whole.
+Then, we provide a comprehensive analysis of the results and highlight our key findings.
+
+\subsection{Overview and Initial Results}
+\label{sec:overview}
+
+\begin{table*}
+\centering
+\begin{center}
+\leavevmode
+	\begin{tabular}{l r}
+	\hline
+	Bug Description & Number of Artifacts\\
+ 	\hline
+	{\sc hrs}: {\sc http} cookie formed from untrusted input & 149\\
+	{\sc hrs}: {\sc http} response splitting vulnerability & 1564\\
+	{\sc pt}: absolute path traversal in servlet  & 92\\
+	{\sc pt}: relative path traversal in servlet & 50\\
+	{\sc sql}: nonconstant string passed to execute method on an {\sc sql} & 1817\\
+	{\sc sql}: a prepared statement is generated from a nonconstant String & 1438\\
+	{\sc xss}: {\sc jsp} reflected cross site scripting vulnerability & 17\\
+	{\sc xss}: Servlet reflected cross site scripting vulnerability in error page & 88\\
+	{\sc xss}: Servlet reflected cross site scripting vulnerability & 140\\
+	\hline
+	\end{tabular}
+\caption{Number of Artifacts that Contain at Least One Severe Security Bug}
+\label{tbl:sev}
+\end{center}
+\end{table*}
+
+FindBugs separates software bugs into seven categories (see
+Table~\ref{tbl:bug-cat}). Two of them involve security: {\it Security} and {\it
+Malicious Code}. From the total number of the artifacts, 4,270 of them contained
+at least one bug coming from the first category
+and 45,145 from the second. Another observation involves bugs that we call {\it
+severe}. Such bugs are related to vulnerabilities due to the lack of user-input
+validation. Table~\ref{tbl:sev}) presents the number of artifacts where at
+least one of these bugs exists.
+
 Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
 repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
 categories) are the most popular in the repository.
 
 An interesting observation is that 5,601 (31.99\%) projects, containing 32,689
-{\sc jar}s (28.57\%), did not had any bugs at all. These cases involved small artifacts
+artifacts (28.57\%), did not had any bugs at all. These cases involved small artifacts
 with a minimum number of classes.
 
 \begin{figure*}
