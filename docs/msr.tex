@@ -151,21 +151,21 @@ code repository & Maven Repository & \\
 \end{tabular}
 \end{table}
 
-First, we scanned the Maven repository for appropriate {\sc jar}s.
-We discuss the {\sc jar} selection process in the next 
-section. With this list we created a series of processing tasks
-and added them to the task queue. Then we
-executed twenty five (Unix-based) workers that checked out tasks from the queue,
-processed the data and stored the results to the data repository.
+First, we scanned the Maven repository for appropriate {\sc jar}s and created a
+list that included them. We discuss the {\sc jar} selection process in the next 
+section. With the {\sc jar} list at hand, we created a series of processing tasks
+and added them to the task queue. Then we executed twenty five (Unix-based)
+workers that checked out tasks from the queue, processed the data and stored the
+results to the data repository.
 
 A typical processing cycle of a worker included the following steps: after
 the worker spawns, it requests a task from the queue. This task contains
 the {\sc jar} name, which is typically a project version that is downloaded locally.
-First, specific {\sc jar} metadata are calculated and stored. Such metadata include the
-last modification date of the {\sc jar}, its size and dependencies and a number that
-represents the chronological order of the release. This order is derived from an {\sc xml} file that
+First, specific {\sc jar} metadata are calculated and stored. Such metadata include
+its size, its dependencies, and a number that represents the chronological order of the
+release. This order is derived from an {\sc xml} file that
 accompanies every project in the Maven repository called {\it
-maven-metadata.xml}. Then FindBugs is executed and its' results are also stored
+maven-metadata.xml}. Then FindBugs is executed and its results are also stored
 in the data repository. When the task is completed the queue is notified and
 the next task is requested.
 
@@ -176,19 +176,18 @@ our scripts and validate the results.
 \subsection{Data Provenance}
 \label{sec:data}
 
-The subject of our study was the Maven repository. Before
-analyzing the data of the repository we performed a
-number of functional fits on the data. 
+The subject of our study was the Maven repository. Before analyzing the data of the
+repository we performed a number of functional fits on the data. 
 
 Initially, we obtained a snapshot (January 2012) of the maven repository and
 handled it locally to retreive a list of all the names of the project versions
-that existed in it. Our first problem was that the Maven repository
-hosts projects from languages other than Java, typically languages that produce
-executable code for the {\sc jvm} (Java Virtual Machine), such as Scala, Groovy,
-Clojure etc. These projects were filtered out by a series of checks in
+that existed in it. Since FindBugs analyzes applications written in the Java
+programming language, and the Maven repository
+hosts projects from languages other than Java such as Scala, Groovy,
+Clojure etc. we filtered out such projects by performing a series of checks in
 the repository data and metadata.
 
-In addition, we implemented a series of checks in the worker scripts that
+In addition, we implemented a series of audits in the worker scripts that
 checked if the {\sc jar}s are valid in terms of implementation. For instance,
 for every {\sc jar} the worker checked if there were any {\it .class} files
 before invoking FindBugs. After the project filtering we narrowed down
@@ -225,13 +224,14 @@ Range & 336\\
 	\label{fig:version-count}
 \end{figure*}
 
-The repository has many project with a
-few number of versions. On the contrary, there are numerous projects with a
-number of versions that is less than ten.
 The statistical mesurements presented in Table~\ref{tbl:repository}
 indicate that we have 17,505 projects total and the data sets median
 is 3, which means that almost 50\% (8,753 projects) of the project
-population has 1 to 3 versions. There are a few projects containing ten
+population has 1 to 3 versions.
+Note that the Maven repository has many projects with a
+few number of versions. For instance, there are numerous projects with a
+number of versions that is less than ten.
+There are a few projects containing ten
 versions and only a few with hundreds of versions. The maximum number of
 versions for a project is 337. The 3$^{rd}$ quartile measurement
 also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
@@ -281,11 +281,11 @@ Then, we provide a comprehensive analysis of the results and highlight our key f
 	Bug Description & Number of Artifacts\\
  	\hline
 	{\sc hrs}: {\sc http} cookie formed from untrusted input & 149\\
-	{\sc hrs}: {\sc http} response splitting vulnerability & 1564\\
+	{\sc hrs}: {\sc http} response splitting vulnerability & 1,564\\
 	{\sc pt}: absolute path traversal in servlet  & 92\\
 	{\sc pt}: relative path traversal in servlet & 50\\
-	{\sc sql}: nonconstant string passed to execute method on an {\sc sql} & 1817\\
-	{\sc sql}: a prepared statement is generated from a nonconstant String & 1438\\
+	{\sc sql}: nonconstant string passed to execute method on an {\sc sql} & 1,817\\
+	{\sc sql}: a prepared statement is generated from a nonconstant String & 1,438\\
 	{\sc xss}: {\sc jsp} reflected cross site scripting vulnerability & 17\\
 	{\sc xss}: Servlet reflected cross site scripting vulnerability in error page & 88\\
 	{\sc xss}: Servlet reflected cross site scripting vulnerability & 140\\
@@ -300,19 +300,30 @@ FindBugs separates software bugs into seven categories (see
 Table~\ref{tbl:bug-cat}). Two of them involve security: {\it Security} and {\it
 Malicious Code}. From the total number of the artifacts, 4,270 of them contained
 at least one bug coming from the first category
-and 45,145 from the second. Another observation involves bugs that we call {\it
-severe}. Such bugs are related to vulnerabilities due to the lack of user-input
-validation. Table~\ref{tbl:sev}) presents the number of artifacts where at
-least one of these bugs exists.
+and 45,145 coming from the second.
+
+Another observation involves bugs that we could call {\it
+severe}. Such bugs are related to vulnerabilities that appear due to the lack of user-input
+validation and can lead to damaging attacks like {\sc sql} injection and
+Cross-Site Scripting. Note that to exploit such vulnerabilities, a malicious user does
+not have to know anything about the applications internals. For all the other
+bugs, another program should be written either to incorporate references to
+mutable objects, access non-final fields and others. In addition, as
+bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
+if an application has bugs like these, it might have more vulnerabilities that FindBugs doesn't
+report. Table~\ref{tbl:sev} presents the number of artifacts where at least one of these
+bugs exists. In the following section we provide results separately for this
+subcategory.
 
 Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
 repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
-categories) are the most popular in the repository.
-
-An interesting observation is that 5,601 (31.99\%) projects, containing 32,689
-artifacts (28.57\%), did not had any bugs at all. These cases involved small artifacts
-with a minimum number of classes.
+categories) are the most popular in the repository. In the following section we
+show the correlation of security bugs with all the other categories. An interesting observation is
+that 5,601 (31.99\%) projects, containing 32,689 artifacts (28.57\%), did not
+have any bugs at all. These cases involved small artifacts with a minimum number of classes.
+This consorts with the relationship between the size of an artifact and it's
+bugs that is presented in the upcoming section.
 
 \begin{figure*}
 	\centering
