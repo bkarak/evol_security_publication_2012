@@ -65,8 +65,8 @@ class MongoDocumentIterator(object):
 
 class MongoProjectIterator(MongoDocumentIterator):
     def __init__(self, group_id, artifact_id, query=None, fields=None):
-        __q = {'JarMetadata.group_id' : group_id,
-               'JarMetadata.artifact_id' : artifact_id}
+        __q = {'JarMetadata.group_id': group_id,
+               'JarMetadata.artifact_id': artifact_id}
 
         __f = ['JarMetadata.version_order']
 
@@ -116,3 +116,21 @@ def get_project_versions(col_obj, group_id, artifact_id):
     except pymongo.errors.AutoReconnect, ae:
         print 'Mongo Connection is Down. Reconnecting! (record_exists, %s)' % (ae,)
         return get_project_versions(col_obj, group_id, artifact_id)
+
+
+def get_version(col_obj, group_id, artifact_id, version):
+    try:
+        result = []
+
+        q = {'JarMetadata.group_id': group_id,
+             'JarMetadata.artifact_id': artifact_id,
+             'JarMetadata.version': version}
+
+        for c in col_obj.find(q, fields=[], timeout=False):
+            result.append(c)
+
+        return result
+    except pymongo.errors.AutoReconnect, ae:
+        print 'Mongo Connection is Down. Reconnecting! (record_exists, %s)' % (ae,)
+        return get_project_versions(col_obj, group_id, artifact_id)
+
