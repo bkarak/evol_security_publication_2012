@@ -106,8 +106,8 @@ bugs must decrease as a project evolves since they are critical and developers
 should eliminate them.
 	\item We show evidence of the relation between security bugs and the artifact's size.  Here, size is
 defined in terms of bytecode.
-	\item Security bug persistense between versions. We show evidence that specific bugs are
-not eliminated between versions.
+%	\item Security bug persistense between versions. We show evidence that specific bugs are
+%not eliminated between versions.
 	\item The correlation of security bugs with other bug categories. We
 show evidence that such bugs are correlated with bugs that have to do with
 performance, coding practices and others.
@@ -118,9 +118,9 @@ should have a low rate of security bugs.
 
 In the rest of this paper we
 describe the processing of our data and our experiment (Section \ref{sec:meth}),
-present and discuss the results we obtained (Section \ref{sec:res},
+present and discuss the results we obtained (Section \ref{sec:res}),
 outline related work (Section \ref{sec:rel}),
-and end up with an conclusion and directions for future work (Section \ref{sec:con}).
+and end up with a conclusion and directions for future work (Section \ref{sec:con}).
 
 \section{Methodology}
 \label{sec:meth}
@@ -176,26 +176,6 @@ our scripts and validate the results.
 \subsection{Data Provenance}
 \label{sec:data}
 
-The subject of our study was the Maven repository. Before analyzing the data of the
-repository we performed a number of functional fits on the data. 
-
-Initially, we obtained a snapshot (January 2012) of the maven repository and
-handled it locally to retreive a list of all the names of the project versions
-that existed in it. Since FindBugs analyzes applications written in the Java
-programming language, and the Maven repository
-hosts projects from languages other than Java such as Scala, Groovy,
-Clojure etc. we filtered out such projects by performing a series of checks in
-the repository data and metadata.
-
-In addition, we implemented a series of audits in the worker scripts that
-checked if the {\sc jar}s are valid in terms of implementation. For instance,
-for every {\sc jar} the worker checked if there were any {\it .class} files
-before invoking FindBugs. After the project filtering we narrowed down
-our data set to 17,055 projects with 114,399 versions.
-Table~\ref{tbl:repository} summarises the data set information and
-provides the basic descriptive statistic measurements. The distribution of version
-count among the selected projects is presented in Figure \ref{fig:version-count}.
-
 \begin{table}
 \centering
 \caption{Descriptive Statistics Measurements for the Maven Repository}
@@ -217,10 +197,31 @@ Range & 336\\
 \end{tabular}
 \end{table}
 
+The subject of our study was the Maven repository. Before analyzing the data of the
+repository we performed a number of functional fits on the data. 
+
+Initially, we obtained a snapshot (January 2012) of the maven repository and
+handled it locally to retreive a list of all the names of the project versions
+that existed in it. Since FindBugs analyzes applications written in the Java
+programming language, and the Maven repository
+hosts projects from languages other than Java such as Scala, Groovy,
+Clojure etc. we filtered out such projects by performing a series of checks in
+the repository data and metadata.
+
+In addition, we implemented a series of audits in the worker scripts that
+checked if the {\sc jar}s are valid in terms of implementation. For instance,
+for every {\sc jar} the worker checked if there were any {\it .class} files
+before invoking FindBugs. After the project filtering we narrowed down
+our data set to 17,055 projects with 114,399 versions.
+Table~\ref{tbl:repository} summarises the data set information and
+provides the basic descriptive statistic measurements. The distribution of version
+count among the selected projects is presented in Figure \ref{fig:version-count}.
+
 \begin{figure*}
 	\centering
 	\includegraphics[scale=0.6]{version_count.pdf}
-	\caption{Distribution of version count among project population}
+	\caption{Distribution of
+Version Count Among Project Population}
 	\label{fig:version-count}
 \end{figure*}
 
@@ -272,6 +273,25 @@ Then, we provide a comprehensive analysis of the results and highlight our key f
 \subsection{Overview and Initial Results}
 \label{sec:overview}
 
+FindBugs separates software bugs into seven categories (see
+Table~\ref{tbl:bug-cat}). Two of them involve security: {\it Security} and {\it
+Malicious Code}. From the total number of the artifacts, 4,270 of them contained
+at least one bug coming from the first category
+and 45,145 coming from the second.
+
+Another observation involves bugs that we could call {\it
+severe}. Such bugs are related to vulnerabilities that appear due to the lack of user-input
+validation and can lead to damaging attacks like {\sc sql} injection and
+Cross-Site Scripting. Note that to exploit such vulnerabilities, a malicious user does
+not have to know anything about the applications internals. For all the other
+bugs, another program should be written either to incorporate references to
+mutable objects, access non-final fields and others. In addition, as
+bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
+if an application has bugs like these, it might have more vulnerabilities that FindBugs doesn't
+report. Table~\ref{tbl:sev} presents the number of artifacts where at least one of these
+bugs exists. In the following section we provide results separately for this
+subcategory.
+
 \begin{table*}
 \centering
 \begin{center}
@@ -296,33 +316,16 @@ Then, we provide a comprehensive analysis of the results and highlight our key f
 \end{center}
 \end{table*}
 
-FindBugs separates software bugs into seven categories (see
-Table~\ref{tbl:bug-cat}). Two of them involve security: {\it Security} and {\it
-Malicious Code}. From the total number of the artifacts, 4,270 of them contained
-at least one bug coming from the first category
-and 45,145 coming from the second.
-
-Another observation involves bugs that we could call {\it
-severe}. Such bugs are related to vulnerabilities that appear due to the lack of user-input
-validation and can lead to damaging attacks like {\sc sql} injection and
-Cross-Site Scripting. Note that to exploit such vulnerabilities, a malicious user does
-not have to know anything about the applications internals. For all the other
-bugs, another program should be written either to incorporate references to
-mutable objects, access non-final fields and others. In addition, as
-bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
-if an application has bugs like these, it might have more vulnerabilities that FindBugs doesn't
-report. Table~\ref{tbl:sev} presents the number of artifacts where at least one of these
-bugs exists. In the following section we provide results separately for this
-subcategory.
-
 Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
 repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
-categories) are the most popular in the repository. In the following section we
+categories) are the most popular in the repository. This could be an indication
+that programmers write code that implements the required functionality without considering
+its many security aspects. In the following section we
 show the correlation of security bugs with all the other categories. An interesting observation is
 that 5,601 (31.99\%) projects, containing 32,689 artifacts (28.57\%), did not
 have any bugs at all. These cases involved small artifacts with a minimum number of classes.
-This consorts with the relationship between the size of an artifact and it's
+This goes along with the relationship between the size of an artifact and it's
 bugs that is presented in the upcoming section.
 
 \begin{figure*}
