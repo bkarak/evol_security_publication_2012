@@ -25,7 +25,7 @@ with open("data/project_counters.json", "r") as json_file:
             continue
         for version in data['versions']:
             version_order = version['JarMetadata']['version_order']
-            if version_order == 0 or version_order > 100:
+            if version_order == 0:
                 continue
             counters = version['Counters']
             for counter in bugs_per_version.keys():
@@ -34,7 +34,13 @@ with open("data/project_counters.json", "r") as json_file:
                     print project, version_order, counter, value
                 bugs_per_version[counter].append((version_order, value))
 
-                
+
+for counter, counter_list in bugs_per_version.iteritems():
+    bugs_per_version_arr = np.array(counter_list).transpose()            
+    (rho, p_value) = st.spearmanr(bugs_per_version_arr[0],
+                                  bugs_per_version_arr[1])
+    print counter, rho, p_value
+
 plt.figure(1, figsize=(16, 10))
 num_plots = len(bugs_per_version.keys())
 num_cols = 4
