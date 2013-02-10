@@ -35,15 +35,17 @@ def main():
 
             if len(docs) == 0:
                 missing += 1
-                print '[%d]: Missing %s||%s||%s' % (total_jars, group_id, artifact_id, v)
+                #print '[%d]: Missing %s||%s||%s' % (total_jars, group_id, artifact_id, v)
                 local_jar_path = '%s%s/%s-%s.jar' % (maven_base_url, v, artifact_id, v)
 
                 if not os.path.exists(local_jar_path):
                     really_missing += 1
+                else:
+                    print "findbugs -textui -xml -output `basename %s`-findbugs.xml %s" % (local_jar_path, local_jar_path)
 
     fp.close()
 
-    print 'Total: %d, Missing: %d (%d)' % (total_jars, missing - really_missing, missing)
+    #print 'Total: %d, Missing: %d (%d)' % (total_jars, missing - really_missing, missing)
 
 
 if __name__ == "__main__":
