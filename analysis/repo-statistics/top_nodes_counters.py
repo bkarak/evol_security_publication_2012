@@ -2,7 +2,9 @@ import csv
 import json
 
 def main():
-    f = open("data/project_counters.json")
+    with open("data/project_counters.json") as data_file:
+        data = json.load(data_file)
+
     with open('data/graph-results.csv', 'rb') as f:
         reader = csv.reader(f)
         counter = 0
@@ -14,7 +16,7 @@ def main():
             except:
                 pass
             if counter == 50:
-                break    
+                break
 
 if __name__== "__main__":
  main()
