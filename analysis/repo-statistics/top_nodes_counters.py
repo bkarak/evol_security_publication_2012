@@ -11,8 +11,11 @@ def main():
         for row in reader:
             counter = counter + 1
             try:
-                (a,b,c) = row[0].split("||")
-                print "%s %s %s" % (a,b,c)
+                (agroup_id,artifact,version) = row[0].split("||")
+                print "%s %s %s" % (agroup_id,artifact,version)
+                print row[1]
+                print row[2]
+                print row[3]
             except:
                 pass
             if counter == 50:
