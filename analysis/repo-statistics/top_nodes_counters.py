@@ -11,11 +11,16 @@ def main():
         for row in reader:
             counter = counter + 1
             try:
-                (agroup_id,artifact,version) = row[0].split("||")
-                print "%s %s %s" % (agroup_id,artifact,version)
+                (group_id,artifact,version) = row[0].split("||")
+                print "%s %s %s" % (group_id,artifact,version)
                 print row[1]
                 print row[2]
                 print row[3]
+            
+            my_key = ''.join([group_id,"||",artifact]) 
+            if my_key in data:
+                print "exists"
+
             except:
                 pass
             if counter == 50:
