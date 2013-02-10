@@ -1,14 +1,20 @@
 import csv
-
-from helpers.data_helper import load_vuln_projects_json, ArrayCount, save_to_file
-from helpers.mongo_helper import MongoProjectIterator
+import json
 
 def main():
-    projects = load_vuln_projects_json()
-    results = {}
-
+    f = open("data/project_counters.json")
     with open('data/graph-results.csv', 'rb') as f:
         reader = csv.reader(f)
+        counter = 0
         for row in reader:
-            for field in row[0].split("||"):
-                print field
+            counter = counter + 1
+            try:
+                (a,b,c) = row[0].split("||")
+                print "%s %s %s" % (a,b,c)
+            except:
+                pass
+            if counter == 50:
+                break    
+
+if __name__== "__main__":
+ main()
