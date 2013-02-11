@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <BugCollection version="2.0.2-rc2" sequence="0" timestamp="1259603403000" analysisTimestamp="1360503458863" release="">
   <Project projectName="">
     <Jar>/Users/bkarak/devel/repositories/maven/maven/org/apache/directory/studio/aciitemeditor/1.5.1.v20091130/aciitemeditor-1.5.1.v20091130.jar</Jar>

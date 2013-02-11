@@ -103,11 +103,24 @@ def get_mongo_connection():
     return mongo_db
 
 
+def get_collection():
+    return get_mongo_connection()[MONGO_COL]
+
+
+def store_to_mongo(json):
+    try:
+        mongo_id = get_collection().insert(json)
+        print "Stored with ID: " + str(mongo_id)
+    except pymongo.errors.AutoReconnect, ae:
+        print 'Mongo Connection is Down. Reconnecting! (store_to_mongo, %s)' % (ae,)
+        store_to_mongo(json)
+
+
 def get_project_versions(col_obj, group_id, artifact_id):
     try:
         result = []
-        q = {'JarMetadata.group_id' : group_id,
-             'JarMetadata.artifact_id' : artifact_id}
+        q = {'JarMetadata.group_id': group_id,
+             'JarMetadata.artifact_id': artifact_id}
 
         for c in col_obj.find(q, timeout=False):
             result.append(c)
