@@ -106,8 +106,8 @@ bugs must decrease as a project evolves since they are critical and developers
 should eliminate them.
 	\item We show evidence of the relation between security bugs and the artifact's size.  Here, size is
 defined in terms of bytecode.
-%	\item Security bug persistense between versions. We show evidence that specific bugs are
-%not eliminated between versions.
+	\item Security bug persistense between versions. We show evidence that specific bugs are
+not eliminated between versions.
 	\item The correlation of security bugs with other bug categories. We
 show evidence that such bugs are correlated with bugs that have to do with
 performance, coding practices and others.
@@ -129,24 +129,25 @@ and end up with a conclusion and directions for future work (Section \ref{sec:co
 \label{sec:exp}
 
 Our experiment goal was to collect the metric results of the FindBugs tool.
-The process involved four entities: a number of {\it workers}, a
-{\it task queue} mechanism,\footnote{\url{http://www.rabbitmq.com/}}
+The process involved four entities (see Table~\ref{tbl:exp}):
+a number of {\it workers}, a {\it task queue}
+mechanism,\footnote{\url{http://www.rabbitmq.com/}}
 a {\it data repository},\footnote{\url{http://www.mongodb.org/}}
 and the {\it code repository}, which in our case it was the public Maven 
 repository\footnote{\url{http://mvnrepository.com}}.
 
 \begin{table}
 \centering
-\caption{Experiment software and versions}
-\label{tbl:soft-version}
+\caption{Experiment Entities}
+\label{tbl:exp}
 \begin{tabular}{r r r}
 \hline
  & Software Package & version\\
  \hline
-worker & Custom Python Script & 2.7\\
-task queue & RabbitMQ\footnote{\url{http://www.rabbitmq.com/}} & \\
-data repository & MongoDB\footnote{\url{http://www.mongodb.org/}} & \\
-code repository & Maven Repository & \\
+Worker & Custom Python Script & 2.7\\
+Task Queue & RabbitMQ & 3.0.1 \\
+Data Repository & MongoDB & 2.2 \\
+Code Repository & Maven Repository & January 2012 \\
 \hline
 \end{tabular}
 \end{table}
@@ -288,7 +289,7 @@ bugs, another program should be written either to incorporate references to
 mutable objects, access non-final fields and others. In addition, as
 bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
 if an application has bugs like these, it might have more vulnerabilities that FindBugs doesn't
-report. Table~\ref{tbl:sev} presents the number of artifacts where at least one of these
+report. Table~\ref{tbl:sev} presents the number of {\sc jar}s where at least one of these
 bugs exists. In the following section we provide results separately for this
 subcategory.
 
@@ -333,6 +334,26 @@ bugs that is presented in the upcoming section.
 	\label{fig:bug-per} 
 \end{figure*}
 
+As we mentioned earlier, during the experiment we managed to retrieve the
+dependencies of every version. Based on this information we created a graph
+that represented the snapshot of the repository that we were analyzing. The
+nodes of the graph represented the versions and the vertices their dependencies.
+We have to mention here that the graph is not representative. For instance, if
+a dependency was pointing only to a project (and not to a specific version), we chose to
+select the latest version found on the repository. Also, this graph is not
+complete. This is because threre were missing versions.
+Practically, the corresponding {\it pom}, or {\it war} files existed on the
+repository, but the {\sc jar} file did not. From the 56,5680 vertices, 191,433
+belonged to the first category while 16,4234 belonged to the second. Finally,
+the graph contained 80,354 nodes. Obviously the number does not correspond to
+the number of the total versions (see Section~\ref{sec:data}). This is because
+some versions did not contain any information about their dependencies so they
+are not represented in the graph. After creating the graph, we ran the PageRank
+algorithm~\cite{BP98} on it and retrieved all PageRanks for every node. Then we
+examined the security bugs of the 50 most popular nodes based on their PageRank.
+33 of them contained security bugs while two of them contained severe bugs.
+Finally, 25 of them were latest versions at the time.
+
 \subsection{Analysis}
 \label{sec:analysis}
 
@@ -345,6 +366,9 @@ bugs that is presented in the upcoming section.
 \subsubsection{Security Bugs {\sc vs} Other Bug Categories}
 
 \subsubsection{Critical Artifacts and their Defects}
+
+\section{Discussion}
+\label{sec:dis}
 
 \section{Related Work}
 \label{sec:rel}
