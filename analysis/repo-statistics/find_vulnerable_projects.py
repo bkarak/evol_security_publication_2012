@@ -4,7 +4,6 @@ from helpers.data_helper import save_to_file
 from helpers.mongo_helper import MongoDocumentIterator
 
 
-
 def main():
     project_list = []
 
@@ -24,7 +23,7 @@ def main():
             if project_key not in project_list:
                 project_list.append(project_key)
 
-    miter = MongoDocumentIterator(query={'BugCollection.BugInstance.category':'MALICIOUS_CODE'},fields=['JarMetadata.group_id',  'JarMetadata.artifact_id', 'JarMetadata.version','BugCollection.BugInstance.category', 'BugCollection.BugInstance.type'])
+    miter = MongoDocumentIterator(query={'BugCollection.BugInstance.category':'MALICIOUS_CODE'},fields=['JarMetadata.group_id', 'JarMetadata.artifact_id', 'JarMetadata.version','BugCollection.BugInstance.category', 'BugCollection.BugInstance.type'])
 
     print 'Found %d documents with MALICIOUS_CODE bugs' % (miter.total(),)
 
