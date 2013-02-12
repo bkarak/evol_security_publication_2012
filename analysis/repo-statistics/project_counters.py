@@ -49,7 +49,7 @@ def main():
         # TODO: uncomment this to print out each entry
         #print results
 
-    save_to_file('project_counters.json', json.dumps(results))
+    save_to_file('project_counters_2.json', json.dumps(results))
 
 
 if __name__ == "__main__":
