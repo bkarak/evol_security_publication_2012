@@ -62,7 +62,8 @@ def main():
                 signatures.append(signature)
                 proj_array_count.incr('bug_category')
 
-            results['%s||%s||%s' % (p.group_id(), p.artifact_id(), d['JarMetadata']['version'])] = {'Counters': proj_array_count.get_series(), 'Bugs': signatures}
+            print d['JarMetadata']['version_order']
+            results['%s||%s||%s' % (p.group_id(), p.artifact_id(), d['JarMetadata']['version'])] = {'Counters': proj_array_count.get_series(), 'Bugs': signatures, 'version_order': d['JarMetadata']['version_order']}
 
     save_to_file('bug_persistence.json', json.dumps(results))
 
