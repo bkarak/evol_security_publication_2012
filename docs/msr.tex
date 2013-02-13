@@ -30,11 +30,11 @@ vulnerabilities in software. Such bugs may allow an attacker to take over
 an application, steal data or prevent the application from working at all.
 In this paper, we present how we used the Maven repository to study the
 characteristics of security bugs individually and in relation to other software
-bugs. In particular, we analyzed every artifact of the repository by using a
+bugs. In particular, we analyzed every project version of the repository by using a
 popular static analysis tool. Then by taking advantage of the various features of
 the repository (multiple versions for every project, dependencies and others) we studied
-the evolution of security bugs through time and their relationship with a) the
-size of the corresponding artifact and b) other bug categories. Also, based on the
+the evolution of security bugs through time, their persistence and their relationship with a) the
+size of the corresponding version and b) other bug categories. Also, based on the
 dependencies of artifacts we constructed the graph of the repository and
 examined the most popular nodes based on their PageRank. 
 \end{abstract}
@@ -83,17 +83,18 @@ in market value for a software vendor~\cite{TW07}.
 Hence, one of the basic pursuits in every new software release should
 be the mitigation of such bugs.
 
-The motivation behind our work is to validate if programmers tend to care for
+The motivation behind our work was to validate if programmers tend to care for
 such high-risk bugs when they release a new version of their software. In
-addition, we want to investigate other critical aspects associated with such
-vulnerabilities. For instance, we want to elaborate more on the relation of security
+addition, we wanted to investigate other critical features associated with such
+vulnerabilities like the persistency of a bug. In essence, to check if specific bugs stay
+unresolved for a long time. Also, we wanted to elaborate more on the relation of security
 bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
-did) but also with other bug categories. In the same manner, we want to check
-the relation between an artifact's size and its' security bugs knowing the
+did) but also with other bug categories. In the same manner, we tried to check
+the relation between a version's size and its' security bugs knowing the
 that research has been contradictory on the the issue~\cite{BP84, SYTP85,
-NBZ06, GKMS00}. Finally, the structure of the Maven ecosystem,
-gives us the oportunity to see if an artifact that is a dependency to
-a large number of other artifacts contains a high rate of security bugs.
+NBZ06, GKMS00}. Finally, we examined the Maven ecosystem as a whole from a security
+perspective. Its structure, gave us the oportunity to see if a project version that is a dependency to
+a large number of others contains a high rate of security bugs.
 In this case we can strenghten the relationship between Linus' Law and
 software security as Meneely et al. have already indicated~\cite{MW10}.
 
@@ -104,16 +105,16 @@ The main contributions of this research are:
 this, we inspect every project per version. Our hypothesis is that security
 bugs must decrease as a project evolves since they are critical and developers
 should eliminate them.
-	\item We show evidence of the relation between security bugs and the artifact's size.  Here, size is
-defined in terms of bytecode.
-	\item Security bug persistense between versions. We show evidence that specific bugs are
-not eliminated between versions.
+	\item Security bug persistense between versions. We show evidence that
+specific bugs are not eliminated between versions.
+	\item We show evidence of the relation between security bugs and a project
+version's size.  Here, size is defined in terms of bytecode.
 	\item The correlation of security bugs with other bug categories. We
 show evidence that such bugs are correlated with bugs that have to do with
 performance, coding practices and others.
-	\item The relation of software dependencies and security bugs. Our
-hypothesis is that an artifact that is a dependency of many other artifacts
-should have a low rate of security bugs. 
+%	\item The relation of software dependencies and security bugs. Our
+%hypothesis is that an artifact that is a dependency of many other artifacts
+%should have a low rate of security bugs. 
 \end{itemize}
 
 In the rest of this paper we
@@ -201,9 +202,11 @@ Range & 336\\
 The subject of our study was the Maven repository. Before analyzing the data of the
 repository we performed a number of functional fits on the data. 
 
-Initially, we obtained a snapshot (January 2012) of the maven repository and
+Initially, we obtained a snapshot (January 2012) of the Maven repository and
 handled it locally to retreive a list of all the names of the project versions
-that existed in it. Since FindBugs analyzes applications written in the Java
+that existed in it. A project version can be uniquely identified by the triplet:
+{\it group id}, {\it artifact id} and {\it version}.
+Since FindBugs analyzes applications written in the Java
 programming language, and the Maven repository
 hosts projects from languages other than Java such as Scala, Groovy,
 Clojure etc. we filtered out such projects by performing a series of checks in
@@ -227,7 +230,7 @@ Version Count Among Project Population}
 \end{figure*}
 
 The statistical mesurements presented in Table~\ref{tbl:repository}
-indicate that we have 17,505 projects total and the data sets median
+indicate that we have 17,505 projects and the data set's median
 is 3, which means that almost 50\% (8,753 projects) of the project
 population has 1 to 3 versions.
 Note that the Maven repository has many projects with a
@@ -243,7 +246,7 @@ also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
 
 \begin{table}
 \centering
-\caption{Bug categorisation according to FindBugs}
+\caption{Bug Categorisation According to FindBugs}
 \label{tbl:bug-cat}
 \begin{tabular}{l p{15em}}
 \hline
@@ -282,8 +285,8 @@ and 45,145 coming from the second.
 
 Another observation involves bugs that we could call {\it
 severe}. Such bugs are related to vulnerabilities that appear due to the lack of user-input
-validation and can lead to damaging attacks like {\sc sql} injection and
-Cross-Site Scripting. Note that to exploit such vulnerabilities, a malicious user does
+validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12} and
+Cross-Site Scripting~\cite{WS08}. Note that to exploit such vulnerabilities, a malicious user does
 not have to know anything about the applications internals. For all the other
 bugs, another program should be written either to incorporate references to
 mutable objects, access non-final fields and others. In addition, as
@@ -295,12 +298,12 @@ subcategory.
 
 \begin{table*}
 \centering
-\caption{Number of Artifacts that Contain at Least One Severe Security Bug}
+\caption{Number of Versions that Contain at Least One Severe Security Bug}
 \label{tbl:sev}
 \leavevmode
 	\begin{tabular}{l r}
 	\hline
-	Bug Description & Number of Artifacts\\
+	Bug Description & Number of Versions\\
  	\hline
 	{\sc hrs}: {\sc http} cookie formed from untrusted input & 149\\
 	{\sc hrs}: {\sc http} response splitting vulnerability & 1,564\\
@@ -359,13 +362,11 @@ Finally, 25 of them were latest versions at the time.
 
 \subsubsection{How Security Bugs Evolve Over Time}
 
-\subsubsection{The Relation of Defects with the size of an Artifact}
-
 \subsubsection{Persistense of Security Bugs}
 
-\subsubsection{Security Bugs {\sc vs} Other Bug Categories}
+\subsubsection{The Relation of Defects with the size of an Artifact}
 
-\subsubsection{Critical Artifacts and their Defects}
+\subsubsection{Security Bugs {\sc vs} Other Bug Categories}
 
 \section{Discussion}
 \label{sec:dis}
