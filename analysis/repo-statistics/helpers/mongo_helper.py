@@ -1,6 +1,6 @@
 import pymongo
 
-MONGO_HOST   = '83.212.106.194'
+MONGO_HOST   = '127.0.0.1'
 MONGO_DB     = 'findbugs'
 MONGO_COL    = 'findbugs'
 MONGO_UNAME  = 'findbugs'
