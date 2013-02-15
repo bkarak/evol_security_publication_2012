@@ -1,7 +1,5 @@
 
 
-__author__ = "Vassilios Karakoidas (vassilios.karakoidas@gmail.com)"
-
 class Project(object):
     def __init__(self, group_id, artifact_id):
         super(Project, self).__init__()
@@ -14,6 +12,9 @@ class Project(object):
 
     def artifact_id(self):
         return self.__artifact_id
+
+    def key(self):
+        return '%s||%s' % (self.group_id, self.artifact_id())
 
     def set_version_count(self, c):
         self.__version_count = c
