@@ -1,10 +1,28 @@
 import os
+import zipfile
 import xmldict
 import sys
 
 from helpers.data_helper import load_projects_json
 
 from helpers.mongo_helper import get_version, get_mongo_connection, MONGO_COL
+
+
+def has_classes(filename):
+    try:
+        if zipfile.is_zipfile(filename):
+            z = zipfile.ZipFile(filename)
+            for f in z.namelist():
+                if f.endswith('.class'):
+                    print 'Valid JAR file: %s' % (filename,)
+                    return True
+        else:
+            print '%s is not a zipfile (has_classes)' % (filename,)
+
+        return False
+    except Exception, e:
+        return False
+
 
 def main():
     base_url = '/Users/bkarak/devel/repositories/maven/maven/'
@@ -48,6 +66,7 @@ def main():
                 else:
                     sys.stderr.write('ADDED: Total: %d, Missing: %d (%d)\n' % (total_jars, missing - really_missing, missing))
                     print "findbugs -textui -xml -output `basename %s`-findbugs.xml %s" % (local_jar_path, local_jar_path)
+
 
     sys.stderr.write('Total: %d, Missing: %d (%d)\n' % (total_jars, missing - really_missing, missing))
 

@@ -76,7 +76,8 @@ class MongoProjectIterator(MongoDocumentIterator):
         if fields is not None:
             __f.extend(fields)
 
-        super(MongoProjectIterator, self).__init__(query=__q,fields=__f)
+        super(MongoProjectIterator, self).__init__(query=__q, fields=__f)
+        self.__documents = []
 
     def documents_list(self):
         docs = []
@@ -89,7 +90,21 @@ class MongoProjectIterator(MongoDocumentIterator):
 
         docs.sort(key=lambda doc: doc['JarMetadata']['version_order'])
 
-        return docs
+        for d in docs:
+            if d['JarMetadata']['version_order'] == 0:
+                self.__documents.append(d)
+
+        return self.__documents
+
+    def valid(self):
+        c = 1
+
+        for d in self.__documents:
+            if d['JarMetadata']['version_order'] != c:
+                return False
+            c += 1
+
+        return True
 
 
 def get_mongo_connection():
