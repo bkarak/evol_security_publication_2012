@@ -4,7 +4,7 @@ from helpers.mongo_helper import MongoDocumentIterator
 from helpers.data_helper import save_to_file
 
 #
-# This script generates the "data/projects.json", which is a json dict (object)
+# This script generates the "data/project_versions.json", which is a json dict (object)
 # with the following structure {<group_id>||<artifact_id> : version_count}
 #
 

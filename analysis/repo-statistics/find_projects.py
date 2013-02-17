@@ -4,7 +4,7 @@ from helpers.mongo_helper import MongoDocumentIterator
 from helpers.data_helper import ArrayCount, save_to_file
 
 #
-# This script generates the "data/projects.json", which is a json dict (object)
+# This script generates the "data/project_versions.json", which is a json dict (object)
 # with the following structure {<group_id>||<artifact_id> : version_count}
 #
 
@@ -26,7 +26,7 @@ def main():
             results.incr(ga)
             print 'Working %d of %d' % (miter.count(), miter.total(),)
 
-    save_to_file('projects.json', json.dumps(results.get_series()))
+    save_to_file('project_versions.json', json.dumps(results.get_series()))
 
 
 if __name__ == "__main__":
