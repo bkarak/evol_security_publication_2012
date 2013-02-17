@@ -64,3 +64,22 @@ def load_projects_json():
     return project_list
 
 
+def load_evolution_projects_json():
+    from models.project import Project
+
+    if not os.path.exists('data/valid_projects.json'):
+        print '[ERROR]: data/valid_projects.json does not exist!'
+        return []
+
+    project_list = []
+    fp = open('data/valid_projects.json', 'r')
+    prj_json = json.load(fp)
+    fp.close()
+
+    for p in prj_json:
+        project_list.append(Project.parse_project(p, 0))
+
+    return project_list
+
+
+
