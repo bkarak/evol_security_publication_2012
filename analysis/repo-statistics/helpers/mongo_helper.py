@@ -77,9 +77,13 @@ class MongoProjectIterator(MongoDocumentIterator):
             __f.extend(fields)
 
         super(MongoProjectIterator, self).__init__(query=__q, fields=__f)
+        self.__evol_documents = []
         self.__documents = []
 
-    def documents_list(self):
+    def evolution_list(self):
+        if len(self.__evol_documents) > 0:
+            return self.__evol_documents
+
         docs = []
 
         while self.has_next():
@@ -92,11 +96,30 @@ class MongoProjectIterator(MongoDocumentIterator):
 
         for d in docs:
             if d['JarMetadata']['version_order'] != 0:
+                self.__evol_documents.append(d)
+
+        return self.__evol_documents
+
+    def documents_list(self):
+        if len(self.__documents) > 0:
+            return self.__documents
+
+        self.__documents = []
+
+        while self.has_next():
+            d = self.next()
+
+            if d is not None:
                 self.__documents.append(d)
+
+        self.__documents.sort(key=lambda doc: doc['JarMetadata']['version_order'])
 
         return self.__documents
 
     def valid(self):
+        if len(self.__evol_documents) == 0:
+            return False
+
         c = 1
 
         for d in self.__documents:

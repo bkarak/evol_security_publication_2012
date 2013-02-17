@@ -15,15 +15,15 @@ def main():
         key = '%s||%s' % (p.group_id(), p.artifact_id())
         piter = MongoProjectIterator(p.group_id(), p.artifact_id(), fields=['JarMetadata.version_order'])\
 
-        piter.documents_list()
+        piter.evolution_list()
         print '[%d:%d:%d] Checking ... %s' % (counter, valid, total, key),
 
         if piter.valid():
             valid_projects.append(key)
-            print ' ... Valid'
+            print ' ... Valid (%d versions)' % (len(piter.evolution_list()))
             valid += 1
         else:
-            print ' ... Invalid'
+            print ' ... Invalid (%d versions)' % (len(piter.evolution_list()))
 
     print 'Total: %d, Valid: %d' % (total, valid)
     save_to_file('valid_projects.json', json.dumps(valid_projects))
