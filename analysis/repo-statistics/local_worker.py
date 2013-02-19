@@ -111,7 +111,7 @@ def convert_findbugs_xml(findbugs_xml):
 
 def main():
     c = 0
-    for (root, dirs, files) in os.walk('data/missing2'):
+    for (root, dirs, files) in os.walk('data/missing3'):
         for f in files:
             if f.endswith('.xml'):
                 jar_filename = '%s/%s' % (root, f)
