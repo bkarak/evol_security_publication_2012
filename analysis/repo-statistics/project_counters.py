@@ -58,19 +58,7 @@ def main():
                     sec_instances.append(sec_dict)
 
                 # counters
-                if bug_category == 'SECURITY':
-                    bug_type = bi.get('type', None)
-
-                    if bug_type is None:
-                        print 'Invalid Type!'
-                        continue
-
-                    if bug_type in security_bugs:
-                        doc_array_count.incr('SECURITY_HIGH')
-                    else:
-                        doc_array_count.incr('SECURITY_LOW')
-                else:
-                    doc_array_count.incr(bug_category)
+                doc_array_count.incr(bug_category)
 
             doc_results['Counters'] = doc_array_count.get_series()
             doc_results['SecurityBugs'] = sec_instances
