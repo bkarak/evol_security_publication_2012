@@ -1,11 +1,11 @@
 import json
 
-from helpers.data_helper import ArrayCount, save_to_file, load_projects_json
+from helpers.data_helper import ArrayCount, save_to_file, load_evolution_projects_json
 from helpers.mongo_helper import MongoProjectIterator
 
 
 def main():
-    projects = load_projects_json()
+    projects = load_evolution_projects_json()
     results = {}
     total_projects = len(projects)
     count = 0
