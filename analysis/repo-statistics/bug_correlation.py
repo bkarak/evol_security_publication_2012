@@ -62,15 +62,7 @@ def main():
                 # method
                 if signature not in bug_list:
                     bug_list.append(signature)
-
-                    if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
-                        proj_array_count.incr('SECURITY')
-                    else:
-                        proj_array_count.incr(bug_category)
-
-                if bug_category == 'SECURITY' or bug_category == 'MALICIOUS_CODE':
-                    proj_array_count.incr('TOTAL_SECURITY')
-                else:
+                    proj_array_count.incr(bug_category)
                     proj_array_count.incr('TOTAL_' + bug_category)
 
         print proj_array_count.get_series()
