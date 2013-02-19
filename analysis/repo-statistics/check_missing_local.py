@@ -14,7 +14,7 @@ def has_classes(filename):
             z = zipfile.ZipFile(filename)
             for f in z.namelist():
                 if f.endswith('.class'):
-                    print 'Valid JAR file: %s' % (filename,)
+                    #print 'Valid JAR file: %s' % (filename,)
                     return True
         else:
             print '%s is not a zipfile (has_classes)' % (filename,)
@@ -34,8 +34,8 @@ def main():
     really_missing = 0
 
     for proj in projects:
-        group_id = proj.group_id()
-        artifact_id = proj.artifact_id()
+        group_id = proj.group_id().strip()
+        artifact_id = proj.artifact_id().strip()
         maven_base_url = '%s%s/%s/' % (base_url, group_id.replace('.', '/'), artifact_id)
         maven_metadata_name = '%smaven-metadata.xml' % (maven_base_url,)
 
@@ -52,6 +52,8 @@ def main():
             version_list.append(versions)
 
         for v in version_list:
+            if v is not None:
+                v = v.strip()
             docs = get_version(col_obj, group_id, artifact_id, v)
             total_jars += 1
 
@@ -64,8 +66,12 @@ def main():
                     sys.stderr.write('[%d]: Invalid Jar: %s||%s||%s\n' % (total_jars, group_id, artifact_id, v))
                     really_missing += 1
                 else:
-                    sys.stderr.write('ADDED: Total: %d, Missing: %d (%d)\n' % (total_jars, missing - really_missing, missing))
-                    print "findbugs -textui -xml -output `basename %s`-findbugs.xml %s" % (local_jar_path, local_jar_path)
+                    if has_classes(local_jar_path):
+                        sys.stderr.write('ADDED: Total: %d, Missing: %d (%d)\n' % (total_jars, missing - really_missing, missing))
+                        print "findbugs -textui -xml -output `basename %s`-findbugs.xml %s" % (local_jar_path, local_jar_path)
+                    else:
+                        really_missing += 1
+                        sys.stderr.write('HAS_NO_CLASSES: %s\n' % (local_jar_path,))
 
 
     sys.stderr.write('Total: %d, Missing: %d (%d)\n' % (total_jars, missing - really_missing, missing))
