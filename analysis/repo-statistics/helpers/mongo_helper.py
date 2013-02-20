@@ -95,7 +95,7 @@ class MongoProjectIterator(MongoDocumentIterator):
         docs.sort(key=lambda doc: doc['JarMetadata']['version_order'])
 
         for d in docs:
-            if d['JarMetadata']['version_order'] != 0:
+            if d['JarMetadata']['version_order'] > 0:
                 self.__evol_documents.append(d)
 
         return self.__evol_documents
@@ -122,7 +122,7 @@ class MongoProjectIterator(MongoDocumentIterator):
 
         c = 1
 
-        for d in self.__documents:
+        for d in self.__evol_documents:
             if d['JarMetadata']['version_order'] != c:
                 return False
             c += 1

@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import json
 
 from helpers.data_helper import ArrayCount, save_to_file, load_evolution_projects_json
@@ -6,7 +7,7 @@ from helpers.mongo_helper import MongoProjectIterator
 
 def main():
     projects = load_evolution_projects_json()
-    results = {}
+    results = OrderedDict()
     total_projects = len(projects)
     count = 0
 
@@ -20,6 +21,9 @@ def main():
         print '[%d:%d] %s||%s: %d versions' % (count, total_projects, p.group_id(), p.artifact_id(), len(doc_list))
 
         for d in doc_list:
+            if d['JarMetadata']['version_order'] == 0:
+                continue
+
             proj_array_count = ArrayCount()
             signatures = []
 
