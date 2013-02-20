@@ -70,8 +70,6 @@ def main():
                         'version_count' : len(doc_list),
                         'versions' : documents}
 
-        print results
-
     save_to_file('project_counters.json', json.dumps(results))
 
 
