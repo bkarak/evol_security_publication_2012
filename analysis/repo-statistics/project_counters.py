@@ -58,7 +58,20 @@ def main():
                     sec_instances.append(sec_dict)
 
                 # counters
-                doc_array_count.incr(bug_category)
+                if bug_category == 'SECURITY':
+                    bug_type = bi.get('type', None)
+                    
+                    if bug_type is None:
+                        print 'Invalid Type!'
+                        continue
+                        
+                    if bug_type in security_bugs:
+                        doc_array_count.incr('SECURITY_HIGH')
+                    else:
+                        doc_array_count.incr('SECURITY_LOW')
+                else:
+                    doc_array_count.incr(bug_category)
+                #doc_array_count.incr(bug_category)
 
             doc_results['Counters'] = doc_array_count.get_series()
             doc_results['SecurityBugs'] = sec_instances
@@ -69,6 +82,7 @@ def main():
                         'artifact_id' : p.artifact_id(),
                         'version_count' : len(doc_list),
                         'versions' : documents}
+        #print results
 
     save_to_file('project_counters.json', json.dumps(results))
 

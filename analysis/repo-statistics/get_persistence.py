@@ -9,6 +9,14 @@ def main():
     projects = load_evolution_projects_json()
     results = OrderedDict()
     total_projects = len(projects)
+    security_bugs = ['HRS_REQUEST_PARAMETER_TO_COOKIE',
+                     'HRS_REQUEST_PARAMETER_TO_HTTP_HEADER',
+                     'PT_ABSOLUTE_PATH_TRAVERSAL',
+                     'SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE',
+                     'SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING',
+                     'XSS_REQUEST_PARAMETER_TO_JSP_WRITER',
+                     'XSS_REQUEST_PARAMETER_TO_SEND_ERROR',
+                     'XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER']
     count = 0
 
     print 'Found %d Projects' % (total_projects,)
@@ -32,7 +40,20 @@ def main():
                     #print 'Invalid BugInstance (%s)' % (bi,)
                     continue
 
-                bug_category = bi.get('category', '')
+                bug_c = bi.get('category', '')
+                if bug_c == 'SECURITY':
+                    bug_type = bi.get('type', None)
+                    
+                    if bug_type is None:
+                        print 'Invalid Type!'
+                        continue
+                        
+                    if bug_type in security_bugs:
+                        bug_category = 'SECURITY_HIGH'
+                    else:
+                        bug_category = 'SECURITY_LOW'
+                else:
+                    bug_category = bug_c
 
                 # create signature
                 signatures_ids = []
@@ -63,6 +84,7 @@ def main():
 
                 bug_type = bi['type']
                 signature = '%s||%s||%s' % (bug_category, bug_type, '||'.join(signatures_ids))
+                print signature
                 signatures.append(signature)
                 proj_array_count.incr('bug_category')
 
