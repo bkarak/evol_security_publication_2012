@@ -84,7 +84,8 @@ def main():
                 if signature not in bug_list:
                     bug_list.append(signature)
                     proj_array_count.incr(bug_category)
-                    proj_array_count.incr('TOTAL_' + bug_category)
+                
+                proj_array_count.incr('TOTAL_' + bug_category)
 
         print proj_array_count.get_series()
         results['%s||%s' % (p.group_id(), p.artifact_id())] = proj_array_count.get_series()
