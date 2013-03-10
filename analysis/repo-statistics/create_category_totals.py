@@ -14,7 +14,13 @@ def main():
             for (key, value) in v.iteritems():
                 totals.incr(key, delta=value)
 
-    total = 7008859
+    total = 0
+
+    for (k, v) in totals.get_series().iteritems():
+        if k.startswith('TOTAL_'):
+            total += v
+
+    print 'Total: %d' % (total,)
 
     for (k, v) in totals.get_series().iteritems():
         if k.startswith('TOTAL_'):
