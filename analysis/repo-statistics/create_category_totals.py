@@ -3,7 +3,7 @@ from helpers.data_helper import ArrayCount
 
 
 def main():
-    fp = open('data/bug_correlation_counters.json', 'r')
+    fp = open('data/bug_correlation_counters_full.json', 'r')
     json_corr = json.load(fp)
     fp.close()
 
