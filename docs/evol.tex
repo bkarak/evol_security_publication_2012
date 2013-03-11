@@ -64,7 +64,7 @@ One of the most common approaches to identify security bugs is
 inspection of the program's source or object code without executing
 it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
-research~\cite{AP10, HP07, HP04}. Specifically, we ran FindBugs on all the project
+research~\cite{AP10, HP07, HP04, HW08}. Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the Maven\footnote{\url{http://maven.apache.org/}}
 repository (approximately 265GB of data). Then we observed the changes that
 involved the security bugs and their characteristics. This research builds upon
@@ -288,19 +288,6 @@ Malicious Code}. From the total number of the artifacts, 4,270 of them contained
 at least one bug coming from the first category
 and 45,145 coming from the second.
 
-Another observation involves bugs that we could call {\it
-severe}. Such bugs are related to vulnerabilities that appear due to the lack of user-input
-validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12} and
-Cross-Site Scripting~\cite{WS08}. Note that to exploit such vulnerabilities, a malicious user does
-not have to know anything about the applications internals. For all the other
-bugs, another program should be written either to incorporate references to
-mutable objects, access non-final fields and others. In addition, as
-bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
-if an application has bugs like these, it might have more vulnerabilities that FindBugs doesn't
-report. Table~\ref{tbl:sev} presents the number of {\sc jar}s where at least one of these
-bugs exists. In the following section we provide results separately for this
-subcategory.
-
 \begin{table*}
 \centering
 \caption{Number of Versions that Contain at Least One Severe Security Bug}
@@ -334,6 +321,19 @@ that 5,601 (31.99\%) projects, containing 32,689 artifacts (28.57\%), did not
 have any bugs at all. These cases involved small artifacts with a minimum number of classes.
 This goes along with the relationship between the size of an artifact and it's
 bugs that is presented in the upcoming section.
+
+Another observation involves bugs that we could call {\it
+severe}. Such bugs are related to vulnerabilities that appear due to the lack of user-input
+validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12} and
+Cross-Site Scripting~\cite{WS08}. Note that to exploit such vulnerabilities, a malicious user does
+not have to know anything about the applications internals. For all the other
+bugs, another program should be written either to incorporate references to
+mutable objects, access non-final fields and others. In addition, as
+bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
+if an application has bugs like these, it might have more vulnerabilities that FindBugs doesn't
+report. Table~\ref{tbl:sev} presents the number of {\sc jar}s where at least one of these
+bugs exists. In the following section we provide results separately for this
+subcategory.
 
 \begin{figure*}
 	\centering
