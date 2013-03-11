@@ -1,17 +1,14 @@
 pdf:
 	#cd data && make
-	pdflatex msr.tex
-	bibtex msr
-	pdflatex msr.tex
-	pdflatex msr.tex
+	pdflatex evol.tex
+	bibtex evol
+	pdflatex evol.tex
+	pdflatex evol.tex
 
 clean:
 	-rm -f *.aux
 	-rm -f *.bbl *.blg *.log *.out *.dvi *~ *.spl
-	-rm -f msr.pdf
-
-bib:
-	biblio.py texmode msr.tex > msr.bib
+	-rm -f evol.pdf
 
 count-words:
 	@echo "Counting Words"
