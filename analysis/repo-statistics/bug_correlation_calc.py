@@ -41,8 +41,25 @@ for i in xrange(num_bug_types):
         jcolumn = bug_types[j]
         data_pair = data[[icolumn, jcolumn]].dropna()
         (corr, pvalue) = st.pearsonr(data_pair[icolumn], data_pair[jcolumn])
-        print icolumn, jcolumn, corr, pvalue
+        print icolumn, jcolumn, corr, pvalue        
         corrmatrix[i, j] = corrmatrix[j, i] = corr
         pvalues[i, j] = pvalues[j, i] = pvalue
 
-corrplot(corrmatrix, pvalues, bug_types)
+
+print r"""
+\begin{tabular}{ccccccccc}
+\hline \\
+"""
+
+for row in corrmatrix:
+    print ' & '.join(map('{:.2f}'.format, row)), r'\\'
+
+print r"""
+\hline \\
+\end{tabular}
+"""
+plot = corrplot(corrmatrix, pvalues, bug_types)
+
+plot.tight_layout()
+plot.savefig('corrplot.pdf', format='pdf')
+plot.show()
