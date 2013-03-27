@@ -13,6 +13,7 @@ from corrplot import corrplot
 bug_types = [
     'SECURITY_HIGH',
     'SECURITY_LOW',
+    'MALICIOUS_CODE',
     'STYLE',
     'BAD_PRACTICE',
     'CORRECTNESS',
@@ -21,15 +22,34 @@ bug_types = [
     'I18N',
     'EXPERIMENTAL'
     ]
-    
+
+labels = []
+for bug_type in bug_types:
+    if bug_type == 'I18N':
+        labels.append(bug_type.lower())
+    elif bug_type == 'MT_CORRECTNESS':
+        labels.append('MT Correctness')
+    elif bug_type == 'MALICIOUS_CODE':
+        pass
+    else:
+        labels.append(bug_type.title().replace('_', ' '))
+
 with open("data/bug_correlation_counters.json") as infile:
     json_input = json.load(infile)
 
 data = pd.DataFrame(json_input).T
-data['SECURITY_HIGH'] = data['SECURITY_HIGH'] + data['MALICIOUS_CODE']
-data['TOTAL_SECURITY_HIGH'] = (data['TOTAL_SECURITY_HIGH']
-                               + data['TOTAL_MALICIOUS_CODE'])
+
+for bug_type in bug_types:
+    print bug_type, data[bug_type].count()
+
+print "MALICIUS_CODE & SECURITY_LOW ", len(data[data['MALICIOUS_CODE']
+                                                * data['SECURITY_LOW'] > 0])
+    
+data['SECURITY_LOW'] = (data['MALICIOUS_CODE'].fillna(0)
+                        + data['SECURITY_LOW'].fillna(0)).replace(0, np.nan)
+data['TOTAL_SECURITY_LOW'] += data['TOTAL_MALICIOUS_CODE']
 data = data.drop(['MALICIOUS_CODE', 'TOTAL_MALICIOUS_CODE'], axis=1)
+bug_types.remove('MALICIOUS_CODE')
 
 num_bug_types = len(bug_types)
 corrmatrix = np.identity(num_bug_types)
@@ -41,7 +61,9 @@ for i in xrange(num_bug_types):
         jcolumn = bug_types[j]
         data_pair = data[[icolumn, jcolumn]].dropna()
         (corr, pvalue) = st.pearsonr(data_pair[icolumn], data_pair[jcolumn])
-        print icolumn, jcolumn, corr, pvalue        
+        print "{} ({}) {} ({}) {} {}".format(icolumn, data[icolumn].count(),
+                                             jcolumn, data[jcolumn].count(),
+                                             corr, pvalue)
         corrmatrix[i, j] = corrmatrix[j, i] = corr
         pvalues[i, j] = pvalues[j, i] = pvalue
 
@@ -58,7 +80,8 @@ print r"""
 \hline \\
 \end{tabular}
 """
-plot = corrplot(corrmatrix, pvalues, bug_types)
+
+plot = corrplot(corrmatrix, pvalues, labels)
 
 plot.tight_layout()
 plot.savefig('corrplot.pdf', format='pdf')
