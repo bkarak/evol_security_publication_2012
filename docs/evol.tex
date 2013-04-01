@@ -1,4 +1,4 @@
-\documentclass[conference]{IEEEtran}
+\documentclass[conference]{llncs}
 
 \usepackage{url}
 \usepackage{amsmath}
@@ -8,20 +8,22 @@
 
 \begin{document}
 
-
-\author{
-\IEEEauthorblockN{Dimitris Mitropoulos\IEEEauthorrefmark{1}, Vassilios Karakoidas\IEEEauthorrefmark{1},
-Georgios Gousios\IEEEauthorrefmark{2}, Panagiotis Louridas\IEEEauthorrefmark{1},
-Diomidis Spinellis\IEEEauthorrefmark{1}}\\
-\IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Management Science and Technology\\
-Athens University of Economics and Business\\
-\{dimitro, bkarak, louridas, dds\}@aueb.gr}\\
-\IEEEauthorblockA{\IEEEauthorrefmark{2}
-Software Engineering Research Group\\
-Delft University of Technology\\
-G.Gousios@tudelft.nl}}
-
 \title{Dismal Code: Studying the Evolution of Security Bugs}
+
+\author{Dimitris Mitropoulos    \and
+       Vassilios Karakoidas	\and
+       Georgios Gousios         \and
+       Panos Louridas		\and
+       Diomidis Spinellis
+}
+\institute{
+       	Department of Management Science and Technology\\
+	Athens University of Economics and Business\\
+      	\email{\{dimitro, bkarak, louridas, dds\}@aueb.gr}\\
+	Software Engineering Research Group\\
+	Delft University of Technology\\
+	\email{G.Gousios@tudelft.nl}
+}
 
 \maketitle
 
@@ -41,21 +43,19 @@ dependencies of artifacts we constructed the graph of the repository and
 examined the most popular nodes based on their PageRank. 
 \end{abstract}
 
-\begin{IEEEkeywords}
+\begin{keywords}
 Software Bugs, Static Analysis, Software Evolution, Software
 Security, Maven, FindBugs.
-\end{IEEEkeywords}
-
-\IEEEpeerreviewmaketitle
+\end{keywords}
 
 \section{Introduction}
 
 A security bug is a programming error that introduces a potentially
-exploitable weakness into a computer system~\cite{SSL12, TJBD11}. This weakness could lead to a
+exploitable weakness into a computer system~\cite{SSL12}\cite{TJBD11}. This weakness could lead to a
 security breach with unfortunate consequences in different layers, like databases,
 native code, applications, libraries and others. Despite the significant
 effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
-study them in relation to software evolution~\cite{L96, LRWPT97, IB06, RGMA06}.
+study them in relation to software evolution~\cite{L96}\cite{LRWPT97}\cite{IB06}\cite{RGMA06}.
 In this paper we present how we used a large software ecosystem to analyze
 how evolving software packages are related to the different types of security
 vulnerabilities.
@@ -65,7 +65,7 @@ One of the most common approaches to identify security bugs is
 inspection of the program's source or object code without executing
 it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
-research~\cite{AP10, HP07, HP04, HW08}. Specifically, we ran FindBugs on all the project
+research~\cite{AP10}\cite{HP07}\cite{HP04}\cite{HW08}. Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the Maven\footnote{\url{http://maven.apache.org/}}
 repository (approximately 265GB of data). Then we observed the changes that
 involved the security bugs and their characteristics. This research builds upon
@@ -93,8 +93,8 @@ unresolved for a long time. Also, we wanted to elaborate more on the relation of
 bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
 did) but also with other bug categories. In the same manner, we tried to check
 the relation between a version's size and its' security bugs knowing the
-that research has been contradictory on the the issue~\cite{BP84, SYTP85,
-NBZ06, GKMS00}. Finally, we examined the Maven ecosystem as a whole from a security
+that research has been contradictory on the the issue~\cite{BP84}\cite{SYTP85},
+\cite{NBZ06}\cite{GKMS00}. Finally, we examined the Maven ecosystem as a whole from a security
 perspective. Its structure, gave us the oportunity to see if a project version that is a dependency to
 a large number of others contains a high rate of security bugs.
 In this case we can strenghten the relationship between Linus' Law and
@@ -377,7 +377,7 @@ Finally, 25 of them were latest versions at the time.
 To see whether bugs flock together we performed pairwise correlations
 between all bug categories. We calculated the correlations between the
 number of distinct bugs that appeared in a project throughout its
-lifetime. The results can be seen in Table~\ref{tbl:corrmatrix} and
+lifetime. The results can be seen in Table~\ref{tbl:corrmatrix} andsplncs.bst
 Figure~\ref{fig:corrplot}. We found significant correlations between
 all pairs apart from two pairs involving the {\it Security High}
 category. In general, the {\it Security High} category showed the
@@ -445,7 +445,7 @@ pattern prevalence tends to be the same in software collections.
 
 {\it Querying techniques} are used to answer a broad range of questions
 regarding the evolution history of a project~\cite{HG05}. Bhattacharya et
-al.~\cite{BN11, B11} proposed a framework that is based upon
+al.~\cite{BN11}\cite{B11} proposed a framework that is based upon
 recursively enumerable languages. The framework can correlate software
 bugs with developers in various ways. For instanse, return the list of
 bugs fixed by a specific developer. Fischer et al.~\cite{FPG03} proposed
@@ -497,7 +497,7 @@ The project is being co-financed by the European Regional Development Fund (ERDF
 and national funds and is a part of the Operational Programme ``Competitiveness \&
 Entrepreneurship" (OPCE II), Measure ``COOPERATION" (Action I).
 
-\bibliographystyle{IEEEtran}
+\bibliographystyle{splncs}
 \bibliography{evol} 
 
 \end{document}
