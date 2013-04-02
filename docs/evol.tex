@@ -66,8 +66,9 @@ inspection of the program's source or object code without executing
 it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
 research~\cite{AP10}\cite{HP07}\cite{HP04}\cite{HW08}. Specifically, we ran FindBugs on all the project
-versions of all the projects that exist in the Maven\footnote{\url{http://maven.apache.org/}}
-repository (approximately 265GB of data). Then we observed the changes that
+versions of all the projects that exist in the
+{\it Maven Central Repository}\footnote{\url{http://search.maven.org/}}
+(approximately 265GB of data). Then we observed the changes that
 involved the security bugs and their characteristics. This research builds upon
 our earlier work on the topic~\cite{MGS12}.
 
@@ -106,7 +107,7 @@ The main contributions of this research are:
 	\item The analysis of how security bugs evolve over time. To achieve
 this, we inspect every project per version. Our hypothesis is that security
 bugs must decrease as a project evolves since they are critical and developers
-should eliminate them.
+should eliminate them.http://search.maven.org/
 	\item Security bug persistense between versions. We show evidence that
 security bugs are not eliminated between versions.
 	\item We show evidence of the relation between security bugs and a project
@@ -134,32 +135,38 @@ performance, coding practices and others.
 
 Our experiment involved the collection of the metric results of the FindBugs
 tool. Before and during the experiment, we performed a number of functional
-fits on the data for reasons that we will describe below.
+fits on the data coming from the Maven repository,
+http://search.maven.org/for reasons that we will describe below.
 
 \subsection{Experiment}
 \label{sec:exp}
 
 Our experiment involved four entities (see Table~\ref{tbl:exp}):
 a number of {\it workers}, a {\it task queue}
-mechanism,\footnote{\url{http://www.rabbitmq.com/}}
-a {\it data repository},\footnote{\url{http://www.mongodb.org/}}
-and the {\it code repository}, which in our case it was the public Maven 
-repository\footnote{\url{http://mvnrepository.com}}.
+mechanism, a {\it data repository}, and the {\it code repository},
+which in our case it was the public Maven repository.
 
 \begin{table}
 \centering
+\begin{threeparttable}
 \caption{Experiment Entities}
 \label{tbl:exp}
-\begin{tabular}{r r r}
+\begin{tabular}{l r r}
 \hline
 Entity & Software Package & Version\\
 \hline
 Worker & Custom Python Script & 2.7\\
-Task Queue & RabbitMQ & 3.0.1 \\
-Data Repository & MongoDB & 2.2 \\
-Code Repository & Maven Repository & January 2012 \\
+Task Queue & RabbitMQ\tnote{1} & 3.0.1 \\
+Data Repository & MongoDB\tnote{2} & 2.2 \\
+Code Repository & Maven Central Repository\tnote{3} & January 2012 \\
 \hline
 \end{tabular}
+ \begin{tablenotes}
+       	\item[1] \url{http://www.rabbitmq.com/}
+       	\item[2] \url{http://www.mongodb.org/}
+	\item[3] \url{http://mvnrepository.com}
+   \end{tablenotes}
+\end{threeparttable}
 \end{table}
 
 First, we scanned the Maven repository for appropriate {\sc jar}s and created a
@@ -176,9 +183,9 @@ First, specific {\sc jar} metadata were calculated and stored. Such metadata inc
 its size, its dependencies, and a number that represented the chronological order of the
 release. This order was derived from an {\sc xml} file that
 accompanies every project in the Maven repository called {\it
-maven-metadata.xml}. Then, FindBugs was executed and its results were also stored
-in the data repository. When the task was completed the queue was notified and
-the next task was requested.
+maven-metadata.xml}. Then, FindBugs was invoked by the worker and its results were
+also stored in the data repository. When the task was completed the queue
+was notified and the next task was requested.
 
 This process was executed for all the available {\sc jar}s in the task queue.
 The experiment was executed five times in order to iron out various bugs in
@@ -207,6 +214,15 @@ Range & 337\\
 \hline
 \end{tabular}
 \end{table}
+
+Maven is a build automation tool used primarily for Java projects and it is
+hosted by the Apache Software Foundation.\footnote{\url{http://www.apache.org/}}
+To describe the software project being built, its dependencies
+on other external modules, the build order, and required plug-ins Maven uses
+{\sc xml}. To build a software component, it dynamically downloads Java libraries
+and Maven plug-ins from the Maven Central Repository,
+and stores them in a local cache. The repository can also be updated with new
+new projects but also with new versions of existing ones.
 
 Initially, we obtained a snapshot (January 2012) of the Maven repository and
 handled it locally to retreive a list of all the names of the project versions
