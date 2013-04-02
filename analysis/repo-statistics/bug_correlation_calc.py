@@ -68,18 +68,20 @@ for i in xrange(num_bug_types):
         pvalues[i, j] = pvalues[j, i] = pvalue
 
 
-print r"""
+with open("corrmatrix.tex", "w") as corrmatrix_tex:
+    start = r"""
 \begin{tabular}{ccccccccc}
 \hline \\
 """
-
-for row in corrmatrix:
-    print ' & '.join(map('{:.2f}'.format, row)), r'\\'
-
-print r"""
+    corrmatrix_tex.write(start)
+    for row in corrmatrix:
+        table_row = ' & '.join(map('{:.2f}'.format, row)) +  r'\\' + '\n'
+        corrmatrix_tex.write(table_row)
+    end = r"""
 \hline \\
 \end{tabular}
 """
+    corrmatrix_tex.write(end)
 
 plot = corrplot(corrmatrix, pvalues, labels)
 
