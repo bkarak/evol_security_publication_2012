@@ -136,8 +136,7 @@ performance, coding practices and others.
 
 Our experiment involved the collection of the metric results of the FindBugs
 tool. Before and during the experiment, we performed a number of functional
-fits on the data coming from the Maven repository,
-http://search.maven.org/for reasons that we will describe below.
+fits on the data coming from the Maven repository, for reasons that we will describe below.
 
 \subsection{Experiment}
 \label{sec:exp}
@@ -161,7 +160,7 @@ Entity & Software Package & Version\\
 Worker & Custom Python Script & 2.7\\
 Task Queue & RabbitMQ & 3.0.1 \\
 Data Repository & MongoDB & 2.2 \\
-Code Repository & Maven Central Repository\tnote{3} & January 2012 \\
+Code Repository & Maven Central Repository & January 2012 \\
 \hline
 \end{tabular}
 \end{threeparttable}
@@ -481,12 +480,24 @@ also used by Zimmermann et al.~\cite{ZNA08} to check the correlation
 of bugs with software properties like code complexity, process quality and others
 and predict future properties.
 
-% in a recent paper, Spacco et al.~\cite{SHP06} showed the relation of bugs
-% in general, with the size of every version of Sun's {\sc jdk}.
-
 The evolution of software artifacts has also been analyzed to {\it reduce the false
-alarms} of the various static analysis tools.
-% dimitro: more to come.
+alarms} of the various static analysis tools. To achieve this, Spacco et
+al.~\cite{SHP06} introduced {\it pairing} and {\it warning signatures}. In the
+former they tried to pair sets of bugs between versions in order to find
+similar patterns. In the latter they computed a signature for every bug. This
+signature contained elemnts like the name of the class where the bug was found,
+the method and others. Then they searched for similar signatures between
+versions. In their research they also studied the evolution of 116 sequential
+builds of the Sun Java Sevelopment Kit ({\sc jdk}). Their findings indicated that
+high priority bugs are fixed over time. To improve the precision of bug
+detection, Kim et al.~\cite{KE07b}\cite{KE07} an history-based warning
+prioritization algorithm by mining the warning fix experience of three
+different projects. The algorithm was based on the following hypothesis: if a
+bug that belongs to a specific category is eliminated by a code change, then
+this warning category is important. Working towards the same direction Heckman
+et al.~\cite{HW09}\cite{HW08} have introduced benchmarks that use specific
+correlation algorithms and classification techniques to evaluate alert
+prioritization approaches.
 
 Contrary to the above, our work focuses on the subset of security bugs.
 Focusing on such bugs is not a new idea. Massacci et al.~\cite{MNN11} observed
