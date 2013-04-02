@@ -68,9 +68,9 @@ a static analysis tool that examines bytecode to detect software bugs and has al
 research~\cite{AP10}\cite{HP07}\cite{HP04}\cite{HW08}. Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the
 {\it Maven Central Repository}\footnote{\url{http://search.maven.org/}}
-(approximately 265GB of data). Then we observed the changes that
-involved the security bugs and their characteristics. This research builds upon
-our earlier work on the topic~\cite{MGS12}.
+(approximately 265GB of data - see Section~\ref{sec:data}).
+Then we observed the changes that involved the security bugs and their characteristics.
+This research builds upon our earlier work on the topic~\cite{MGS12}.
 
 We chose to focus our study on the security bugs rather than other
 software bugs. This is because compared to other bug categories,
@@ -107,7 +107,7 @@ The main contributions of this research are:
 	\item The analysis of how security bugs evolve over time. To achieve
 this, we inspect every project per version. Our hypothesis is that security
 bugs must decrease as a project evolves since they are critical and developers
-should eliminate them.http://search.maven.org/
+should eliminate them.
 	\item Security bug persistense between versions. We show evidence that
 security bugs are not eliminated between versions.
 	\item We show evidence of the relation between security bugs and a project
@@ -220,9 +220,9 @@ hosted by the Apache Software Foundation.\footnote{\url{http://www.apache.org/}}
 To describe the software project being built, its dependencies
 on other external modules, the build order, and required plug-ins Maven uses
 {\sc xml}. To build a software component, it dynamically downloads Java libraries
-and Maven plug-ins from the Maven Central Repository,
-and stores them in a local cache. The repository can also be updated with new
-new projects but also with new versions of existing ones.
+and Maven plug-ins from the Maven central repository,
+and stores them in a local cache. The repository can be updated with
+new projects and also with new versions of existing projects.
 
 Initially, we obtained a snapshot (January 2012) of the Maven repository and
 handled it locally to retreive a list of all the names of the project versions
@@ -286,8 +286,10 @@ Performance & Involves inefficient memory usageallocation, usage
 of non-static classes. \\
 Style & Code that is confusing, or
 written in a way that leads to errors.\\
-Security & Contains two subcategories, namely: {\it Security} and {\it
-Malicious Code}. Involves code that could lead to security breach. \\
+Malicious Code & Involves variables or fields exposed to classes that should
+not be using them. \\
+Security & Involves input validation issues, unauthorized database connections
+and others. \\
 \hline
 \end{tabular}
 \end{table}
@@ -299,9 +301,9 @@ Then, we provide a comprehensive analysis of the results and highlight our key f
 \subsection{Overview and Initial Results}
 \label{sec:overview}
 
-FindBugs separates software bugs into seven categories (see
-Table~\ref{tbl:bug-cat}). Two of them involve security: {\it Security} and {\it
-Malicious Code}. From the total number of the {\sc jar}s, 4,353 of them contained
+FindBugs separates software bugs into nine categories (see
+Table~\ref{tbl:bug-cat}). Two of them involve security issues: {\it Security} and {\it
+Malicious Code}. From the total number of versions, 4,353 of them contained
 at least one bug coming from the first category
 and 45,559 coming from the second.
 
