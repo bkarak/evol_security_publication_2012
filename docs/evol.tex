@@ -144,8 +144,10 @@ http://search.maven.org/for reasons that we will describe below.
 
 Our experiment involved four entities (see Table~\ref{tbl:exp}):
 a number of {\it workers}, a {\it task queue}
-mechanism, a {\it data repository}, and the {\it code repository},
-which in our case it was the public Maven repository.
+mechanism,\footnote{\url{http://www.rabbitmq.com/}}
+a {\it data repository},\footnote{\url{http://www.mongodb.org/}}
+and the {\it code repository}, which in our case it was
+the public Maven repository.
 
 \begin{table}
 \centering
@@ -157,16 +159,11 @@ which in our case it was the public Maven repository.
 Entity & Software Package & Version\\
 \hline
 Worker & Custom Python Script & 2.7\\
-Task Queue & RabbitMQ\tnote{1} & 3.0.1 \\
-Data Repository & MongoDB\tnote{2} & 2.2 \\
+Task Queue & RabbitMQ & 3.0.1 \\
+Data Repository & MongoDB & 2.2 \\
 Code Repository & Maven Central Repository\tnote{3} & January 2012 \\
 \hline
 \end{tabular}
- \begin{tablenotes}
-       	\item[1] \url{http://www.rabbitmq.com/}
-       	\item[2] \url{http://www.mongodb.org/}
-	\item[3] \url{http://mvnrepository.com}
-   \end{tablenotes}
 \end{threeparttable}
 \end{table}
 
