@@ -77,7 +77,7 @@ the category of security bugs has two distinct features: it is critical~\cite{SZ
 and it costs~\cite{BCL08}. Specifically, a software bug can
 lead to a mulfunction of a software artifact that runs under specific
 requirements but a security bug can allow a malicious user to alter the execution
-of the entire application. In this case, such bugs could span a wide
+of the entire application for his or her own gain. In this case, such bugs could span a wide
 range of security and privacy issues, like viewing sensitive information, the destruction or
 modification of sensitive data, denial of service and others.
 Moreover, security bug disclosures lead to a negative and significant change
@@ -88,42 +88,42 @@ be the mitigation of such bugs.
 The motivation behind our work was to validate if programmers tend to care for
 such high-risk bugs when they release a new version of their software. In
 addition, we wanted to investigate other critical features associated with such
-vulnerabilities like the persistency of a bug. In essence, to check if specific bugs stay
+vulnerabilities like the persistency of a bug. In essence, to check if critical bugs stay
 unresolved for a long time. Also, we wanted to elaborate more on the relation of security
 bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
 did) but also with other bug categories. In the same manner, we tried to check
 the relation between a version's size and its' security bugs knowing the
-that research has been contradictory on the the issue~\cite{BP84}\cite{SYTP85},
-\cite{NBZ06}\cite{GKMS00}. Finally, we examined the Maven ecosystem as a whole from a security
+that research has been contradictory on the the
+issue~\cite{BP84}\cite{SYTP85}\cite{NBZ06}\cite{GKMS00}.
+Finally, we examined the Maven ecosystem as a whole from a security
 perspective. Its structure, gave us the oportunity to see if a project version that is a dependency to
 a large number of others contains a high rate of security bugs.
 In this case we can strenghten the relationship between Linus' Law and
 software security as Meneely et al. have already indicated~\cite{MW10}.
 
 The main contributions of this research are:
-
 \begin{itemize}
 	\item The analysis of how security bugs evolve over time. To achieve
 this, we inspect every project per version. Our hypothesis is that security
 bugs must decrease as a project evolves since they are critical and developers
 should eliminate them.
 	\item Security bug persistense between versions. We show evidence that
-specific bugs are not eliminated between versions.
+security bugs are not eliminated between versions.
 	\item We show evidence of the relation between security bugs and a project
 version's size.  Here, size is defined in terms of bytecode.
 	\item The correlation of security bugs with other bug categories. We
-show evidence that such bugs are correlated with bugs that have to do with
+show evidence on how such bugs are correlated with bugs that have to do with
 performance, coding practices and others.
 %	\item The relation of software dependencies and security bugs. Our
 %hypothesis is that an artifact that is a dependency of many other artifacts
 %should have a low rate of security bugs. 
 \end{itemize}
 
-In the rest of this paper we
-describe the processing of our data and our experiment (Section \ref{sec:meth}),
-present and discuss the results we obtained (Section \ref{sec:res}),
-outline related work (Section \ref{sec:rel}),
-and end up with a conclusion and directions for future work (Section \ref{sec:con}).
+% In the rest of this paper we
+% describe the processing of our data and our experiment (Section \ref{sec:meth}),
+% present and discuss the results we obtained (Section \ref{sec:res}),
+% outline related work (Section \ref{sec:rel}),
+% and end up with a conclusion and directions for future work (Section \ref{sec:con}).
 
 \section{Methodology}
 \label{sec:meth}
@@ -132,11 +132,14 @@ and end up with a conclusion and directions for future work (Section \ref{sec:co
 %	\includegraphics{arch.pdf}
 %\end{figure}
 
+Our experiment involved the collection of the metric results of the FindBugs
+tool. Before and during the experiment, we performed a number of functional
+fits on the data for reasons that we will describe below.
+
 \subsection{Experiment}
 \label{sec:exp}
 
-Our experiment goal was to collect the metric results of the FindBugs tool.
-The process involved four entities (see Table~\ref{tbl:exp}):
+Our experiment involved four entities (see Table~\ref{tbl:exp}):
 a number of {\it workers}, a {\it task queue}
 mechanism,\footnote{\url{http://www.rabbitmq.com/}}
 a {\it data repository},\footnote{\url{http://www.mongodb.org/}}
@@ -149,8 +152,8 @@ repository\footnote{\url{http://mvnrepository.com}}.
 \label{tbl:exp}
 \begin{tabular}{r r r}
 \hline
- & Software Package & version\\
- \hline
+Entity & Software Package & Version\\
+\hline
 Worker & Custom Python Script & 2.7\\
 Task Queue & RabbitMQ & 3.0.1 \\
 Data Repository & MongoDB & 2.2 \\
@@ -167,15 +170,15 @@ workers that checked out tasks from the queue, processed the data and stored the
 results to the data repository.
 
 A typical processing cycle of a worker included the following steps: after
-the worker spawns, it requests a task from the queue. This task contains
-the {\sc jar} name, which is typically a project version that is downloaded locally.
-First, specific {\sc jar} metadata are calculated and stored. Such metadata include
-its size, its dependencies, and a number that represents the chronological order of the
-release. This order is derived from an {\sc xml} file that
+the worker spawned, it requested a task from the queue. This task contained
+the {\sc jar} name, which was typically a project version that was downloaded locally.
+First, specific {\sc jar} metadata were calculated and stored. Such metadata included
+its size, its dependencies, and a number that represented the chronological order of the
+release. This order was derived from an {\sc xml} file that
 accompanies every project in the Maven repository called {\it
-maven-metadata.xml}. Then FindBugs is executed and its results are also stored
-in the data repository. When the task is completed the queue is notified and
-the next task is requested.
+maven-metadata.xml}. Then, FindBugs was executed and its results were also stored
+in the data repository. When the task was completed the queue was notified and
+the next task was requested.
 
 This process was executed for all the available {\sc jar}s in the task queue.
 The experiment was executed five times in order to iron out various bugs in
@@ -205,9 +208,6 @@ Range & 337\\
 \end{tabular}
 \end{table}
 
-The subject of our study was the Maven repository. Before analyzing the data of the
-repository we performed a number of functional fits on the data. 
-
 Initially, we obtained a snapshot (January 2012) of the Maven repository and
 handled it locally to retreive a list of all the names of the project versions
 that existed in it. A project version can be uniquely identified by the triplet:
@@ -221,7 +221,7 @@ the repository data and metadata.
 In addition, we implemented a series of audits in the worker scripts that
 checked if the {\sc jar}s are valid in terms of implementation. For instance,
 for every {\sc jar} the worker checked if there were any {\it .class} files
-before invoking FindBugs. After the project filtering we narrowed down
+before invoking FindBugs. After the project filtering, we narrowed down
 our data set to 17,055 projects with 115,214 versions.
 Table~\ref{tbl:repository} summarises the data set information and
 provides the basic descriptive statistic measurements. The distribution of version
@@ -285,9 +285,9 @@ Then, we provide a comprehensive analysis of the results and highlight our key f
 
 FindBugs separates software bugs into seven categories (see
 Table~\ref{tbl:bug-cat}). Two of them involve security: {\it Security} and {\it
-Malicious Code}. From the total number of the artifacts, 4,270 of them contained
+Malicious Code}. From the total number of the {\sc jar}s, 4,353 of them contained
 at least one bug coming from the first category
-and 45,145 coming from the second.
+and 45,559 coming from the second.
 
 \begin{table*}
 \centering
@@ -316,15 +316,16 @@ repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
 categories) are the most popular in the repository. This could be an indication
 that programmers write code that implements the required functionality without considering
-its many security aspects. In the following section we
-show the correlation of security bugs with all the other categories. An interesting observation is
-that 5,601 (31.99\%) projects, containing 32,689 artifacts (28.57\%), did not
-have any bugs at all. These cases involved small artifacts with a minimum number of classes.
-This goes along with the relationship between the size of an artifact and it's
-bugs that is presented in the upcoming section.
+its many security aspects.
+% An interesting observation is that 4,908 projects did not
+% have any bugs at all. These cases involved small artifacts with a minimum number of classes.
+% This goes along with the relationship between the size of an artifact and it's
+% bugs that is presented in the upcoming section.
 
+% dimitro@dds: maybe you want to add something here?
 Another observation involves bugs that we could call {\it
-severe}. Such bugs are related to vulnerabilities that appear due to the lack of user-input
+severe} and they are a subset of the {\it Security} category.
+Such bugs are related to vulnerabilities that appear due to the lack of user-input
 validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12} and
 Cross-Site Scripting~\cite{WS08}. Note that to exploit such vulnerabilities, a malicious user does
 not have to know anything about the applications internals. For all the other
@@ -334,7 +335,9 @@ bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDesc
 if an application has bugs like these, it might have more vulnerabilities that FindBugs doesn't
 report. Table~\ref{tbl:sev} presents the number of {\sc jar}s where at least one of these
 bugs exists. In the following section we provide results separately for this
-subcategory.
+subcategory which we call {\it Security High}. The remaining bugs of the {\it Security} category
+are grouped together with the bugs of the {\it Malicious Code} category in another subcategory that
+we call {\it Security Low}.
 
 \begin{figure*}
 	\centering
@@ -345,23 +348,26 @@ subcategory.
 
 As we mentioned earlier, during the experiment we managed to retrieve the
 dependencies of every version. Based on this information we created a graph
-that represented the snapshot of the repository that we were analyzing. The
+that represented the snapshot of the Maven repository. The
 nodes of the graph represented the versions and the vertices their dependencies.
-We have to mention here that the graph is not representative. For instance, if
+We have to mention here that the graph was not representative. For instance, if
 a dependency was pointing only to a project (and not to a specific version), we chose to
 select the latest version found on the repository. Also, this graph is not
 complete. This is because threre were missing versions.
-Practically, the corresponding {\it pom}, or {\it war} files existed on the
-repository, but the {\sc jar} file did not. From the 56,5680 vertices, 191,433
-belonged to the first category while 16,4234 belonged to the second. Finally,
-the graph contained 80,354 nodes. Obviously the number does not correspond to
+% Practically, the corresponding {\it pom}, or {\it war} files existed on the
+% repository, but the {\sc jar} file did not.
+From the 56,5680 vertices, 191,433
+belonged to the first case while 16,4234 belonged to the second.
+The graph contained 80,354 nodes. Obviously, the number does not correspond to
 the number of the total versions (see Section~\ref{sec:data}). This is because
 some versions did not contain any information about their dependencies so they
 are not represented in the graph. After creating the graph, we ran the PageRank
 algorithm~\cite{BP98} on it and retrieved all PageRanks for every node. Then we
-examined the security bugs of the 50 most popular nodes based on their PageRank.
-33 of them contained security bugs while two of them contained severe bugs.
-Finally, 25 of them were latest versions at the time.
+examined the security bugs of the fifty most popular nodes based on their PageRank.
+Thirty three of them contained bugs coming from the {\it Security Low} subcategory,
+while two of them contained severe bugs. Twenty five of them were latest
+versions at the time.
+% what can we say about this?
 
 \subsection{Analysis}
 \label{sec:analysis}
@@ -371,6 +377,8 @@ Finally, 25 of them were latest versions at the time.
 \subsubsection{Persistense of Security Bugs}
 
 \subsubsection{The Relation of Defects with the size of an Artifact}
+% in a recent paper, Spacco et al.~\cite{SHP06} showed the relation of bugs
+% in general, with the size of every version of Sun's {\sc jdk}.
 
 \subsubsection{Security Bugs {\sc vs} Other Bug Categories}
 
@@ -388,8 +396,8 @@ kinds. Bugs of the {\it Security High} category, though, are
 different: they are either not associated with other bugs, or only
 weakly so. Perhaps it takes a special kind of blunder to make it a
 security hazard.
+
 \begin{table}
-  \begin{threeparttable}
     \centering
     \caption{Correlation matrix}
     \label{tbl:corrmatrix}
@@ -401,7 +409,6 @@ security hazard.
         Low, Style, Bad Practice, Correctness, MT Correctness,
         Performance, i18n, Experimental.
     \end{tablenotes}
-  \end{threeparttable}
 \end{table}
 
 
@@ -493,9 +500,15 @@ Our work could (?) aid bug-prediction models in the same way as~\cite{BN11}.
 
 \section*{Acknowledgments}
 
-The project is being co-financed by the European Regional Development Fund (ERDF)
+This research has been co-financed by the European Union (European Social Fund
+--– {\sc esf}) and Greek national funds through the Operational Program
+``Education and Lifelong Learning'' of the National Strategic Reference Framework –
+Research Funding Program: Heracleitus II. Investing in knowledge society
+through the {\sc esf}.
+
+The project has been also co-financed by the European Regional Development Fund ({\sc erdf})
 and national funds and is a part of the Operational Programme ``Competitiveness \&
-Entrepreneurship" (OPCE II), Measure ``COOPERATION" (Action I).
+Entrepreneurship" ({\sc opce} II), Measure ``{\sc cooperation}" (Action I).
 
 \bibliographystyle{splncs}
 \bibliography{evol} 
