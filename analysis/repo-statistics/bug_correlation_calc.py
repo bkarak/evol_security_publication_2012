@@ -42,12 +42,14 @@ data = pd.DataFrame(json_input).T
 for bug_type in bug_types:
     print bug_type, data[bug_type].count()
 
-print "MALICIUS_CODE & SECURITY_LOW ", len(data[data['MALICIOUS_CODE']
+print "MALICIUS_CODE | SECURITY_LOW ", len(data[data['MALICIOUS_CODE']
                                                 * data['SECURITY_LOW'] > 0])
     
 data['SECURITY_LOW'] = (data['MALICIOUS_CODE'].fillna(0)
                         + data['SECURITY_LOW'].fillna(0)).replace(0, np.nan)
-data['TOTAL_SECURITY_LOW'] += data['TOTAL_MALICIOUS_CODE']
+data['TOTAL_SECURITY_LOW'] = (data['TOTAL_MALICIOUS_CODE'].fillna(0)
+                              + data['TOTAL_SECURITY_LOW'].fillna(0)
+                              ).replace(0, np.nan)
 data = data.drop(['MALICIOUS_CODE', 'TOTAL_MALICIOUS_CODE'], axis=1)
 bug_types.remove('MALICIOUS_CODE')
 
