@@ -499,18 +499,18 @@ and predict future properties.
 The evolution of software artifacts has also been analyzed to {\it reduce the false
 alarms} of the various static analysis tools. To achieve this, Spacco et
 al.~\cite{SHP06} introduced {\it pairing} and {\it warning signatures}. In the
-former they tried to pair sets of bugs between versions in order to find
-similar patterns. In the latter they computed a signature for every bug. This
+former, they tried to pair sets of bugs between versions in order to find
+similar patterns. In the latter, they computed a signature for every bug. This
 signature contained elemnts like the name of the class where the bug was found,
 the method and others. Then they searched for similar signatures between
 versions. In their research they also studied the evolution of 116 sequential
 builds of the Sun Java Sevelopment Kit ({\sc jdk}). Their findings indicated that
 high priority bugs are fixed over time. To improve the precision of bug
-detection, Kim et al.~\cite{KE07b}\cite{KE07} an history-based warning
-prioritization algorithm by mining the warning fix experience of three
+detection, Kim et al.~\cite{KE07b}\cite{KE07} proposed a history-based warning
+prioritization algorithm by mining the history of bug-fixes of three
 different projects. The algorithm was based on the following hypothesis: if a
 bug that belongs to a specific category is eliminated by a code change, then
-this warning category is important. Working towards the same direction Heckman
+this warning category is important. Working towards the same direction, Heckman
 et al.~\cite{HW09}\cite{HW08} have introduced benchmarks that use specific
 correlation algorithms and classification techniques to evaluate alert
 prioritization approaches.
@@ -520,7 +520,7 @@ Focusing on such bugs is not a new idea. Massacci et al.~\cite{MNN11} observed
 the evolution of software defects by examining six major versions of Firefox.
 To achieve this they created a database schema that contained information
 coming from the ``Mozilla Firefox-related Security Advisories'' ({\sc mfsa})
-list,~\footnote{\url{http://www.mozilla.org/projects/security/known-vulnerabilities.html}}
+list,\footnote{\url{http://www.mozilla.org/projects/security/known-vulnerabilities.html}}
 Bugzilla entries and others. Their findings indicated that security bugs are
 persistent over time. They also showed that there are many web users that use
 old versions of Firefox, meaning that old attacks will continue to work.
