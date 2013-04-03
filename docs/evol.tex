@@ -141,6 +141,14 @@ fits on the data coming from the Maven repository, for reasons that we will desc
 \subsection{Experiment}
 \label{sec:exp}
 
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[scale=0.7]{figures/arch.pdf}
+  \end{center}
+  \caption{The data processing architecture}
+  \label{fig:arch}
+\end{figure}
+
 Our experiment involved four entities (see Table~\ref{tbl:exp}):
 a number of {\it workers}, a {\it task queue}
 mechanism,\footnote{\url{http://www.rabbitmq.com/}}
@@ -182,7 +190,8 @@ release. This order was derived from an {\sc xml} file that
 accompanies every project in the Maven repository called {\it
 maven-metadata.xml}. Then, FindBugs was invoked by the worker and its results were
 also stored in the data repository. When the task was completed the queue
-was notified and the next task was requested.
+was notified and the next task was requested. A schematic representation
+of the data processing architecture can be seen in Figure~\ref{fig:arch}.
 
 This process was executed for all the available {\sc jar}s in the task queue.
 The experiment was executed five times in order to iron out various bugs in
