@@ -393,6 +393,22 @@ versions at the time.
 
 \subsubsection{The Relation of Defects with the size of a {\sc jar}}
 
+We explored te relation between defects with the size of a project,
+measured by the size of its jar file by carrying out correlation tests
+between the size and the defect counts for each project and its
+version. The results, all statistically significant ($p \ll
+0.05$) can be seen in Table~\ref{tbl:jarsizecorr}. The {\it Security
+  High} category stands out by having a remarkably lower effect than
+the other categories, even {\it Security Low} that nearly tops the
+list. 
+
+\begin{table}
+    \centering
+    \caption{Correlations between jarsize and Defects Count}
+    \label{tbl:jarsizecorr}
+    \input{jarsizecorr.tex}
+\end{table}
+
 \subsubsection{Security Bugs {\sc vs} Other Bug Categories}
 
 To see whether bugs flock together we performed pairwise correlations

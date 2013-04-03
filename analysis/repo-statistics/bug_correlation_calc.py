@@ -42,7 +42,7 @@ data = pd.DataFrame(json_input).T
 for bug_type in bug_types:
     print bug_type, data[bug_type].count()
 
-print "MALICIUS_CODE | SECURITY_LOW ", len(data[data['MALICIOUS_CODE']
+print "MALICIUS_CODE & SECURITY_LOW ", len(data[data['MALICIOUS_CODE']
                                                 * data['SECURITY_LOW'] > 0])
     
 data['SECURITY_LOW'] = (data['MALICIOUS_CODE'].fillna(0)
@@ -79,8 +79,7 @@ with open("corrmatrix.tex", "w") as corrmatrix_tex:
     for row in corrmatrix:
         table_row = ' & '.join(map('{:.2f}'.format, row)) +  r'\\' + '\n'
         corrmatrix_tex.write(table_row)
-    end = r"""
-\hline \\
+    end = r"""\hline \\
 \end{tabular}
 """
     corrmatrix_tex.write(end)
