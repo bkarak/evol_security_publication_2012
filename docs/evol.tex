@@ -130,24 +130,12 @@ performance, coding practices and others.
 \section{Methodology}
 \label{sec:meth}
 
-%\begin{figure}
-%	\includegraphics{arch.pdf}
-%\end{figure}
-
 Our experiment involved the collection of the metric results of the FindBugs
 tool. Before and during the experiment, we performed a number of functional
 fits on the data coming from the Maven repository, for reasons that we will describe below.
 
 \subsection{Experiment}
 \label{sec:exp}
-
-\begin{figure}[t]
-  \begin{center}
-    \includegraphics[scale=0.7]{figures/arch.pdf}
-  \end{center}
-  \caption{The data processing architecture}
-  \label{fig:arch}
-\end{figure}
 
 Our experiment involved four entities (see Table~\ref{tbl:exp}):
 a number of {\it workers}, a {\it task queue}
@@ -179,7 +167,15 @@ list that included them. We discuss the {\sc jar} selection process in the next
 section. With the {\sc jar} list at hand, we created a series of processing tasks
 and added them to the task queue. Then we executed twenty five (Unix-based)
 workers that checked out tasks from the queue, processed the data and stored the
-results to the data repository.
+results to the data repository (see Figure~\ref{fig:arch}).
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[scale=0.7]{figures/arch.pdf}
+  \end{center}
+  \caption{The Data Processing Architecture}
+  \label{fig:arch}
+\end{figure}
 
 A typical processing cycle of a worker included the following steps: after
 the worker spawned, it requested a task from the queue. This task contained
@@ -199,6 +195,25 @@ our scripts and validate the results.
 
 \subsection{Data Provenance}
 \label{sec:data}
+
+Maven is a build automation tool used primarily for Java projects and it is
+hosted by the Apache Software Foundation.\footnote{\url{http://www.apache.org/}}
+To describe the software project being built, its dependencies
+on other external modules, the build order, and required plug-ins Maven uses
+{\sc xml}. To build a software component, it dynamically downloads Java libraries
+and Maven plug-ins from the Maven central repository,
+and stores them in a local cache. The repository can be updated with
+new projects and also with new versions of existing projects.
+
+Initially, we obtained a snapshot (January 2012) of the Maven repository and
+handled it locally to retreive a list of all the names of the project versions
+that existed in it. A project version can be uniquely identified by the triplet:
+{\it group id}, {\it artifact id} and {\it version}.
+Since FindBugs analyzes applications written in the Java
+programming language, and the Maven repository
+hosts projects from languages other than Java such as Scala, Groovy,
+Clojure etc. we filtered out such projects by performing a series of checks in
+the repository data and metadata.
 
 \begin{table}
 \centering
@@ -220,25 +235,6 @@ Range & 337\\
 \hline
 \end{tabular}
 \end{table}
-
-Maven is a build automation tool used primarily for Java projects and it is
-hosted by the Apache Software Foundation.\footnote{\url{http://www.apache.org/}}
-To describe the software project being built, its dependencies
-on other external modules, the build order, and required plug-ins Maven uses
-{\sc xml}. To build a software component, it dynamically downloads Java libraries
-and Maven plug-ins from the Maven central repository,
-and stores them in a local cache. The repository can be updated with
-new projects and also with new versions of existing projects.
-
-Initially, we obtained a snapshot (January 2012) of the Maven repository and
-handled it locally to retreive a list of all the names of the project versions
-that existed in it. A project version can be uniquely identified by the triplet:
-{\it group id}, {\it artifact id} and {\it version}.
-Since FindBugs analyzes applications written in the Java
-programming language, and the Maven repository
-hosts projects from languages other than Java such as Scala, Groovy,
-Clojure etc. we filtered out such projects by performing a series of checks in
-the repository data and metadata.
 
 In addition, we implemented a series of audits in the worker scripts that
 checked if the {\sc jar}s are valid in terms of implementation. For instance,
