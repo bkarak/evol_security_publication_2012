@@ -44,7 +44,7 @@ examined the most popular nodes based on their PageRank.
 \end{abstract}
 
 \begin{keywords}
-Software Bugs, Static Analysis, Software Evolution, Software
+Security Bugs, Static Analysis, Software Evolution, Software
 Security, Maven, FindBugs.
 \end{keywords}
 
@@ -329,9 +329,9 @@ and 45,559 coming from the second.
 Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
 repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
-categories) are the most popular in the repository. This could be an indication
-that programmers write code that implements the required functionality without considering
-its many security aspects.
+categories) are the most popular in the repository ($\geq 22\%$).
+This could be an indication that programmers write code that implements the
+required functionality without considering its many security aspects.
 % An interesting observation is that 4,908 projects did not
 % have any bugs at all. These cases involved small artifacts with a minimum number of classes.
 % This goes along with the relationship between the size of an artifact and it's
@@ -447,6 +447,9 @@ security hazard.
 
 \section{Discussion}
 \label{sec:dis}
+% also mention:
+% - the fact that we don't have the same number of versions in every project.
+% - tell about the graph and Linus.
 
 \section{Related Work}
 \label{sec:rel}
