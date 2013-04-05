@@ -1,3 +1,6 @@
+# Extracts the bug counters data from the JSON representation
+# and outputs them in CSV format so that it can be read by R.
+
 import json
 import sys
 import numpy as np
