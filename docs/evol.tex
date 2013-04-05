@@ -421,10 +421,12 @@ in the decimal digits.
 
 \begin{landscape}
   \begin{table}
+    \setlength{\extrarowheight}{0.10cm}
     \caption{Bug Persistence Comparison}
     \label{tbl:bug_persistence}
-    \input{bug_persistence.tex}
-    \small The matrix presents pairwise Mann-Whitney $U$ test results
+    \resizebox{0.95\columnwidth}{!}{
+    \input{bug_persistence.tex}}\\
+    The matrix presents pairwise Mann-Whitney $U$ test results
     between the different bug categories. Each cell contains the test
     result (the value of $U$), the $p$-value, the average for each
     category and the sample size for each category. Cells in brackets show

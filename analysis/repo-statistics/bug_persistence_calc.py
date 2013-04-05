@@ -93,7 +93,7 @@ for i in range(n):
 
 with open("bug_persistence.tex", "w") as bug_persistence_tex:
     start = r"""
-\begin{tabular}{|l|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|}
+\begin{tabular}{|l|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|>{\centering\arraybackslash}m{2.5cm}|}
 \hline 
 """
     bug_persistence_tex.write(start)
@@ -105,33 +105,43 @@ with open("bug_persistence.tex", "w") as bug_persistence_tex:
                     row.append('')
             else:
                 results = results_matrix[i][j]
-                z_stat_str = '{:.2f}'.format(results[0])
+                z_stat_str = '${:.2f}$'.format(results[0])
                 significant = True
                 if results[1] < 0.001:
-                    p_val_str = '$\ll 0.05$'
+                    p_val_str = '$p \ll 0.05$'
                 elif results[1] < 0.01:
-                    p_val_str = '$< 0.01$'
+                    p_val_str = '$p < 0.01$'
                 elif results[1] < 0.05:
-                    p_val_str = '$< 0.05$'
+                    p_val_str = '$p < 0.05$'
                 else:
-                    p_val_str = '{:.2f}'.format(results[1])
+                    p_val_str = '$p = {:.2f}$'.format(results[1])
                     significant = False
                 mean_i_str = '{:.2f}'.format(results[2])
                 mean_j_str = '{:.2f}'.format(results[3])
                 size_i_str = str(results[4])
                 size_j_str = str(results[5])
-                cell = '{}, {}, {}, {}, {}, {}'.format(z_stat_str,
-                                                       p_val_str,
-                                                       mean_i_str,
-                                                       mean_j_str,
-                                                       size_i_str,
-                                                       size_j_str)
+                cell_fmt = r'{}, {}\newline {}, {}\newline {}, {}'
+                cell = cell_fmt.format(z_stat_str,
+                                       p_val_str,
+                                       mean_i_str,
+                                       mean_j_str,
+                                       size_i_str,
+                                       size_j_str)
                 if not significant:
                     cell = '{{\it ({})}}'.format(cell)
                 row.append(cell)
         bug_persistence_tex.write(' & '.join(row) + r'\\' + '\n')
 
-    end = r"""\hline
-\end{tabular}
-"""
-    bug_persistence_tex.write(end)
+    bug_persistence_tex.write(r"\hline" + '\n')
+    for i in range(n):
+        label = '' if i == 0 else bug_labels[i]
+        empties = ' & ' * (n - i - 1)
+        line = r'\multicolumn{{{0}}}{{l|}}{{{1}}} {2} \\'.format(i+1, label,
+                                                                 empties)
+        line += '\n'
+        bug_persistence_tex.write(line)
+        line = r'\cline{{1-{0}}}'.format(i+1) + '\n'
+        bug_persistence_tex.write(line)
+        
+    bug_persistence_tex.write(r'\hline' + '\n')
+    bug_persistence_tex.write(r'\end{tabular}' + '\n')
