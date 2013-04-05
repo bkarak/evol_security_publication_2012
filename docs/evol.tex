@@ -5,6 +5,8 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{threeparttable}
+\usepackage{pdflscape}
+\usepackage{array}
 
 \begin{document}
 
@@ -388,6 +390,30 @@ versions at the time.
 \subsubsection{How Security Bugs Evolve Over Time}
 
 \subsubsection{Persistence of Security Bugs}
+
+To examine the relation between the persistence of different kinds of
+bugs, and of security bugs in particular, we used as a persistence
+indicator the number of versions a bug remains open in a project. We
+grouped the persistence numbers by bug categories and then performed
+both descriptive statistics and a Mann-Whitney U test among all bug
+category pairs. The results are presented in
+Table~\ref{tbl:bug_persistence}. Cells in brackets show pairs where no
+statistically significant difference was found. 
+
+In general, although the average number of versions bugs in different
+bug categories remained opened was statistically different in many
+cases, the difference is not spectacular. In all cases a bug persists
+on average between two and three versions, with the difference being
+in the decimal digits.
+
+\begin{landscape}
+  \begin{table}
+    \centering
+    \caption{Bug Persistence Comparison}
+    \label{tbl:bug_persistence}
+    \input{bug_persistence.tex}
+  \end{table}
+\end{landscape}
 
 \subsubsection{The Relation of Defects with the size of a {\sc jar}}
 

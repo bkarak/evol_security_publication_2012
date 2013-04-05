@@ -1,24 +1,34 @@
-# Extracts the bug counters data from the JSON representation
-# and outputs them in CSV format so that it can be read by R.
+# Calculates the bug persistence statistics
 
 import json
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as st
 import collections
-import itertools
 
-bug_types_closed = {
-        'SECURITY': [],
-        'MALICIOUS_CODE': [],
-        'STYLE': [],
-        'CORRECTNESS': [],
-        'BAD_PRACTICE': [],
-        'MT_CORRECTNESS': [],
-        'I18N': [],
-        'PERFORMANCE': [],
-        'EXPERIMENTAL': []
-        }
+bug_types_closed = collections.OrderedDict({
+    'SECURITY_HIGH': [],
+    'SECURITY_LOW': [],
+    'STYLE': [],
+    'CORRECTNESS': [],
+    'BAD_PRACTICE': [],
+    'MT_CORRECTNESS': [],
+    'I18N': [],
+    'PERFORMANCE': [],
+    'EXPERIMENTAL': []
+})
+
+bug_labels = [
+    'Security High',
+    'Security Low',
+    'Style',
+    'Correctness',
+    'Bad Practice',
+    'MT Correctness',
+    'i18n',
+    'Performance',
+    'Experimental'
+]
 
 projects_closed = set()
 
@@ -42,6 +52,8 @@ with open("data/bug_persistence.json", "r") as json_file:
         for bug in bugs_opened.keys():
             if bug not in bugs:
                 bug_type = bug.partition('||')[0]
+                if bug_type == 'MALICIOUS_CODE':
+                    bug_type = 'SECURITY_LOW'
                 diff = version_order - bugs_opened[bug]
                 bug_types_closed[bug_type].append(diff)
                 if diff < 1:
@@ -49,21 +61,78 @@ with open("data/bug_persistence.json", "r") as json_file:
                            bugs_opened[bug])
                 del bugs_opened[bug]
         for bug in bugs:
+            if bug == 'MALICIOUS_CODE':
+                bug = 'SECURITY_LOW'
             if bug not in bugs_opened:
                 bugs_opened[bug] = version_order
 
-bug_combinations = itertools.combinations(bug_types_closed.keys(), 2)
-
-bug_type_arrays = {}
-bug_type_means = {}
-bug_type_desc = {}
+bug_type_arrays = []
+bug_type_desc = []
 
 for bug_type, bugs_closed in bug_types_closed.iteritems():
-    bug_type_arrays[bug_type] = np.array(bugs_closed)
-    bug_type_desc[bug_type] = st.describe(bugs_closed)
+    bug_type_arrays.append(np.array(bugs_closed))
+    bug_type_desc.append(st.describe(bugs_closed))
 
-for b1, b2 in bug_combinations:
-    z_stat, p_val = st.ranksums(bug_type_arrays[b1],
-                                bug_type_arrays[b2])
-    print b1, b2, z_stat, p_val, bug_type_desc[b1], bug_type_desc[b2]
+results_matrix = collections.defaultdict(dict)
 
+n = len(bug_types_closed)
+
+results_matrix = [[[] for j in range(n)] for i in range(n)]
+
+for i in range(n):
+    for j in range(i+1, n):
+        z_stat, p_val = st.ranksums(bug_type_arrays[i],
+                                    bug_type_arrays[j])
+        print (bug_labels[i], bug_labels[j], z_stat, p_val,
+               bug_type_desc[i], bug_type_desc[j])
+        results_matrix[i][j] = (z_stat,
+                                p_val,
+                                bug_type_desc[i][2], # mean
+                                bug_type_desc[j][2], # mean
+                                bug_type_desc[i][0], # size
+                                bug_type_desc[j][0]) # size
+
+with open("bug_persistence.tex", "w") as bug_persistence_tex:
+    start = r"""
+\begin{tabular}{|l|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|}
+\hline 
+"""
+    bug_persistence_tex.write(start)
+    for i in range(n-1):
+        row = [bug_labels[i]]
+        for j in range(n):
+            if j <= i:
+                if j < i:
+                    row.append('')
+            else:
+                results = results_matrix[i][j]
+                z_stat_str = '{:.2f}'.format(results[0])
+                significant = True
+                if results[1] < 0.001:
+                    p_val_str = '$\ll 0.05$'
+                elif results[1] < 0.01:
+                    p_val_str = '$< 0.01$'
+                elif results[1] < 0.05:
+                    p_val_str = '$< 0.05$'
+                else:
+                    p_val_str = '{:.2f}'.format(results[1])
+                    significant = False
+                mean_i_str = '{:.2f}'.format(results[2])
+                mean_j_str = '{:.2f}'.format(results[3])
+                size_i_str = str(results[4])
+                size_j_str = str(results[5])
+                cell = '{}, {}, {}, {}, {}, {}'.format(z_stat_str,
+                                                         p_val_str,
+                                                         mean_i_str,
+                                                         mean_j_str,
+                                                         size_i_str,
+                                                         size_j_str)
+                if not significant:
+                    cell = '{{\it ({})}}'.format(cell)
+                row.append(cell)
+        bug_persistence_tex.write(' & '.join(row) + r'\\' + '\n')
+
+    end = r"""\hline
+\end{tabular}
+"""
+    bug_persistence_tex.write(end)
