@@ -6,17 +6,16 @@ import matplotlib.pyplot as plt
 import scipy.stats as st
 import collections
 
-bug_types_closed = collections.OrderedDict({
-    'SECURITY_HIGH': [],
-    'SECURITY_LOW': [],
-    'STYLE': [],
-    'CORRECTNESS': [],
-    'BAD_PRACTICE': [],
-    'MT_CORRECTNESS': [],
-    'I18N': [],
-    'PERFORMANCE': [],
-    'EXPERIMENTAL': []
-})
+bug_types_closed = collections.OrderedDict()
+bug_types_closed['SECURITY_HIGH'] = []
+bug_types_closed['SECURITY_LOW'] = []
+bug_types_closed['STYLE'] =  []
+bug_types_closed['CORRECTNESS'] = []
+bug_types_closed['BAD_PRACTICE'] = []
+bug_types_closed['MT_CORRECTNESS'] = []
+bug_types_closed['I18N'] =  []
+bug_types_closed['PERFORMANCE'] = []
+bug_types_closed['EXPERIMENTAL'] = []
 
 bug_labels = [
     'Security High',

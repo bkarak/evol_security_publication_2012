@@ -389,6 +389,20 @@ versions at the time.
 
 \subsubsection{How Security Bugs Evolve Over Time}
 
+The relation between bugs and time can be traced from the number of
+bugs per category in each project version. We can then calculate the
+correlations between the defects count and the ordinal version number
+across all projects to see if bigger versions relate to higher or
+lower defect counts. The results are shown in
+Table~\ref{tbl:bugsperversion}. Although the tendency is for
+defect counts to increase, this tendency is extremely slight.
+\begin{table}
+    \centering
+    \caption{Correlations between Version and Defects Count}
+    \label{tbl:bugsperversion}
+    \input{bugsperversion.tex}
+\end{table}
+
 \subsubsection{Persistence of Security Bugs}
 
 To examine the relation between the persistence of different kinds of
