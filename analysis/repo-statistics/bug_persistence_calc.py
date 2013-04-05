@@ -122,11 +122,11 @@ with open("bug_persistence.tex", "w") as bug_persistence_tex:
                 size_i_str = str(results[4])
                 size_j_str = str(results[5])
                 cell = '{}, {}, {}, {}, {}, {}'.format(z_stat_str,
-                                                         p_val_str,
-                                                         mean_i_str,
-                                                         mean_j_str,
-                                                         size_i_str,
-                                                         size_j_str)
+                                                       p_val_str,
+                                                       mean_i_str,
+                                                       mean_j_str,
+                                                       size_i_str,
+                                                       size_j_str)
                 if not significant:
                     cell = '{{\it ({})}}'.format(cell)
                 row.append(cell)
