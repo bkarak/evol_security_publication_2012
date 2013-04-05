@@ -442,26 +442,24 @@ To see whether bugs flock together we performed pairwise correlations
 between all bug categories. We calculated the correlations between the
 number of distinct bugs that appeared in a project throughout its
 lifetime. The results can be seen in Table~\ref{tbl:corrmatrix} and
-Figure~\ref{fig:corrplot}. We found significant correlations between
-all pairs apart from two pairs involving the {\it Security High}
-category. In general, the {\it Security High} category showed the
-weakest correlations with the other categories. Our results show that
-in general bugs do flock together. We do not find projects with only a
-certain kind of bug; bugs come upon projects in swarms of different
-kinds. Bugs of the {\it Security High} category, though, are
-different: they are either not associated with other bugs, or only
-weakly so. Perhaps it takes a special kind of blunder to make it a
-security hazard.
+Figure~\ref{fig:corrplot}. We found significant, but not always
+strong, correlations between all pairs. In general, the {\it Security
+  High} category showed the weakest correlations with the other
+categories. Our results show that in general bugs do flock together.
+We do not find projects with only a certain kind of bug; bugs come
+upon projects in swarms of different kinds. Bugs of the {\it Security
+  High} category, though, are different: they are either not
+associated with other bugs, or only weakly so. Perhaps it takes a
+special kind of blunder to make it a security hazard.
 
 \begin{table}
     \centering
     \caption{Correlation matrix}
     \label{tbl:corrmatrix}
     \input{corrmatrix.tex}
+    \\
     \small The matrix presents pairwise correlations between the
-        following bug categories in order: Security High, Security
-        Low, Style, Bad Practice, Correctness, {\sc mt} Correctness,
-        Performance, i18n, Experimental.
+        different bug categories.
 \end{table}
 
 

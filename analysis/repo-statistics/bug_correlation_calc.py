@@ -62,7 +62,7 @@ for i in xrange(num_bug_types):
         icolumn = bug_types[i]
         jcolumn = bug_types[j]
         data_pair = data[[icolumn, jcolumn]].dropna()
-        (corr, pvalue) = st.pearsonr(data_pair[icolumn], data_pair[jcolumn])
+        (corr, pvalue) = st.spearmanr(data_pair[icolumn], data_pair[jcolumn])
         print "{} ({}) {} ({}) {} {}".format(icolumn, data[icolumn].count(),
                                              jcolumn, data[jcolumn].count(),
                                              corr, pvalue)
@@ -72,14 +72,15 @@ for i in xrange(num_bug_types):
 
 with open("corrmatrix.tex", "w") as corrmatrix_tex:
     start = r"""
-\begin{tabular}{ccccccccc}
-\hline \\
+\begin{tabular}{lccccccccc}
+\hline
 """
     corrmatrix_tex.write(start)
-    for row in corrmatrix:
-        table_row = ' & '.join(map('{:.2f}'.format, row)) +  r'\\' + '\n'
+    for i, row in enumerate(corrmatrix):
+        table_row = labels[i] + ' & '
+        table_row += ' & '.join(map('{:.2f}'.format, row)) +  r'\\' + '\n'
         corrmatrix_tex.write(table_row)
-    end = r"""\hline \\
+    end = r"""\hline
 \end{tabular}
 """
     corrmatrix_tex.write(end)
