@@ -154,7 +154,12 @@ for bug_type, bug_type_corrs in counts_corrs.iteritems():
     cc_arr = np.array(bug_type_corrs)
     ax = plt.subplot(num_rows, num_cols, num_plot)
     plt.hist(cc_arr, 30, log=True)
-    plt.title(bug_labels[bug_type])
+    total = len(bug_type_corrs)
+    zeros = total - len(np.nonzero(bug_type_corrs)[0])
+    title = "{} ({}, no correlation: {})".format(bug_labels[bug_type],
+                                                 total,
+                                                 zeros)
+    plt.title(title)
     num_plot += 1
 
 plt.tight_layout()
