@@ -330,6 +330,10 @@ Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
 repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
 categories) are the most popular in the repository ($\geq 22\%$ each).
+This could be a strong indication that programmers write code
+that implements the required functionality without considering its many
+security aspects; an issue that has already been reported in
+literature~\cite{SH09}.
 % An interesting observation is that 4,908 projects did not
 % have any bugs at all. These cases involved small artifacts with a minimum number of classes.
 % This goes along with the relationship between the size of an artifact and it's
@@ -340,11 +344,21 @@ Another observation involves bugs that we could call {\it
 severe} and they are a subset of the {\it Security} category.
 Such bugs are related to vulnerabilities that appear due to the lack of user-input
 validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12} and
-Cross-Site Scripting~\cite{WS08}. Note that to exploit such vulnerabilities, a malicious user does
+Cross-Site Scripting~\cite{WS08}.
+Note that to exploit such vulnerabilities, a malicious user does
 not have to know anything about the applications internals. For all the other
 bugs, another program should be written either to incorporate references to
-mutable objects, access non-final fields and others. Table~\ref{tbl:sev} presents the number
-of {\sc jar}s where at least one of these bugs exists. In the following section
+mutable objects, access non-final fields and others.
+Also, as bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
+if an application has bugs coming from the {\it Security High} category,
+it might have more vulnerabilities that FindBugs doesn't report.
+Table~\ref{tbl:sev} presents the number
+of {\sc jar}s where at least one of these bugs exists. In essence, 5,355 versions
+($\approx 4,64\% $), contained at
+least one severe security bug. Given the fact that other projects include these
+versions as their dependencies, they are automatically rendered vulnerable if
+they use the code fragments that include the defects.
+In the following section
 we provide results separately for this subcategory which we call {\it Security High}.
 The remaining bugs of the {\it Security} category
 are grouped together with the bugs of the {\it Malicious Code} category
@@ -375,10 +389,11 @@ some versions did not contain any information about their dependencies so they
 are not represented in the graph. After creating the graph, we ran the PageRank
 algorithm~\cite{BP98} on it and retrieved all PageRanks for every node. Then we
 examined the security bugs of the fifty most popular nodes based on their PageRank.
-Thirty three of them contained bugs coming from the {\it Security Low} subcategory,
-while two of them contained severe bugs. Twenty five of them were latest
-versions at the time.
-% what can we say about this?
+Contrary to the Linus' Law, thirty three of them contained bugs coming from the
+{\it Security Low} subcategory, while two of them contained severe bugs.
+Twenty five of them were latest versions at the time. This also highlights
+the {\it domino effect}~\cite{TH04}. No matter how well a programmer secures a software component
+it won't matter if he or she is using vulnerable code fragments from another library.
 
 \subsection{Analysis}
 \label{sec:analysis}
@@ -527,32 +542,6 @@ special kind of blunder to make it a security hazard.
   \caption{Correlation matrix plot for bug categories}
   \label{fig:corrplot}
 \end{figure*}
-
-\section{Discussion}
-\label{sec:dis}
-% also mention:
-% - the fact that we don't have the same number of versions in every project.
-% - tell about the graph and Linus.
-
-By examining Maven as a whole we observed that security bugs and the
-bugs coming from the {\it Bad Practice} category are the most popular types of
-bugs in the ecosystem. This could be a strong indication that programmers write code
-that implements the required functionality without considering its many
-security aspects; an issue that has already been reported in
-literature~\cite{SH09}. In addition, contrary to the Linus' Law, from the top fifty versions
-(based on their PageRank), twenty five of them were the latest versions at the
-time and at the same time contained security bugs.
-This also highlights the {\it domino effect}~\cite{TH04}. No matter how well a programmer
-secures a software component it won't matter if he or she is using vulnerable
-code fragments from another library. Finally, 5,355 versions ($\approx 4,64\% $), contained at
-least one severe security bug. Given the fact that other projects include these
-versions as their dependencies, they are automatically rendered vulnerable if
-they use the code fragments that include the defects. Finally, as
-bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
-if an application has bugs coming from the {\it Security High} category,
-it might have more vulnerabilities that FindBugs doesn't report.
-
-
 
 \section{Related Work}
 \label{sec:rel}
