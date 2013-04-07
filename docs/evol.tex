@@ -500,7 +500,8 @@ version. The results, all statistically significant ($p \ll
 0.05$) can be seen in Table~\ref{tbl:jarsizecorr}. The {\it Security
   High} category stands out by having a remarkably lower effect than
 the other categories, even {\it Security Low} that nearly tops the
-list. 
+list. In essense, a severe bug is introduced only when code that deals with
+untrusted input is introduced in a application.
 
 \begin{table}
     \centering
@@ -642,6 +643,12 @@ over the years.
 
 \section{Conclusions and Future Work}
 \label{sec:con}
+
+In this work we analyzed a large software repository to examine the behavior
+of security bugs. Specifically, we analyzed more than 260GB of interdependent
+projcet versions to see how security bugs evolve over time, their
+persistence, and their relation with other bug categories and the size in
+terms of bytecode.
 
 Our work could (?) aid bug-prediction models in the same way as~\cite{BN11}.
 
