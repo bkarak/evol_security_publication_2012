@@ -12,7 +12,7 @@
 
 \title{Dismal Code: Studying the Evolution of Security Bugs}
 
-\author{Dimitris Mitropoulos \and Vassilios Karakoidas \and Georgios Gousios \and Panos Louridas \and Diomidis Spinellis }
+\author{Dimitris Mitropoulos \and Vassilios Karakoidas \and Panos Louridas \and Georgios Gousios \and Diomidis Spinellis }
 \institute{ Department of Management Science and Technology\\
 			Athens University of Economics and Business\\
       		\email{\{dimitro, bkarak, louridas, dds\}@aueb.gr}\\
@@ -46,7 +46,7 @@ Security, Maven, FindBugs.
 \section{Introduction}
 
 A security bug is a programming error that introduces a potentially
-exploitable weakness into a computer system~\cite{SSL12}\cite{TJBD11}. This weakness could lead to a
+exploitable weakness into a computer system~\cite{SSL12}\cite{TJBD11}\cite{M06}. This weakness could lead to a
 security breach with unfortunate consequences in different layers, like databases,
 native code, applications, libraries and others. Despite the significant
 effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
@@ -94,9 +94,9 @@ that research has been contradictory on the the
 issue~\cite{BP84}\cite{SYTP85}\cite{NBZ06}\cite{GKMS00}.
 Finally, we examined the Maven ecosystem as a whole from a security
 perspective. Its structure, gave us the opportunity to see if a project version that is a dependency to
-a large number of others contains a high rate of security bugs.
-In this case we can strengthen the relationship between Linus' Law and
-software security as Meneely et al. have already indicated~\cite{MW10}.
+a large number of others contains a low rate of security bugs~\cite{MW10}.
+%In this case we can strengthen the relationship between Linus' Law and
+%software security as Meneely et al. have already indicated~\cite{MW10}.
 
 The main contributions of this research are:
 \begin{itemize}
@@ -330,8 +330,6 @@ Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
 repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
 categories) are the most popular in the repository ($\geq 22\%$).
-This could be an indication that programmers write code that implements the
-required functionality without considering its many security aspects.
 % An interesting observation is that 4,908 projects did not
 % have any bugs at all. These cases involved small artifacts with a minimum number of classes.
 % This goes along with the relationship between the size of an artifact and it's
@@ -371,8 +369,8 @@ select the latest version found on the repository. Also, this graph is not
 complete. This is because there were missing versions.
 % Practically, the corresponding {\it pom}, or {\it war} files existed on the
 % repository, but the {\sc jar} file did not.
-From the 56,5680 vertices, 191,433
-belonged to the first case while 16,4234 belonged to the second.
+From the 565,680 vertices, 191,433
+belonged to the first case while 164,234 belonged to the second.
 The graph contained 80,354 nodes. Obviously, the number does not correspond to
 the number of the total versions (see Section~\ref{sec:data}). This is because
 some versions did not contain any information about their dependencies so they
@@ -520,6 +518,21 @@ special kind of blunder to make it a security hazard.
 % also mention:
 % - the fact that we don't have the same number of versions in every project.
 % - tell about the graph and Linus.
+
+By examining Maven as a whole we observed that security bugs and the
+bugs coming from the {\it Bad Practice} category are the most popular types of
+bugs in the ecosystem. This could be a strong indication that programmers write code
+that implements the required functionality without considering its many
+security aspects; an issue that has already been reported in
+literature~\cite{SH09}. In addition, contrary to the Linus' Law, from the top fifty versions
+(based on their PageRank), twenty five of them were the latest versions at the
+time and at the same time contained security bugs.
+This also highlights the {\it domino effect}~\cite{TH04}. No matter how well a programmer
+secures a software component it won't matter if he or she is using vulnerable
+code fragments from another library. Finally, 5,355 versions ($\approx 4,64\% $), contain at
+least one severe security bug. Given the fact that other projects include these
+versions as their dependencies, they are automatically rendered vulnerable if
+they use the code fragments that include the defects.
 
 \section{Related Work}
 \label{sec:rel}
