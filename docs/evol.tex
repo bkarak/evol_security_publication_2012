@@ -101,8 +101,8 @@ a large number of others contains a low rate of security bugs~\cite{MW10}.
 The main contributions of this research are:
 \begin{itemize}
 	\item The analysis of how security bugs evolve over time. To achieve
-this, we inspect every project per version. Our hypothesis is that security
-bugs must decrease as a project evolves since they are critical and developers
+this, we inspect every project per version. We expect that security
+bugs should decrease as a project evolves since they are critical and developers
 should eliminate them.
 	\item Security bug persistence between versions. We show evidence that
 security bugs are not eliminated between versions.
@@ -329,7 +329,7 @@ and 45,559 coming from the second.
 Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
 repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
-categories) are the most popular in the repository ($\geq 22\%$).
+categories) are the most popular in the repository ($\geq 22\%$ each).
 % An interesting observation is that 4,908 projects did not
 % have any bugs at all. These cases involved small artifacts with a minimum number of classes.
 % This goes along with the relationship between the size of an artifact and it's
@@ -343,14 +343,12 @@ validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12}
 Cross-Site Scripting~\cite{WS08}. Note that to exploit such vulnerabilities, a malicious user does
 not have to know anything about the applications internals. For all the other
 bugs, another program should be written either to incorporate references to
-mutable objects, access non-final fields and others. In addition, as
-bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
-if an application has bugs like these, it might have more vulnerabilities that FindBugs doesn't
-report. Table~\ref{tbl:sev} presents the number of {\sc jar}s where at least one of these
-bugs exists. In the following section we provide results separately for this
-subcategory which we call {\it Security High}. The remaining bugs of the {\it Security} category
-are grouped together with the bugs of the {\it Malicious Code} category in another subcategory that
-we call {\it Security Low}.
+mutable objects, access non-final fields and others. Table~\ref{tbl:sev} presents the number
+of {\sc jar}s where at least one of these bugs exists. In the following section
+we provide results separately for this subcategory which we call {\it Security High}.
+The remaining bugs of the {\it Security} category
+are grouped together with the bugs of the {\it Malicious Code} category
+in another subcategory that we call {\it Security Low}.
 
 \begin{figure*}
 	\centering
@@ -529,10 +527,15 @@ literature~\cite{SH09}. In addition, contrary to the Linus' Law, from the top fi
 time and at the same time contained security bugs.
 This also highlights the {\it domino effect}~\cite{TH04}. No matter how well a programmer
 secures a software component it won't matter if he or she is using vulnerable
-code fragments from another library. Finally, 5,355 versions ($\approx 4,64\% $), contain at
+code fragments from another library. Finally, 5,355 versions ($\approx 4,64\% $), contained at
 least one severe security bug. Given the fact that other projects include these
 versions as their dependencies, they are automatically rendered vulnerable if
-they use the code fragments that include the defects.
+they use the code fragments that include the defects. Finally, as
+bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
+if an application has bugs coming from the {\it Security High} category,
+it might have more vulnerabilities that FindBugs doesn't report.
+
+
 
 \section{Related Work}
 \label{sec:rel}
