@@ -500,8 +500,7 @@ version. The results, all statistically significant ($p \ll
 0.05$) can be seen in Table~\ref{tbl:jarsizecorr}. The {\it Security
   High} category stands out by having a remarkably lower effect than
 the other categories, even {\it Security Low} that nearly tops the
-list. In essense, a severe bug is introduced only when code that deals with
-untrusted input is introduced in a application.
+list.
 
 \begin{table}
     \centering
@@ -648,9 +647,25 @@ In this work we analyzed a large software repository to examine the behavior
 of security bugs. Specifically, we analyzed more than 260GB of interdependent
 projcet versions to see how security bugs evolve over time, their
 persistence, and their relation with other bug categories and the size in
-terms of bytecode.
+terms of bytecode. We have to mentioned that the versions examined were
+actually releases of these projets. In essence, these {\sc jar}s were the ones
+that were or still are out there in the wild, being used either as
+applications, or dependencies of others.
 
-Our work could (?) aid bug-prediction models in the same way as~\cite{BN11}.
+Our primary expectation was that security bugs and especially severe
+ones, should be corrected as projects evolve. But our findigs indicate that this is
+not true. Concerning bug persistence, we saw that the behaviour of security
+bugs is similar to the other categories. We have to point out the fact that
+having an average of two to three versions persistence in a sample where 60\%
+of the projects have three versions, is not a positive result especially in the
+case of the {\it Security High} bugs. An interesting observation was that
+the relation between severe security bugs and a project's size the is different
+than the other categories. In essense, a severe bug is introduced only when code
+that deals with untrusted input is added in a application. Furthermore, the
+pairwise correlations between all categories indicated that severe bugs are
+coming from a special kind of carelessness. Finally, it is interesting to see
+that security bugs were one of the top two bug categories existing in such a
+large ecosystem.
 
 \section*{Acknowledgements}
 
