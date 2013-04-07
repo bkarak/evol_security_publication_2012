@@ -105,7 +105,7 @@ this, we inspect every project per version. We expect that security
 bugs should decrease as a project evolves since they are critical and developers
 should eliminate them.
 	\item Security bug persistence between versions. We show evidence that
-security bugs are not eliminated between versions.
+security bugs are not eliminated between releases.
 	\item We show evidence of the relation between security bugs and a project
 version's size.  Here, size is defined in terms of bytecode.
 	\item The correlation of security bugs with other bug categories. We
@@ -132,30 +132,30 @@ fits on the data coming from the Maven repository, for reasons that we will desc
 \subsection{Experiment}
 \label{sec:exp}
 
-Our experiment involved four entities (see Table~\ref{tbl:exp}):
-a number of {\it workers}, a {\it task queue}
-mechanism,\footnote{\url{http://www.rabbitmq.com/}}
-a {\it data repository},\footnote{\url{http://www.mongodb.org/}}
+Our experiment involved four entities:
+a number of {\it workers} (a custom Python script), a {\it task queue}
+mechanism (Rabbit{\sc mq} - version 3.0.1),\footnote{\url{http://www.rabbitmq.com/}}
+a {\it data repository} (Mongo{\sc db} - version 2.2),\footnote{\url{http://www.mongodb.org/}}
 and the {\it code repository}, which in our case it was
 the public Maven repository.
 
-\begin{table}
-\centering
-\begin{threeparttable}
-\caption{Experiment Entities}
-\label{tbl:exp}
-\begin{tabular}{l r r}
-\hline
-Entity & Software Package & Version\\
-\hline
-Worker & Custom Python Script & 2.7\\
-Task Queue & RabbitMQ & 3.0.1 \\
-Data Repository & MongoDB & 2.2 \\
-Code Repository & Maven Central Repository & January 2012 \\
-\hline
-\end{tabular}
-\end{threeparttable}
-\end{table}
+%\begin{table}
+%\centering
+%\begin{threeparttable}
+%\caption{Experiment Entities}
+%\label{tbl:exp}
+%\begin{tabular}{l r r}
+%\hline
+%Entity & Software Package & Version\\
+%\hline
+%Worker & Custom Python Script & 2.7\\
+%Task Queue & RabbitMQ & 3.0.1 \\
+%Data Repository & MongoDB & 2.2 \\
+%Code Repository & Maven Central Repository & January 2012 \\
+%\hline
+%\end{tabular}
+%\end{threeparttable}
+%\end{table}
 
 First, we scanned the Maven repository for appropriate {\sc jar}s and created a
 list that included them. We discuss the {\sc jar} selection process in the next 
@@ -210,7 +210,7 @@ hosts projects from languages other than Java such as Scala, Groovy,
 Clojure etc. we filtered out such projects by performing a series of checks in
 the repository data and metadata.
 
-\begin{table}
+\begin{table}[t]
 \centering
 \caption{Descriptive Statistics Measurements for the Maven Repository}
 \label{tbl:repository}
@@ -240,7 +240,7 @@ Table~\ref{tbl:repository} summarises the data set information and
 provides the basic descriptive statistic measurements. The distribution of version
 count among the selected projects is presented in Figure \ref{fig:version-count}.
 
-\begin{figure*}
+\begin{figure*}[t]
 	\centering
 	\includegraphics[scale=0.6]{version_count.pdf}
 	\caption{Distribution of
@@ -263,7 +263,7 @@ also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
 \section{Results and Analysis}
 \label{sec:res}
 
-\begin{table}
+\begin{table}[t]
 \centering
 \caption{Bug Categorisation According to FindBugs}
 \label{tbl:bug-cat}
@@ -304,7 +304,7 @@ Malicious Code}. From the total number of versions, 4,353 of them contained
 at least one bug coming from the first category
 and 45,559 coming from the second.
 
-\begin{table*}
+\begin{table*}[t]
 \centering
 \caption{Number of Versions that Contain at Least One Severe Security Bug}
 \label{tbl:sev}
@@ -364,7 +364,7 @@ The remaining bugs of the {\it Security} category
 are grouped together with the bugs of the {\it Malicious Code} category
 in another subcategory that we call {\it Security Low}.
 
-\begin{figure*}
+\begin{figure*}[t]
 	\centering
 	\includegraphics[scale=0.6]{bug_percent}
 	\caption{Bug Percentage in Maven Repository}
@@ -407,7 +407,8 @@ across all projects to see if bigger versions relate to higher or
 lower defect counts. The results are shown in
 Table~\ref{tbl:bugsperversion}. Although the tendency is for
 defect counts to increase, this tendency is extremely slight.
-\begin{table}
+
+\begin{table}[t]
     \centering
     \caption{Correlations between Version and Defects Count}
     \label{tbl:bugsperversion}
@@ -434,7 +435,7 @@ upwards or downwards tendency. There may be no such thing as a
 ``project'' in general, only particular projects with their own
 idiosyncrasies, quality features, and coding practices.
 
-\begin{figure*}
+\begin{figure*}[t]
   \centering
   \includegraphics[scale=0.4]{bugsversionscorr}
   \caption{Histograms of correlations between bug counts and version
@@ -451,7 +452,7 @@ Note also the spectacular changes of introducing or removing thousands
 of defects; this may be the result of doing and undoing a pervasive
 code change that falls foul of some bug identification rule.
 
-\begin{figure*}
+\begin{figure*}[t]
   \centering
   \includegraphics[scale=0.4]{bugdiffs}
   \caption{Histograms of the time, measure in versions, it takes for a
@@ -502,7 +503,7 @@ version. The results, all statistically significant ($p \ll
 the other categories, even {\it Security Low} that nearly tops the
 list.
 
-\begin{table}
+\begin{table}[t]
     \centering
     \caption{Correlations between jar size and Defects Count}
     \label{tbl:jarsizecorr}
@@ -525,7 +526,7 @@ upon projects in swarms of different kinds. Bugs of the {\it Security
 associated with other bugs, or only weakly so. Perhaps it takes a
 special kind of blunder to make it a security hazard.
 
-\begin{table}
+\begin{table}[t]
     \centering
     \caption{Correlation matrix}
     \label{tbl:corrmatrix}
@@ -536,7 +537,7 @@ special kind of blunder to make it a security hazard.
 \end{table}
 
 
-\begin{figure*}
+\begin{figure*}[t]
   \centering
   \includegraphics[scale=0.6]{corrplot.pdf}
   \caption{Correlation matrix plot for bug categories}
@@ -666,6 +667,15 @@ pairwise correlations between all categories indicated that severe bugs are
 coming from a special kind of carelessness. Finally, it is interesting to see
 that security bugs were one of the top two bug categories existing in such a
 large ecosystem.
+
+Future work on our approach involves the observation of other ecosystems, that
+serve different languages, in the same manner. For instance, Python's PyPY
+(Python Package Index),\footnote{\url{https://pypi.python.org/pypi}}
+Perl's {\sc cpan} (Comprehensive Perl Archive Network),\footnote{\url{http://www.cpan.org/}}
+and Ruby's RubyGems.\footnote{\url{http://rubygems.org/}}
+
+Our data and code are publicly available and can be found under the following
+GitHub address: \url{https://github.com/bkarak/evol_security_publication_2012}.
 
 \section*{Acknowledgements}
 
