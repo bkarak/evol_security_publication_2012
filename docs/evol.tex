@@ -432,6 +432,23 @@ idiosyncrasies, quality features, and coding practices.
   \label{fig:bugsversionscorr}
 \end{figure*}
 
+Another take on this theme is shown in Figure~\ref{fig:bugddifs},
+which presents an histogram of the changes of different bug counts in
+project versions. In most cases, a bug count does not change between
+versions; but when it does change, it may change upwards or downwards.
+Note also the spectacular changes of introducing or removing thousands
+of defects; this may be the result of doing and undoing a pervasive
+code change that falls foul of some bug identification rule.
+
+\begin{figure*}
+  \centering
+  \includegraphics[scale=0.4]{bugdiffs}
+  \caption{Histograms of the time, measure in versions, it takes for a
+    bug to be closed. }
+  \label{fig:bugdiffs}
+\end{figure*}
+
+
 \subsubsection{Persistence of Security Bugs}
 
 To examine the relation between the persistence of different kinds of
