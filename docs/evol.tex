@@ -108,34 +108,32 @@ a large number of others contains a low rate of security bugs~\cite{MW10}.
 %In this case we can strengthen the relationship between Linus' Law and
 %software security as Meneely et al. have already indicated~\cite{MW10}.
 
-%@dimitro: check the following
-The main contributions of this work are:
+In this work we:
 \begin{itemize}
-	\item We present evidence that defect counts remain relatively stable
-    across project revisions.
-%An analysis of how security bugs found through static analysis,
-%evolve over time.
-%To achieve this, we inspect every project per version.
-%Our hypothesis is that security bugs should decrease as a project evolves since
-%they are critical and developers should eliminate them.
-	\item We find that a specific defect remains unfixed on average 
-    for 3 revisions.
-% Security bug persistence between versions. 
-%We expect that
-%security bugs should be eliminated earlier than other bugs.
-	\item We show that many defect types are correlated with the project's
-    size (with the notable exception of high-risk security defects).
-%Our hypothesis is that security bugs are proportional to a project
-%version's size.  Here, size is defined in terms of bytecode.
-	\item We show that a code base can have defect hotspots.
-%Our
-%hypothesis is that security bugs flock together with bugs that have to do with
-%performance, coding practices and others.
+	\item Analyze how security bugs found through static analysis,
+evolve over time. To achieve this, we inspect every project per version.
+Our hypothesis is that security bugs should decrease as a project evolves since
+they are critical and developers should eliminate them.
+%We present evidence that defect counts remain relatively stable
+%across project revisions.
+	\item Examine security bug persistence between versions. 
+We expect that security bugs should be eliminated earlier than other bugs.
+%We find that a specific defect remains unfixed on average 
+%for 3 revisions.
+	\item Study the relation between security bugs and a project
+version's size. Our hypothesis is that security bugs are proportional to a project
+version's size. Here, size is defined in terms of bytecode.
+%We show that many defect types are correlated with the project's
+%size (with the notable exception of high-risk security defects).
+	\item Examine the correlation of security bugs with other bug categories.
+Our hypothesis is that security bugs flock together with bugs that
+have to do with performance, coding practices and others.
+%We show that a code base can have defect hotspots.
 %	\item The relation of software dependencies and security bugs. Our
 %hypothesis is that an artifact that is a dependency of many other artifacts
 %should have a low rate of security bugs. 
-  \item We make available a carefully constructed dataset and a statistical toolkit for
-    performing analysis of the Java Maven ecosystem.
+  %\item Make available a carefully constructed dataset and a statistical toolkit for
+   % performing analysis of the Java Maven ecosystem.
 \end{itemize}
 
 % In the rest of this paper we
@@ -700,7 +698,9 @@ we showed evidence that they are not proportionally related. Furthermore, the
 pairwise correlations between all categories indicated that even though all the other
 categories are related, severe bugs do not flock together with the other bugs.
 Also, it is interesting to see that security bugs were one of the top two
-bug categories existing in a large ecosystem. Finally, we highlighted the
+bug Make available a carefully constructed dataset and a statistical toolkit for
+    performing analysis of the Java Maven ecosystem.
+categories existing in a large ecosystem. Finally, we highlighted the
 domino effect, and showed evidence that indicates that the Linus' Law does not
 apply in the case of the security bugs.
 
