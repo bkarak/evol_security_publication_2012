@@ -172,8 +172,8 @@ fits on the data coming from the Maven repository, for reasons that we will desc
 \end{figure}
 
 The goal of our experiment was to retrieve all the bugs that FindBugs reports,
-from all the project versions existing on the Maven repository.
-The experiment involved four entities:
+from all the project versions existing on the Maven repository (in the Maven
+repository, versions are {\it actual} releases). The experiment involved four entities:
 a number of {\it workers} (a custom Python script), a {\it task queue}
 mechanism (Rabbit{\sc mq} - version 3.0.1),\footnote{\url{http://www.rabbitmq.com/}}
 a {\it data repository} (Mongo{\sc db} - version 2.2),\footnote{\url{http://www.mongodb.org/}}
@@ -345,7 +345,7 @@ Then, we provide a comprehensive analysis of the results and highlight our key f
 
 FindBugs separates software bugs into nine categories (see
 Table~\ref{tbl:bug-cat}). Two of them involve security issues: {\it Security} and {\it
-Malicious Code}. From the total number of versions, 4,353 of them contained
+Malicious Code}. From the total number of releases, 4,353 of them contained
 at least one bug coming from the first category
 and 45,559 coming from the second.
 
