@@ -27,15 +27,19 @@
 Security bugs are critical programming errors that can lead to serious
 vulnerabilities in software. Such bugs may allow an attacker to take over
 an application, steal data or prevent the application from working at all.
-In this paper, we present how we used the Maven repository to study the
+We used the Maven repository to study the
 characteristics of security bugs individually and in relation to other software
 bugs. In particular, we analyzed every project version of the repository by using a
-popular static analysis tool. Then by taking advantage of the various features of
-the repository (multiple versions for every project, dependencies and others) we studied
+popular static analysis tool. Then by taking advantage of
+the repository's features (multiple versions for every project, dependencies) we studied
 the evolution of security bugs through time, their persistence and their relationship with a) the
-size of the corresponding version and b) other bug categories. Also, based on the
-dependencies of artifacts we constructed the graph of the repository and
-examined the most popular nodes based on their PageRank. 
+size of the corresponding version and b) other bug categories. Our findings
+indicated that security bugs neither increase or decrease as a project evolves.
+In addition, they are not eliminated in a way that is particularly
+different from the other bugs. Also, their relation with the
+size appeared to be different from the other categories. Finally, even if bugs
+seem to flock together, severe security bugs
+seem to be unassociated with other categories.
 \end{abstract}
 
 \begin{keywords}
@@ -52,8 +56,7 @@ native code, applications, libraries and others. Despite the significant
 effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
 study them in relation to software evolution~\cite{L96}\cite{LRWPT97}\cite{IB06}\cite{RGMA06}.
 In this paper we present how we used a large software ecosystem to analyse
-how evolving software packages are related to the different types of security
-vulnerabilities.
+how different types of security vulnerabilities are related to the evolving software packages.
 
 One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
@@ -71,7 +74,7 @@ This research builds upon our earlier work on the topic~\cite{MGS12}.
 We chose to focus our study on the security bugs rather than other
 software bugs. This is because compared to other bug categories,
 the category of security bugs has two distinct features: it is critical~\cite{SZ12}
-and it costs~\cite{BCL08}\cite{R06}. Specifically, a software bug can
+and it costs~\cite{BCL08}\c~\cite{TH04}ite{R06}. Specifically, a software bug can
 lead to a malfunction of a software artifact that runs under specific
 requirements but a security bug can allow a malicious user to alter the execution
 of the entire application for his or her own gain. In this case, such bugs could span a wide
@@ -88,8 +91,13 @@ addition, we wanted to investigate other critical features associated with such
 vulnerabilities like the persistence of a bug; in essence, to check if critical bugs stay
 unresolved for a long time. Also, we wanted to elaborate more on the relation of security
 bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
+<<<<<<< HEAD
 done) but also with other bug categories. In the same manner, we tried to check
 the relation between version size and security bugs, knowing the
+=======
+did) but also with other bug categories. In the same manner, we tried to check
+the relation between a version's size and its security bugs knowing the
+>>>>>>> changes after Panos and dds comments
 that research has been contradictory on the the
 issue~\cite{BP84}\cite{SYTP85}\cite{NBZ06}\cite{GKMS00}.
 Finally, we examined the Maven ecosystem as a whole from a security
@@ -100,16 +108,17 @@ a large number of others contains a low rate of security bugs~\cite{MW10}.
 
 The main contributions of this research are:
 \begin{itemize}
-	\item The analysis of how security bugs evolve over time. To achieve
-this, we inspect every project per version. We expect that security
-bugs should decrease as a project evolves since they are critical and developers
-should eliminate them.
-	\item Security bug persistence between versions. We show evidence that
-security bugs are not eliminated between releases.
-	\item We show evidence of the relation between security bugs and a project
+	\item The analysis of how security bugs found through static analysis,
+evolve over time. To achieve this, we inspect every project per version.
+Our hypothesis is that security bugs should decrease as a project evolves since
+they are critical and developers should eliminate them.
+	\item Security bug persistence between versions. We expect that
+security bugs should be eliminated earlier than other bugs.
+	\item The relation between security bugs and a project
+version's size. Our hypothesis is that security bugs are proportional to a project
 version's size.  Here, size is defined in terms of bytecode.
-	\item The correlation of security bugs with other bug categories. We
-show evidence on how such bugs are correlated with bugs that have to do with
+	\item The correlation of security bugs with other bug categories. Our
+hypothesis is that security bugs flock together with bugs that have to do with
 performance, coding practices and others.
 %	\item The relation of software dependencies and security bugs. Our
 %hypothesis is that an artifact that is a dependency of many other artifacts
@@ -132,7 +141,9 @@ fits on the data coming from the Maven repository, for reasons that we will desc
 \subsection{Experiment}
 \label{sec:exp}
 
-Our experiment involved four entities:
+The goal of our experiment was to retrieve all the bugs that FindBugs reports,
+for all the project versions existing on the Maven repository.
+The experiment involved four entities:
 a number of {\it workers} (a custom Python script), a {\it task queue}
 mechanism (Rabbit{\sc mq} - version 3.0.1),\footnote{\url{http://www.rabbitmq.com/}}
 a {\it data repository} (Mongo{\sc db} - version 2.2),\footnote{\url{http://www.mongodb.org/}}
@@ -181,12 +192,9 @@ release. This order was derived from an {\sc xml} file that
 accompanies every project in the Maven repository called {\it
 maven-metadata.xml}. Then, FindBugs was invoked by the worker and its results were
 also stored in the data repository. When the task was completed the queue
-was notified and the next task was requested. A schematic representation
-of the data processing architecture can be seen in Figure~\ref{fig:arch}.
-
-This process was executed for all the available {\sc jar}s in the task queue.
-The experiment was executed five times in order to iron out various bugs in
-our scripts and validate the results. 
+was notified and the next task was requested. This process was executed for
+all the available {\sc jar}s in the task queue. A schematic representation of
+the data processing architecture can be seen in Figure~\ref{fig:arch}.
 
 \subsection{Data Provenance}
 \label{sec:data}
@@ -220,13 +228,13 @@ Measurement & Value\\
  \hline
 Projects & 17,505\\
 Versions (total) & 115,214\\
-Min & 1\\
-Max & 338\\
-Mean & 6.58\\
-Median & 3\\
-Range & 337\\
-1$^{st}$ Quartile & 1\\
-3$^{rd}$ Quartile & 8\\
+Min (versions per project) & 1\\
+Max (versions per project) & 338\\
+Mean (versions per project) & 6.58\\
+Median (versions per project) & 3\\
+Range (over versions) & 337\\
+1$^{st}$ Quartile (over versions) & 1\\
+3$^{rd}$ Quartile (over versions) & 8\\
 \hline
 \end{tabular}
 \end{table}
@@ -242,7 +250,7 @@ count among the selected projects is presented in Figure \ref{fig:version-count}
 
 \begin{figure*}[t]
 	\centering
-	\includegraphics[scale=0.6]{version_count.pdf}
+	\includegraphics[scale=0.4]{version_count.pdf}
 	\caption{Distribution of
 Version Count Among Project Population}
 	\label{fig:version-count}
@@ -257,6 +265,22 @@ only a few with hundreds of versions. The maximum number of versions
 for a project is 338. The 3$^{rd}$ quartile measurement also indicated
 that 75\% (13,129) of the projects have a maximum of 8 versions.
 
+\subsection{Threats to Validity}
+\label{sec:threats}
+
+A threat to the internal validity of our experiment could be the false alarms of the
+FindBugs tool. The false positives and negatives of static analysis tools and
+how they can be reduced, is an issue that has already been discussed in literature (see
+Section~\ref{sec:rel}). Furthermore, consider a false positive alarm where an
+security bug is reported, but it is invalidated based on the context of the
+application (an {\sc sql} injection vulnerability~\cite{RL12} in an application that
+requires no external input).
+
+We also have to mention that our analysis is done on projects written in the
+Java programming language. Hence, a threat to the external validity of our work
+is the fact that our results may not be the same in another programming
+environment.
+
 \section{Results and Analysis}
 \label{sec:res}
 
@@ -264,13 +288,13 @@ that 75\% (13,129) of the projects have a maximum of 8 versions.
 \centering
 \caption{Bug Categorisation According to FindBugs}
 \label{tbl:bug-cat}
-\begin{tabular}{l p{15em}}
+\begin{tabular}{l p{23em}}
 \hline
 Category & Description\\
 \hline
 Bad Practice & Violations of recommended and essential
 coding practice. \\
-Correctness & Involves coding mistakes resulting in code
+Correctness & Involves coding mistin a way that is particularly different from the other bugsakes resulting in code
 that was probably not what the developer intended. \\
 Experimental & Includes unsatisfied obligations. For instance,
 forgetting to close a file. \\
@@ -303,12 +327,12 @@ and 45,559 coming from the second.
 
 \begin{table*}[t]
 \centering
-\caption{Number of Versions that Contain at Least One Severe Security Bug}
+\caption{Number of Project Releases that Contain at Least One Severe Security Bug}
 \label{tbl:sev}
 \leavevmode
-	\begin{tabular}{l r}
+	\begin{tabular}{p{25em} r}
 	\hline
-	Bug Description & Number of Versions\\
+	Bug Description & Number of Project Releases\\
  	\hline
 	{\sc hrs}: {\sc http} cookie formed from untrusted input & 149\\
 	{\sc hrs}: {\sc http} response splitting vulnerability & 1,564\\
@@ -323,6 +347,7 @@ and 45,559 coming from the second.
 	\end{tabular}
 \end{table*}
 
+Our first results involve the most popular bugs in the Maven repository.
 Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
 repository. Together with the {\it Bad Practice} bugs and the {\it Style} bugs,
 security bugs (the sum of the {\it Security} and {\it Malicious Code}
@@ -336,7 +361,6 @@ literature~\cite{SH09}.
 % This goes along with the relationship between the size of an artifact and it's
 % bugs that is presented in the upcoming section.
 
-% dimitro@dds: maybe you want to add something here?
 Another observation involves bugs that we could call {\it
 severe} and they are a subset of the {\it Security} category.
 Such bugs are related to vulnerabilities that appear due to the lack of user-input
@@ -350,7 +374,7 @@ Also, as bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.ne
 if an application has bugs coming from the {\it Security High} category,
 it might have more vulnerabilities that FindBugs doesn't report.
 Table~\ref{tbl:sev} presents the number
-of {\sc jar}s where at least one of these bugs exists. In essence, 5,355 versions
+of releases where at least one of these bugs exists. In essence, 5,355 releases
 ($\approx 4,64\% $), contained at
 least one severe security bug. Given the fact that other projects include these
 versions as their dependencies, they are automatically rendered vulnerable if
@@ -363,12 +387,15 @@ in another subcategory that we call {\it Security Low}.
 
 \begin{figure*}[t]
 	\centering
-	\includegraphics[scale=0.6]{bug_percent}
+	\includegraphics[scale=0.4]{bug_percent}
 	\caption{Bug Percentage in Maven Repository}
 	\label{fig:bug-per} 
 \end{figure*}
 
-As we mentioned earlier, during the experiment we managed to retrieve the
+To examine {\it Linus' Law} in relation to the rate of the
+security bugs~\cite{MW10}, and highlight the
+{\it domino effect}~\cite{TH04} we did the
+following: during the experiment we managed to retrieve the
 dependencies of every version. Based on this information we created a graph
 that represented the snapshot of the Maven repository. The
 nodes of the graph represented the versions and the vertices their dependencies.
@@ -379,7 +406,7 @@ complete. This is because there were missing versions.
 % Practically, the corresponding {\it pom}, or {\it war} files existed on the
 % repository, but the {\sc jar} file did not.
 From the 565,680 vertices, 191,433
-belonged to the first case while 164,234 belonged to the second.
+did not point to a specific version while 164,234 were pointing to missing ones.
 The graph contained 80,354 nodes. Obviously, the number does not correspond to
 the number of the total versions (see Section~\ref{sec:data}). This is because
 some versions did not contain any information about their dependencies so they
@@ -389,13 +416,14 @@ examined the security bugs of the fifty most popular nodes based on their PageRa
 Contrary to Linus' Law, thirty three of them contained bugs coming from the
 {\it Security Low} subcategory, while two of them contained severe bugs.
 Twenty five of them were latest versions at the time. This also highlights
-the {\it domino effect}~\cite{TH04}. No matter how well a programmer secures a software component
-it won't matter if he or she is using vulnerable code fragments from another library.
+the domino effect. No matter how well a programmer secures a software component
+it won't matter if he or she is using vulnerable code fragments coming
+from another library.
 
 \subsection{Analysis}
 \label{sec:analysis}
 
-\subsubsection{How Security Bugs Evolve Over Time}
+\subsubsection{How Security Bugs E(over versions)volve Over Time}
 
 The relation between bugs and time can be traced from the number of
 bugs per category in each project version. We can then calculate the
@@ -412,6 +440,7 @@ counts to increase, this tendency is extremely slight.
     \input{bugsperversion.tex}
 \end{table}
 
+<<<<<<< HEAD
 The zero tendency applies to all versions of all projects together. 
 The situation might be different in individual projects. We therefore
 performed Spearman correlations between bug counts and version
@@ -430,6 +459,25 @@ Figure~\ref{fig:bugsversionscorr} suggest that we cannot say that
 across projects defect counts increase or decrease significantly
 across time. In individual projects, however, defect counts can have a
 strong upwards or downwards tendency. There may be no such thing as a
+=======
+Although there seems to be zero tendency taken over all versions of
+all projects together, the situation might be different in individual
+projects. We therefore performed Spearman correlations between bug
+counts and version ordinals in all projects we examined. These paint a
+different picture from the above table, shown in
+Figure~\ref{fig:bugsversionscorr}. The spike in point zero is
+explained by the large number of projects for which no correlation
+could be established---note that the scale is logarithmic. Still, we
+can see that there were projects where a correlation could be
+established, either positive or negative. The {\it Security High}
+category is particularly bimodal, but this is explained by the small
+number of correlations that could be established, nine in total. Taken
+together with Table~\ref{tbl:bugsperversion},
+Figure~\ref{fig:bugsversionscorr} suggests that \textbf{we cannot say that across
+projects defect counts increase or decrease significantly across time}.
+In individual projects, however, defect counts can have a strong
+upwards or downwards tendency. There may be no such thing as a
+>>>>>>> changes after Panos and dds comments
 ``project'' in general, only particular projects with their own
 idiosyncrasies, quality features, and coding practices.
 
@@ -443,7 +491,7 @@ idiosyncrasies, quality features, and coding practices.
 \end{figure*}
 
 Another take on this theme is shown in Figure~\ref{fig:bugdiffs},
-which presents an histogram of the changes of different bug counts in
+which presents a histogram of the changes of different bug counts in
 project versions. In most cases, a bug count does not change between
 versions; but when it does change, it may change upwards or downwards.
 Note also the spectacular changes of introducing or removing thousands
@@ -465,14 +513,14 @@ To examine the relation between the persistence of different kinds of
 bugs, and of security bugs in particular, we used as a persistence
 indicator the number of versions a bug remains open in a project. We
 grouped the persistence numbers by bug categories and then performed a
-Mann-Whitney $U$ test among all bug category pairs. The results are
+Mann-Whitney $U$~\cite{HM98} test among all bug category pairs. The results are
 presented in Table~\ref{tbl:bug_persistence}. Cells in brackets show
 pairs where no statistically significant difference was found.
 
 In general, although the average number of versions bugs in different
 bug categories remained opened was statistically different in many
-cases, the difference is not spectacular. In all cases a bug persists
-on average between two and three versions, with the difference being
+cases, the difference is not spectacular. \textbf{In all cases a bug persists
+on average between two and three versions}, with the difference being
 in the decimal digits.
 
 \begin{landscape}
@@ -492,6 +540,7 @@ in the decimal digits.
 
 \subsubsection{The Relation of Defects with the size of a {\sc jar}}
 
+<<<<<<< HEAD
 We explored the relation between defects with the size of a project
 version, measured by the size of its {\sc jar} file by carrying out
 correlation tests between the size and the defect counts for each
@@ -500,6 +549,16 @@ project and version. The results, all statistically significant ($p
   Security High} category stands out by having a remarkably lower
 effect than the other categories, even {\it Security Low} that nearly
 tops the list.
+=======
+We explored the relation between defects with the size of a project version,
+measured by the size of its {\sc jar} file by carrying out correlation tests
+between the size and the defect counts for each project and its
+version. The results, all statistically significant ($p \ll
+0.05$) can be seen in Table~\ref{tbl:jarsizecorr}. \textbf{The {\it Security
+  High} category stands out by having a remarkably lower effect than
+the other categories}, even {\it Security Low} that nearly tops the
+list.
+>>>>>>> changes after Panos and dds comments
 
 \begin{table}[t]
     \centering
@@ -517,7 +576,7 @@ lifetime. The results can be seen in Table~\ref{tbl:corrmatrix} and
 Figure~\ref{fig:corrplot}. We found significant, but not always
 strong, correlations between all pairs. In general, the {\it Security
   High} category showed the weakest correlations with the other
-categories. Our results show that in general bugs do flock together.
+categories. Our results show that in general \textbf{bugs do flock together}.
 We do not find projects with only a certain kind of bug; bugs come
 upon projects in swarms of different kinds. Bugs of the {\it Security
   High} category, though, are different: they are either not
@@ -548,7 +607,7 @@ special kind of blunder to make it a security hazard.
 There are numerous methods for mining software repositories in the context
 of software evolution~\cite{KCM07}. In this section we focus on the ones
 that highlight the relationship between software bugs and evolution and try to
-extract useful conclusions. The key idea behind this concept is
+extract useful conclusions. The key idea behind this is
 similar to ours: the combination of information like bug descriptions,
 documentation and others with the information retrieved from either the source
 or object code of a project version.
@@ -562,10 +621,10 @@ Ratzinger et al.~\cite{RSG08} showed that the number of bugs decreases, when the
 refactorings increases. Finally, Kim M. et al.~\cite{KCK11} indicated that {\sc api}-level
 refactorings aid bug fixes.
 
-Using {\it micro patterns} is a method proposed by Kim et al.~\cite{KPW06}
-to detect bug-prone patterns among source code. Micro patterns describe programming
-idioms like inheritance, data management, immutability and others. The approach involved
-the examination of all revisions of three open-source projects to extract bug
+{\it Micro patterns}, proposed by Kim et al.~\cite{KPW06}
+detect bug-prone patterns among source code. Micro patterns describe programming
+idioms like inheritance, data management, immutability and others. The approach
+involves the examination of all revisions of three open-source projects to extract bug
 introduction rates for each pattern. Gil et al.~\cite{GM05} analysed the
 prevalence of micro patterns across five Sun {\sc jdk} versions to conclude that
 pattern prevalence tends to be the same in software collections.
@@ -616,7 +675,7 @@ indicated that the number of file-system bugs does not die down over time. By
 categorizing bugs they also showed the frequency of specific bugs in specific
 components.
 
-Contrary to the above, our work focuses on the subset of security bugs.
+Completing the above approaches, our work focuses on the subset of security bugs.
 Focusing on such bugs is not a new idea. Massacci et al.~\cite{MNN11} observed
 the evolution of software defects by examining six major versions of Firefox.
 To achieve this they created a database schema that contained information
@@ -646,28 +705,39 @@ In this work we analyzed a large software repository to examine the behavior
 of security bugs. Specifically, we analyzed more than 260GB of interdependent
 projcet versions to see how security bugs evolve over time, their
 persistence, and their relation with other bug categories and the size in
-terms of bytecode. We have to mention that the versions examined were
-actually releases of these projets. In essence, these {\sc jar}s were the ones
-that were or still are, out there in the wild, being used either as
-applications, or dependencies of others.
+terms of bytecode.
 
 Our primary hypothesis was that security bugs and especially severe
-ones, should be corrected as projects evolve. But our findigs indicate that this is
-not true. Concerning bug persistence, we saw that the behaviour of security
-bugs is similar to the other categories. We have to point out the fact that
-having an average of two to three versions persistence in a sample where 60\%
+ones, should be corrected as projects evolve. However, our findigs indicate that this is
+not true. Contrary to our second research hypothesis, we showed that security
+bugs are not eliminated in a way that is particularly different from the other bugs.
+Also, having an average of two to three versions persistence in a sample where 60\%
 of the projects have three versions, is not a positive result especially in the
-case of the {\it Security High} bugs. An interesting observation was that
-the relation between severe security bugs and a project's size is different
-than the other categories. In essense, a severe bug is introduced only when code
-that deals with untrusted input is added in a application. Furthermore, the
-pairwise correlations between all categories indicated that severe bugs are
-coming from a special kind of carelessness. Finally, it is interesting to see
-that security bugs were one of the top two bug categories existing in such a
-large ecosystem.
+case of the {\it Security High} bugs. Concerning the relation between severe security bugs and a project's size
+we showed evidence that they are not proportionally related. Furthermore, the
+pairwise correlations between all categories indicated that even though all the other
+categories are related, severe bugs do not flock together with the other bugs.
+Also, it is interesting to see that security bugs were one of the top two
+bug categories existing in a large ecosystem. Finally, we highlighted the
+domino effect, and showed evidence that indicates that the Linus' Law does not
+apply in the case of the security bugs.
 
-Future work on our approach involves the observation of other ecosystems, that
-serve different languages, in the same manner. For instance, Python's PyPY
+Contrary to the approaches that examine all versions
+formed after every change that has been commited to the repository,
+our observations are made from a different perspective.
+The versions examined in this work were actual releases
+of the projets. As a result we do not have an indication of how many changes
+have been made between the releases.
+In essence, these {\sc jar}s were the ones that were or still are,
+out there in the wild, being used either as applications,
+or dependencies of others.
+
+Furthermore, the fact that projects have their own idiosyncrasies concerning
+security bugs, could help us answer questions like: what are the common
+characteristics of the projects where security bugs increase over time?
+
+Future work on our approach could also involve the observation of other ecosystems, that
+serve different languages, in the same manner such as, Python's PyPY
 (Python Package Index),\footnote{\url{https://pypi.python.org/pypi}}
 Perl's {\sc cpan} (Comprehensive Perl Archive Network),\footnote{\url{http://www.cpan.org/}}
 and Ruby's RubyGems.\footnote{\url{http://rubygems.org/}}
