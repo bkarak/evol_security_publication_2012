@@ -147,11 +147,11 @@ are related with performance, coding practices, and product stability.
    % performing analysis of the Java Maven ecosystem.
 \end{itemize}
 
-% In the rest of this paper we
-% describe the processing of our data and our experiment (Section \ref{sec:meth}),
-% present and discuss the results we obtained (Section \ref{sec:res}),
-% outline related work (Section \ref{sec:rel}),
-% and end up with a conclusion and directions for future work (Section \ref{sec:con}).
+In the rest of this paper we
+describe the processing of our data and our experiment (Section \ref{sec:meth}),
+present and discuss the results we obtained (Section \ref{sec:res}),
+outline related work (Section \ref{sec:rel}),
+and end up with a conclusion and directions for future work (Section \ref{sec:con}).
 
 \section{Methodology}
 \label{sec:meth}
@@ -417,7 +417,8 @@ in another subcategory that we call {\it Security Low}.
 	\label{fig:bug-per} 
 \end{figure*}
 
-To examine {\it Linus's Law} in relation to the rate of the
+{\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow".
+To examine Linus's Law in relation to the rate of the
 security bugs~\cite{MW10}, and highlight the
 {\it domino effect}~\cite{TH04} we did the
 following: during the experiment we retrieved the
@@ -447,6 +448,8 @@ from another library.
 
 \subsection{Analysis}
 \label{sec:analysis}
+
+Here, we present our key findings concerning the evolution of security bugs.
 
 \subsubsection{How Security Bugs Evolve Over Time}
 
@@ -505,12 +508,11 @@ code change that falls foul of some bug identification rule.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[scale=0.4]{bugdiffs}
+  \includegraphics[width=\textwidth]{bugdiffs}
   \caption{Histograms of the time, measure in versions, it takes for a
     bug to be closed. }
   \label{fig:bugdiffs}
 \end{figure*}
-
 
 \subsubsection{Persistence of Security Bugs}
 
@@ -586,7 +588,6 @@ special kind of blunder to make it a security hazard.
     \small The matrix presents pairwise correlations between the
         different bug categories.
 \end{table}
-
 
 \begin{figure*}[t]
   \centering
