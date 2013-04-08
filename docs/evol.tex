@@ -49,19 +49,22 @@ Security, Maven, FindBugs.
 
 \section{Introduction}
 
-A security bug is a programming error that introduces a potentially
-exploitable weakness into a computer system~\cite{SSL12}\cite{TJBD11}\cite{M06}. This weakness could lead to a
-security breach with unfortunate consequences in different layers, like databases,
-native code, applications, libraries and others. Despite the significant
-effort to detect and eliminate such bugs~\cite{SZ12}, little attention has been paid to
-study them in relation to software evolution~\cite{L96}\cite{LRWPT97}\cite{IB06}\cite{RGMA06}.
-In this paper we present how we used a large software ecosystem to analyse
-how different types of security vulnerabilities are related to the evolving software packages.
-
+A security bug is a programming error that introduces a potentially exploitable
+weakness into a computer system~\cite{SSL12}\cite{TJBD11}\cite{M06}. This
+weakness could lead to a security breach with unfortunate consequences in
+different layers, like databases, native code, applications, libraries and
+others. Despite the significant effort to detect and eliminate such
+bugs~\cite{SZ12}, little attention has been paid to study them in relation to
+software evolution~\cite{L96}\cite{LRWPT97}\cite{IB06}\cite{RGMA06}. 
 One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
 inspection of the program's source or object code without executing
-it. For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
+it. 
+
+In this
+paper we present how we used a large software ecosystem to analyse how different
+types of security vulnerabilities are related to the evolving software packages.
+For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
 research~\cite{AP10}\cite{HP07}\cite{HP04}\cite{HW08}\cite{SHP06}.
 Specifically, we ran FindBugs on all the project
@@ -71,10 +74,13 @@ versions of all the projects that exist in the
 Then we observed the changes that involved the security bugs and their characteristics.
 This research builds upon our earlier work on the topic~\cite{MGS12}.
 
-We chose to focus our study on the security bugs rather than other
-software bugs. This is because compared to other bug categories,
+We chose to focus our study on security bugs rather than other types of
+software defects. This is because compared to other bug categories,
 the category of security bugs has two distinct features: it is critical~\cite{SZ12}
-and it costs~\cite{BCL08}\c~\cite{TH04}ite{R06}. Specifically, a software bug can
+for an organization's infrastructure
+and moreover it can cause significant financial damage to 
+an organization~\cite{TH04}\cite{BCL08}\cite{R06}. 
+Specifically, a software bug can
 lead to a malfunction of a software artifact that runs under specific
 requirements but a security bug can allow a malicious user to alter the execution
 of the entire application for his or her own gain. In this case, such bugs could span a wide
@@ -83,9 +89,10 @@ modification of sensitive data, denial of service and others.
 Moreover, security bug disclosures lead to a negative and significant change
 in market value for a software vendor~\cite{TW07}.
 Hence, one of the basic pursuits in every new software release should
-be the mitigation of such bugs.
+be to mitigate such bugs.
 
-The motivation behind our work was to validate if programmers tend to care for
+% @dimitro: say why we did this work, not how we did it
+The motivation behind our work was to validate whether programmers care for
 such high-risk bugs when they release a new version of their software. In
 addition, we wanted to investigate other critical features associated with such
 vulnerabilities like the persistence of a bug; in essence, to check if critical bugs stay
@@ -101,23 +108,34 @@ a large number of others contains a low rate of security bugs~\cite{MW10}.
 %In this case we can strengthen the relationship between Linus' Law and
 %software security as Meneely et al. have already indicated~\cite{MW10}.
 
-The main contributions of this research are:
+%@dimitro: check the following
+The main contributions of this work are:
 \begin{itemize}
-	\item The analysis of how security bugs found through static analysis,
-evolve over time. To achieve this, we inspect every project per version.
-Our hypothesis is that security bugs should decrease as a project evolves since
-they are critical and developers should eliminate them.
-	\item Security bug persistence between versions. We expect that
-security bugs should be eliminated earlier than other bugs.
-	\item The relation between security bugs and a project
-version's size. Our hypothesis is that security bugs are proportional to a project
-version's size.  Here, size is defined in terms of bytecode.
-	\item The correlation of security bugs with other bug categories. Our
-hypothesis is that security bugs flock together with bugs that have to do with
-performance, coding practices and others.
+	\item We present evidence that defect counts remain relatively stable
+    across project revisions.
+%An analysis of how security bugs found through static analysis,
+%evolve over time.
+%To achieve this, we inspect every project per version.
+%Our hypothesis is that security bugs should decrease as a project evolves since
+%they are critical and developers should eliminate them.
+	\item We find that a specific defect remains unfixed on average 
+    for 3 revisions.
+% Security bug persistence between versions. 
+%We expect that
+%security bugs should be eliminated earlier than other bugs.
+	\item We show that many defect types are correlated with the project's
+    size (with the notable exception of high-risk security defects).
+%Our hypothesis is that security bugs are proportional to a project
+%version's size.  Here, size is defined in terms of bytecode.
+	\item We show that a code base can have defect hotspots.
+%Our
+%hypothesis is that security bugs flock together with bugs that have to do with
+%performance, coding practices and others.
 %	\item The relation of software dependencies and security bugs. Our
 %hypothesis is that an artifact that is a dependency of many other artifacts
 %should have a low rate of security bugs. 
+  \item We make available a carefully constructed dataset and a statistical toolkit for
+    performing analysis of the Java Maven ecosystem.
 \end{itemize}
 
 % In the rest of this paper we
