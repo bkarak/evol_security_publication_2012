@@ -27,17 +27,18 @@
 Security bugs are critical programming errors that can lead to serious
 vulnerabilities in software. Such bugs may allow an attacker to take over
 an application, steal data or prevent the application from working at all.
-We used the Maven repository to study the
+We used the projects stored in the Maven repository to study the
 characteristics of security bugs individually and in relation to other software
 bugs. In particular, we analyzed every project version of the repository by using a
 popular static analysis tool. Then by taking advantage of
 the repository's features (multiple versions for every project, dependencies) we studied
 the evolution of security bugs through time, their persistence and their relationship with a) the
 size of the corresponding version and b) other bug categories. Our findings
-indicated that security bugs neither increase or decrease as a project evolves.
+indicate that there is no simple relationship between the number of
+security bugs and project evolution.
 In addition, they are not eliminated in a way that is particularly
-different from the other bugs. Also, their relation with the
-size appeared to be different from the other categories. Finally, even if bugs
+different from the other bugs. Their relation with
+size appears to be different from the other categories. Finally, even if bugs
 seem to flock together, severe security bugs
 seem to be unassociated with other categories.
 \end{abstract}
@@ -110,8 +111,8 @@ a large number of others contains a low rate of security bugs~\cite{MW10}.
 
 In this work we:
 \begin{itemize}
-	\item Analyze how security bugs found through static analysis,
-evolve over time. To achieve this, we inspect every project per version.
+	\item Analyze how security bugs found through static analysis
+evolve over time. To achieve this, we inspected every project per version.
 Our hypothesis is that security bugs should decrease as a project evolves since
 they are critical and developers should eliminate them.
 %We present evidence that defect counts remain relatively stable
@@ -280,8 +281,8 @@ that 75\% (13,129) of the projects have a maximum of 8 versions.
 \label{sec:threats}
 
 A threat to the internal validity of our experiment could be the false alarms of the
-FindBugs tool. The false positives and negatives of static analysis tools and
-how they can be reduced, is an issue that has already been discussed in literature (see
+FindBugs tool. False positives and negatives of static analysis tools and
+how they can be reduced is an issue that has already been discussed in literature (see
 Section~\ref{sec:rel}). Furthermore, consider a false positive alarm where an
 security bug is reported, but it is invalidated based on the context of the
 application (an {\sc sql} injection vulnerability~\cite{RL12} in an application that
@@ -681,15 +682,17 @@ over the years.
 \section{Conclusions and Future Work}
 \label{sec:con}
 
-In this work we analyzed a large software repository to examine the behavior
-of security bugs. Specifically, we analyzed more than 260GB of interdependent
-projcet versions to see how security bugs evolve over time, their
-persistence, and their relation with other bug categories and the size in
-terms of bytecode.
+In this work we analyzed a large software repository to examine the
+behavior of security bugs. Specifically, we analyzed more than 260GB
+of interdependent project versions to see how security bugs evolve
+over time, their persistence, their relation with other bug
+categories, and their relationship with size in terms of bytecode.
 
-Our primary hypothesis was that security bugs and especially severe
-ones, should be corrected as projects evolve. However, our findigs indicate that this is
-not true. Contrary to our second research hypothesis, we showed that security
+Our primary hypothesis was that security bugs, and especially severe
+ones, should be corrected as projects evolve. We found that, although
+bugs do close over time in particular projects, we do not have an indication that across
+projects they decrease as projects mature. Moreover, defect counts may
+increase, as well as decrease in time. Contrary to our second research hypothesis, we showed that security
 bugs are not eliminated in a way that is particularly different from the other bugs.
 Also, having an average of two to three versions persistence in a sample where 60\%
 of the projects have three versions, is not a positive result especially in the
@@ -708,7 +711,7 @@ Contrary to the approaches that examine all versions
 formed after every change that has been commited to the repository,
 our observations are made from a different perspective.
 The versions examined in this work were actual releases
-of the projets. As a result we do not have an indication of how many changes
+of the projects. As a result we do not have an indication of how many changes
 have been made between the releases.
 In essence, these {\sc jar}s were the ones that were or still are,
 out there in the wild, being used either as applications,
