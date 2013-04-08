@@ -77,16 +77,19 @@ This research builds upon our earlier work on the topic~\cite{MGS12}.
 
 We chose to focus our study on security bugs rather than other types of
 software defects. This is because compared to other bug categories,
-the category of security bugs has two distinct features: it is critical~\cite{SZ12}
-for an organization's infrastructure
-and moreover it can cause significant financial damage to 
+failures due to security bugs have two distinct features:
+they can severeyl affect an organization's infrastructure\cite{SZ12}, and
+they can cause significant financial damage to
 an organization~\cite{TH04}\cite{BCL08}\cite{R06}. 
-Specifically, a software bug can
-lead to a malfunction of a software artifact that runs under specific
-requirements but a security bug can allow a malicious user to alter the execution
-of the entire application for his or her own gain. In this case, such bugs could span a wide
-range of security and privacy issues, like viewing sensitive information, the destruction or
-modification of sensitive data, denial of service and others.
+Specifically,
+whereas a software bug can cause a software artifact to fail,
+a security bug can allow a malicious user to alter the execution
+of the entire application for his or her own gain.
+In this case, such bugs could give rise to a wide
+range of security and privacy issues, like
+the access of sensitive information,
+the destruction or modification of data, and
+denial of service.
 Moreover, security bug disclosures lead to a negative and significant change
 in market value for a software vendor~\cite{TW07}.
 Hence, one of the basic pursuits in every new software release should
@@ -94,14 +97,15 @@ be to mitigate such bugs.
 
 % @dimitro: say why we did this work, not how we did it
 The motivation behind our work was to validate whether programmers care for
-such high-risk bugs when they release a new version of their software. In
-addition, we wanted to investigate other critical features associated with such
-vulnerabilities like the persistence of a bug; in essence, to check if critical bugs stay
-unresolved for a long time. Also, we wanted to elaborate more on the relation of security
-bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
-done) but also with other bug categories. In the same manner, we tried to check
-the relation between version size and security bugs, knowing the
-that research has been contradictory on the the
+the risk posed by security bugs when they release a new version of their software.
+In addition, we wanted to investigate other critical features associated with such
+vulnerabilities like the persistence of a bug;
+in essence, to see whether critical bugs stay unresolved for a long time.
+Also, we wanted to elaborate more on the relation of security
+bugs with other bug categories.
+In the same manner, we tried to looked at the relationship
+between successive product versions and the number of security bugs,
+knowing the that research has produced contradictory results on this
 issue~\cite{BP84}\cite{SYTP85}\cite{NBZ06}\cite{GKMS00}.
 Finally, we examined the Maven ecosystem as a whole from a security
 perspective. Its structure gave us the opportunity to see if a project version that is a dependency to
@@ -112,23 +116,23 @@ a large number of others contains a low rate of security bugs~\cite{MW10}.
 In this work we:
 \begin{itemize}
 	\item Analyze how security bugs found through static analysis
-evolve over time. To achieve this, we inspected every project per version.
-Our hypothesis is that security bugs should decrease as a project evolves since
-they are critical and developers should eliminate them.
+evolve over time. To achieve this, we inspected all releases of every project.
+Our hypothesis is that security bugs should decrease as a project evolves,
+for they form critical issues, which developers should eliminate.
 %We present evidence that defect counts remain relatively stable
 %across project revisions.
-	\item Examine security bug persistence between versions. 
+	\item Examine security bug persistence across releases. 
 We expect that security bugs should be eliminated earlier than other bugs.
 %We find that a specific defect remains unfixed on average 
 %for 3 revisions.
 	\item Study the relation between security bugs and a project
-version's size. Our hypothesis is that security bugs are proportional to a project
-version's size. Here, size is defined in terms of bytecode.
+release's size. Our hypothesis is that security bugs are proportional to a project
+release's size (defined in terms of bytecode size).
 %We show that many defect types are correlated with the project's
 %size (with the notable exception of high-risk security defects).
 	\item Examine the correlation of security bugs with other bug categories.
-Our hypothesis is that security bugs flock together with bugs that
-have to do with performance, coding practices and others.
+Our hypothesis is that security bugs appear together with bugs that
+are related with performance, coding practices, and product stability.
 %We show that a code base can have defect hotspots.
 %	\item The relation of software dependencies and security bugs. Our
 %hypothesis is that an artifact that is a dependency of many other artifacts
