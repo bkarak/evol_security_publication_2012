@@ -283,10 +283,11 @@ that 75\% (13,129) of the projects have a maximum of 8 versions.
 A threat to the internal validity of our experiment could be the false alarms of the
 FindBugs tool. False positives and negatives of static analysis tools and
 how they can be reduced is an issue that has already been discussed in literature (see
-Section~\ref{sec:rel}). Furthermore, consider a false positive alarm where an
+Section~\ref{sec:rel}). Furthermore, consider the case where a
 security bug is reported, but it is invalidated based on the context of the
-application (an {\sc sql} injection vulnerability~\cite{RL12} in an application that
-requires no external input).
+application. For instance, an {\sc sql} injection vulnerability~\cite{RL12}
+in an application that requires no external input could be reported by FindBugs,
+but in this case would be a false positive alarm.
 
 We also have to mention that our analysis is done on projects written in the
 Java programming language. Hence, a threat to the external validity of our work
