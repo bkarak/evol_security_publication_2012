@@ -413,10 +413,10 @@ in another subcategory that we call {\it Security Low}.
 	\label{fig:bug-per} 
 \end{figure*}
 
-To examine {\it Linus' Law} in relation to the rate of the
+To examine {\it Linus's Law} in relation to the rate of the
 security bugs~\cite{MW10}, and highlight the
 {\it domino effect}~\cite{TH04} we did the
-following: during the experiment we managed to retrieve the
+following: during the experiment we retrieved the
 dependencies of every version. Based on this information we created a graph
 that represented the snapshot of the Maven repository. The
 nodes of the graph represented the versions and the vertices their dependencies.
@@ -434,7 +434,7 @@ some versions did not contain any information about their dependencies so they
 are not represented in the graph. After creating the graph, we ran the PageRank
 algorithm~\cite{BP98} on it and retrieved all PageRanks for every node. Then we
 examined the security bugs of the fifty most popular nodes based on their PageRank.
-Contrary to Linus' Law, thirty three of them contained bugs coming from the
+Contrary to Linus's Law, thirty three of them contained bugs coming from the
 {\it Security Low} subcategory, while two of them contained severe bugs.
 Twenty five of them were latest versions at the time. This also highlights
 the domino effect. No matter how well a programmer secures a software component
@@ -698,20 +698,21 @@ over time, their persistence, their relation with other bug
 categories, and their relationship with size in terms of bytecode.
 
 Our primary hypothesis was that security bugs, and especially severe
-ones, should be corrected as projects evolve. We found that, although
+ones, would be corrected as projects evolve. We found that, although
 bugs do close over time in particular projects, we do not have an indication that across
 projects they decrease as projects mature. Moreover, defect counts may
-increase, as well as decrease in time. Contrary to our second research hypothesis, we showed that security
+increase, as well as decrease in time. Contrary to our second research hypothesis,
+we found that security
 bugs are not eliminated in a way that is particularly different from the other bugs.
 Also, having an average of two to three versions persistence in a sample where 60\%
 of the projects have three versions, is not a positive result especially in the
 case of the {\it Security High} bugs. Concerning the relation between severe security bugs and a project's size
-we showed evidence that they are not proportionally related. Furthermore, the
+we showed that they are not proportionally related. Furthermore, the
 pairwise correlations between all categories indicated that even though all the other
-categories are related, severe bugs do not flock together with the other bugs.
+categories are related, severe bugs do not appear together with the other bugs.
 Also, it is interesting to see that security bugs were one of the top two
 bug categories existing in a large ecosystem. Finally, we highlighted the
-domino effect, and showed evidence that indicates that the Linus' Law does not
+domino effect, and showed evidence that indicates that Linus's Law does not
 apply in the case of the security bugs.
 
 Contrary to the approaches that examine all versions
