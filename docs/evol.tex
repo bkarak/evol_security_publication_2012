@@ -30,7 +30,7 @@ an application, steal data or prevent the application from working at all.
 We used the projects stored in the Maven repository to study the
 characteristics of security bugs individually and in relation to other software
 bugs. In particular, we analyzed every project version of the repository by using a
-popular static analysis tool. Then by taking advantage of
+popular static analysis tool. Then, by taking advantage of
 the repository's project history and dependency data we studied
 the evolution of security bugs through time. In addition, we examined
 their persistence and their relationship with
@@ -84,7 +84,7 @@ This research builds upon our earlier work on the topic~\cite{MGS12}.
 We chose to focus our study on security bugs rather than other types of
 software defects. This is because compared to other bug categories,
 failures due to security bugs have two distinct features:
-they can severeyl affect an organization's infrastructure\cite{SZ12}, and
+they can severely affect an organization's infrastructure~\cite{SZ12}, and
 they can cause significant financial damage to
 an organization~\cite{TH04,BCL08,R06}. 
 Specifically,
@@ -109,8 +109,8 @@ vulnerabilities like the persistence of a bug;
 in essence, to see whether critical bugs stay unresolved for a long time.
 Also, we wanted to elaborate more on the relation of security
 bugs with other bug categories.
-In the same manner, we tried to looked at the relationship
-between successive product versions and the number of security bugs,
+In the same manner, we tried to examine the relationship
+between the size of a project release and the number of security bugs that it contains,
 knowing the that research has produced contradictory results on this
 issue~\cite{BP84,SYTP85,NBZ06,GKMS00}.
 Finally, we examined the Maven ecosystem as a whole from a security
@@ -163,6 +163,14 @@ fits on the data coming from the Maven repository, for reasons that we will desc
 \subsection{Experiment}
 \label{sec:exp}
 
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[scale=0.75]{figures/arch.pdf}
+  \end{center}
+  \caption{The Data Processing Architecture}
+  \label{fig:arch}
+\end{figure}
+
 The goal of our experiment was to retrieve all the bugs that FindBugs reports,
 from all the project versions existing on the Maven repository.
 The experiment involved four entities:
@@ -196,14 +204,6 @@ section. With the {\sc jar} list at hand, we created a series of processing task
 and added them to the task queue. Then we executed twenty five (Unix-based)
 workers that checked out tasks from the queue, processed the data and stored the
 results to the data repository.
-
-\begin{figure}[t]
-  \begin{center}
-    \includegraphics[scale=0.75]{figures/arch.pdf}
-  \end{center}
-  \caption{The Data Processing Architecture}
-  \label{fig:arch}
-\end{figure}
 
 A typical processing cycle of a worker included the following steps: after
 the worker spawned, it requested a task from the queue. This task contained
@@ -354,7 +354,7 @@ and 45,559 coming from the second.
 \caption{Number of Project Releases that Contain at Least One Severe Security Bug}
 \label{tbl:sev}
 \leavevmode
-	\begin{tabular}{p{25em} r}
+	\begin{tabular}{p{24em} r}
 	\hline
 	Bug Description & Number of Project Releases\\
  	\hline
@@ -385,6 +385,13 @@ literature~\cite{SH09}.
 % This goes along with the relationship between the size of an artifact and it's
 % bugs that is presented in the upcoming section.
 
+\begin{figure*}[t]
+	\centering
+	\includegraphics[scale=0.45]{bug_percent}
+	\caption{Bug Percentage in Maven Repository}
+	\label{fig:bug-per} 
+\end{figure*}
+
 Another observation involves bugs that we could call {\it
 severe} and they are a subset of the {\it Security} category.
 Such bugs are related to vulnerabilities that appear due to the lack of user-input
@@ -408,13 +415,6 @@ we provide results separately for this subcategory which we call {\it Security H
 The remaining bugs of the {\it Security} category
 are grouped together with the bugs of the {\it Malicious Code} category
 in another subcategory that we call {\it Security Low}.
-
-\begin{figure*}[t]
-	\centering
-	\includegraphics[scale=0.45]{bug_percent}
-	\caption{Bug Percentage in Maven Repository}
-	\label{fig:bug-per} 
-\end{figure*}
 
 {\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow".
 To examine Linus's Law in relation to the rate of the
@@ -452,6 +452,13 @@ Here, we present our key findings concerning the evolution of security bugs.
 
 \subsubsection{How Security Bugs Evolve Over Time}
 
+\begin{table}[t]
+    \centering
+    \caption{Correlations between Version and Defects Count}
+    \label{tbl:bugsperversion}
+    \input{bugsperversion.tex}
+\end{table}
+
 The relation between bugs and time can be traced from the number of
 bugs per category in each project version. We can then calculate the
 Spearman correlations between the defects count and the ordinal
@@ -459,13 +466,6 @@ version number across all projects to see if bigger versions relate to
 higher or lower defect counts. The results are shown in
 Table~\ref{tbl:bugsperversion}. Although the tendency is for defect
 counts to increase, this tendency is extremely slight.
-
-\begin{table}[t]
-    \centering
-    \caption{Correlations between Version and Defects Count}
-    \label{tbl:bugsperversion}
-    \input{bugsperversion.tex}
-\end{table}
 
 The zero tendency applies to all versions of all projects together. 
 The situation might be different in individual projects. We therefore
@@ -478,15 +478,7 @@ logarithmic. Still, we can see that there were projects where a
 correlation could be established, either positive or negative. The
 {\it Security High} category is particularly bimodal, but this is
 explained by the small number of correlations that could be
-established, nine in total. 
-
-Overall, Table~\ref{tbl:bugsperversion} and
-Figure~\ref{fig:bugsversionscorr} suggest that \textbf{we cannot say that
-across projects defect counts increase or decrease significantly
-across time}. In individual projects, however, defect counts can have a
-strong upwards or downwards tendency. There may be no such thing as a
-``project'' in general, only particular projects with their own
-idiosyncrasies, quality features, and coding practices.
+established, nine in total.
 
 \begin{figure*}[t]
   \centering
@@ -496,6 +488,14 @@ idiosyncrasies, quality features, and coding practices.
     the number of no correlation instances.}
   \label{fig:bugsversionscorr}
 \end{figure*}
+
+Overall, Table~\ref{tbl:bugsperversion} and
+Figure~\ref{fig:bugsversionscorr} suggest that \textbf{we cannot say that
+across projects defect counts increase or decrease significantly
+across time}. In individual projects, however, defect counts can have a
+strong upwards or downwards tendency. There may be no such thing as a
+``project'' in general, only particular projects with their own
+idiosyncrasies, quality features, and coding practices.
 
 Another take on this theme is shown in Figure~\ref{fig:bugdiffs},
 which presents a histogram of the changes of different bug counts in
