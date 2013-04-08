@@ -199,7 +199,7 @@ results to the data repository.
 
 \begin{figure}[t]
   \begin{center}
-    \includegraphics[scale=0.9]{figures/arch.pdf}
+    \includegraphics[scale=0.75]{figures/arch.pdf}
   \end{center}
   \caption{The Data Processing Architecture}
   \label{fig:arch}
@@ -272,7 +272,7 @@ count among the selected projects is presented in Figure \ref{fig:version-count}
 
 \begin{figure*}[t]
 	\centering
-	\includegraphics[scale=0.6]{version_count.pdf}
+	\includegraphics[scale=0.45]{version_count.pdf}
 	\caption{Distribution of Version Count Among Project Population}
 	\label{fig:version-count}
 \end{figure*}
@@ -358,15 +358,15 @@ and 45,559 coming from the second.
 	\hline
 	Bug Description & Number of Project Releases\\
  	\hline
-	{\sc hrs}: {\sc http} cookie formed from untrusted input & 149\\
-	{\sc hrs}: {\sc http} response splitting vulnerability & 1,564\\
-	{\sc pt}: absolute path traversal in servlet  & 92\\
-	{\sc pt}: relative path traversal in servlet & 50\\
-	{\sc sql}: non-constant string passed to execute method on an {\sc sql} & 1,817\\
-	{\sc sql}: a prepared statement is generated from a non-constant String & 1,438\\
-	{\sc xss}: {\sc jsp} reflected cross site scripting vulnerability & 17\\
-	{\sc xss}: Servlet reflected cross site scripting vulnerability in error page & 88\\
-	{\sc xss}: Servlet reflected cross site scripting vulnerability & 140\\
+	{\sc hrs}: {\sc http} cookie formed from untrusted input & 151\\
+	{\sc hrs}: {\sc http} response splitting vulnerability & 1,579\\
+	{\sc pt}: absolute path traversal in servlet  & 103\\
+	{\sc pt}: relative path traversal in servlet & 57\\
+	{\sc sql}: non-constant string passed to execute method on an {\sc sql} statement & 1,875\\
+	{\sc sql}: a prepared statement is generated from a non-constant String & 1,486\\
+	{\sc xss}: {\sc jsp} reflected cross site scripting vulnerability & 18\\
+	{\sc xss}: Servlet reflected cross site scripting vulnerability in error page & 90\\
+	{\sc xss}: Servlet reflected cross site scripting vulnerability & 142\\
 	\hline
 	\end{tabular}
 \end{table*}
@@ -398,8 +398,8 @@ Also, as bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.ne
 if an application has bugs coming from the {\it Security High} category,
 it might have more vulnerabilities that FindBugs doesn't report.
 Table~\ref{tbl:sev} presents the number
-of releases where at least one of these bugs exists. In essence, 5,355 releases
-($\approx 4,64\% $), contained at
+of releases where at least one of these bugs exists. In essence, 5,501 releases
+($\approx 4,77\% $), contained at
 least one severe security bug. Given the fact that other projects include these
 versions as their dependencies, they are automatically rendered vulnerable if
 they use the code fragments that include the defects.
@@ -411,7 +411,7 @@ in another subcategory that we call {\it Security Low}.
 
 \begin{figure*}[t]
 	\centering
-	\includegraphics[scale=0.55]{bug_percent}
+	\includegraphics[scale=0.45]{bug_percent}
 	\caption{Bug Percentage in Maven Repository}
 	\label{fig:bug-per} 
 \end{figure*}
