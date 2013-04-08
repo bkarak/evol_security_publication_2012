@@ -57,12 +57,12 @@ Security, Maven, FindBugs.
 \section{Introduction}
 
 A security bug is a programming error that introduces a potentially exploitable
-weakness into a computer system~\cite{SSL12}\cite{TJBD11}\cite{M06}. This
+weakness into a computer system~\cite{SSL12,TJBD11,M06}. This
 weakness could lead to a security breach with unfortunate consequences in
 different layers, like databases, native code, applications, libraries and
 others. Despite the significant effort to detect and eliminate such
 bugs~\cite{SZ12}, little attention has been paid to study them in relation to
-software evolution~\cite{L96}\cite{LRWPT97}\cite{IB06}\cite{RGMA06}. 
+software evolution~\cite{L96,LRWPT97,IB06,RGMA06}. 
 One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
 inspection of the program's source or object code without executing
@@ -73,7 +73,7 @@ paper we present how we used a large software ecosystem to analyse how different
 types of security vulnerabilities are related to the evolving software packages.
 For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
-research~\cite{AP10}\cite{HP07}\cite{HP04}\cite{HW08}\cite{SHP06}.
+research~\cite{AP10,HP07,HP04,HW08,SHP06}.
 Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the
 {\it Maven Central Repository}\footnote{\url{http://search.maven.org/}}
@@ -86,7 +86,7 @@ software defects. This is because compared to other bug categories,
 failures due to security bugs have two distinct features:
 they can severeyl affect an organization's infrastructure\cite{SZ12}, and
 they can cause significant financial damage to
-an organization~\cite{TH04}\cite{BCL08}\cite{R06}. 
+an organization~\cite{TH04,BCL08,R06}. 
 Specifically,
 whereas a software bug can cause a software artifact to fail,
 a security bug can allow a malicious user to alter the execution
@@ -112,7 +112,7 @@ bugs with other bug categories.
 In the same manner, we tried to looked at the relationship
 between successive product versions and the number of security bugs,
 knowing the that research has produced contradictory results on this
-issue~\cite{BP84}\cite{SYTP85}\cite{NBZ06}\cite{GKMS00}.
+issue~\cite{BP84,SYTP85,NBZ06,GKMS00}.
 Finally, we examined the Maven ecosystem as a whole from a security
 perspective. Its structure gave us the opportunity to see if a project version that is a dependency to
 a large number of others contains a low rate of security bugs~\cite{MW10}.
@@ -626,7 +626,7 @@ pattern prevalence tends to be the same in software collections.
 
 {\it Querying techniques} are used to answer a broad range of questions
 regarding the evolution history of a project~\cite{HG05}. Bhattacharya et
-al.~\cite{BN11}\cite{B11} proposed a framework that is based upon
+al.~\cite{BN11,B11} proposed a framework that is based upon
 recursively enumerable languages. The framework can correlate software
 bugs with developers in various ways. For instance, return the list of
 bugs fixed by a specific developer. Fischer et al.~\cite{FPG03} proposed
@@ -654,12 +654,12 @@ the method and others. Then they searched for similar signatures between
 versions. In their research they also studied the evolution of 116 sequential
 builds of the Sun Java Sevelopment Kit ({\sc jdk}). Their findings indicated that
 high priority bugs are fixed over time. To improve the precision of bug
-detection, Kim et al.~\cite{KE07b}\cite{KE07} proposed a history-based warning
+detection, Kim et al.~\cite{KE07b,KE07} proposed a history-based warning
 prioritization algorithm by mining the history of bug-fixes of three
 different projects. The algorithm was based on the following hypothesis: if a
 bug that belongs to a specific category is eliminated by a code change, then
 this warning category is important. Working towards the same direction, Heckman
-et al.~\cite{HW09}\cite{HW08} have introduced benchmarks that use specific
+et al.~\cite{HW09,HW08} have introduced benchmarks that use specific
 correlation algorithms and classification techniques to evaluate alert
 prioritization approaches.
 
