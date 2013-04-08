@@ -64,7 +64,7 @@ research~\cite{AP10}\cite{HP07}\cite{HP04}\cite{HW08}\cite{SHP06}.
 Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the
 {\it Maven Central Repository}\footnote{\url{http://search.maven.org/}}
-(approximately 265GB of data - see Section~\ref{sec:data}).
+(approximately 265GB of data---see Section~\ref{sec:data}).
 Then we observed the changes that involved the security bugs and their characteristics.
 This research builds upon our earlier work on the topic~\cite{MGS12}.
 
@@ -85,15 +85,15 @@ be the mitigation of such bugs.
 The motivation behind our work was to validate if programmers tend to care for
 such high-risk bugs when they release a new version of their software. In
 addition, we wanted to investigate other critical features associated with such
-vulnerabilities like the persistence of a bug. In essence, to check if critical bugs stay
+vulnerabilities like the persistence of a bug; in essence, to check if critical bugs stay
 unresolved for a long time. Also, we wanted to elaborate more on the relation of security
 bugs not only with performance bugs (as Zaman et al.~\cite{ZAH11} have already
-did) but also with other bug categories. In the same manner, we tried to check
-the relation between a version's size and its' security bugs knowing the
+done) but also with other bug categories. In the same manner, we tried to check
+the relation between version size and security bugs, knowing the
 that research has been contradictory on the the
 issue~\cite{BP84}\cite{SYTP85}\cite{NBZ06}\cite{GKMS00}.
 Finally, we examined the Maven ecosystem as a whole from a security
-perspective. Its structure, gave us the opportunity to see if a project version that is a dependency to
+perspective. Its structure gave us the opportunity to see if a project version that is a dependency to
 a large number of others contains a low rate of security bugs~\cite{MW10}.
 %In this case we can strengthen the relationship between Linus' Law and
 %software security as Meneely et al. have already indicated~\cite{MW10}.
@@ -249,16 +249,13 @@ Version Count Among Project Population}
 \end{figure*}
 
 The statistical measurements presented in Table~\ref{tbl:repository}
-indicate that we have 17,505 projects and the data set's median
-is 3, which means that almost 50\% (8,753 projects) of the project
-population has 1 to 3 versions.
-Note that the Maven repository has many projects with a
-few number of versions. For instance, there are numerous projects with a
-number of versions that is less than ten.
-There are a few projects containing ten
-versions and only a few with hundreds of versions. The maximum number of
-versions for a project is 338. The 3$^{rd}$ quartile measurement
-also indicated that 75\% (13,129) of the projects have a maximum of 8 versions.
+indicate that we have 17,505 projects and the data set's median is 3,
+which means that almost 50\% (8,753 projects) of the project
+population have 1 to 3 versions. In general, most projects have a few
+number of versions, there are some projects with ten versions and
+only a few with hundreds of versions. The maximum number of versions
+for a project is 338. The 3$^{rd}$ quartile measurement also indicated
+that 75\% (13,129) of the projects have a maximum of 8 versions.
 
 \section{Results and Analysis}
 \label{sec:res}
@@ -346,9 +343,9 @@ Such bugs are related to vulnerabilities that appear due to the lack of user-inp
 validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12} and
 Cross-Site Scripting~\cite{WS08}.
 Note that to exploit such vulnerabilities, a malicious user does
-not have to know anything about the applications internals. For all the other
-bugs, another program should be written either to incorporate references to
-mutable objects, access non-final fields and others.
+not have to know anything about the application internals. For all the other
+bugs, another program should be written to incorporate references to
+mutable objects, access non-final fields, etc.
 Also, as bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
 if an application has bugs coming from the {\it Security High} category,
 it might have more vulnerabilities that FindBugs doesn't report.
@@ -375,7 +372,7 @@ As we mentioned earlier, during the experiment we managed to retrieve the
 dependencies of every version. Based on this information we created a graph
 that represented the snapshot of the Maven repository. The
 nodes of the graph represented the versions and the vertices their dependencies.
-We have to mention here that the graph was not representative. For instance, if
+The graph was not entirely accurate. For instance, if
 a dependency was pointing only to a project (and not to a specific version), we chose to
 select the latest version found on the repository. Also, this graph is not
 complete. This is because there were missing versions.
@@ -389,7 +386,7 @@ some versions did not contain any information about their dependencies so they
 are not represented in the graph. After creating the graph, we ran the PageRank
 algorithm~\cite{BP98} on it and retrieved all PageRanks for every node. Then we
 examined the security bugs of the fifty most popular nodes based on their PageRank.
-Contrary to the Linus' Law, thirty three of them contained bugs coming from the
+Contrary to Linus' Law, thirty three of them contained bugs coming from the
 {\it Security Low} subcategory, while two of them contained severe bugs.
 Twenty five of them were latest versions at the time. This also highlights
 the {\it domino effect}~\cite{TH04}. No matter how well a programmer secures a software component
@@ -402,11 +399,11 @@ it won't matter if he or she is using vulnerable code fragments from another lib
 
 The relation between bugs and time can be traced from the number of
 bugs per category in each project version. We can then calculate the
-correlations between the defects count and the ordinal version number
-across all projects to see if bigger versions relate to higher or
-lower defect counts. The results are shown in
-Table~\ref{tbl:bugsperversion}. Although the tendency is for
-defect counts to increase, this tendency is extremely slight.
+Spearman correlations between the defects count and the ordinal
+version number across all projects to see if bigger versions relate to
+higher or lower defect counts. The results are shown in
+Table~\ref{tbl:bugsperversion}. Although the tendency is for defect
+counts to increase, this tendency is extremely slight.
 
 \begin{table}[t]
     \centering
@@ -415,23 +412,24 @@ defect counts to increase, this tendency is extremely slight.
     \input{bugsperversion.tex}
 \end{table}
 
-Although there seems to be zero tendency taken over all versions of
-all projects together, the situation might be different in individual
-projects. We therefore performed Spearman correlations between bug
-counts and version ordinals in all projects we examined. These paint a
-different picture from the above table, shown in
-Figure~\ref{fig:bugsversionscorr}. The spike in point zero is
-explained by the large number of projects for which no correlation
-could be established---note that the scale is logarithmic. Still, we
-can see that there were projects where a correlation could be
-established, either positive or negative. The {\it Security High}
-category is particularly bimodal, but this is explained by the small
-number of correlations that could be established, nine in total. Taken
-together with Table~\ref{tbl:bugsperversion},
-Figure~\ref{fig:bugsversionscorr} suggests that we cannot say that across
-projects defect counts increase or decrease significantly across time.
-In individual projects, however, defect counts can have a strong
-upwards or downwards tendency. There may be no such thing as a
+The zero tendency applies to all versions of all projects together. 
+The situation might be different in individual projects. We therefore
+performed Spearman correlations between bug counts and version
+ordinals in all projects we examined. These paint a different picture
+from the above table, shown in Figure~\ref{fig:bugsversionscorr}. The
+spike in point zero is explained by the large number of projects for
+which no correlation could be established---note that the scale is
+logarithmic. Still, we can see that there were projects where a
+correlation could be established, either positive or negative. The
+{\it Security High} category is particularly bimodal, but this is
+explained by the small number of correlations that could be
+established, nine in total. 
+
+Overall, Table~\ref{tbl:bugsperversion} and
+Figure~\ref{fig:bugsversionscorr} suggest that we cannot say that
+across projects defect counts increase or decrease significantly
+across time. In individual projects, however, defect counts can have a
+strong upwards or downwards tendency. There may be no such thing as a
 ``project'' in general, only particular projects with their own
 idiosyncrasies, quality features, and coding practices.
 
@@ -494,18 +492,18 @@ in the decimal digits.
 
 \subsubsection{The Relation of Defects with the size of a {\sc jar}}
 
-We explored the relation between defects with the size of a project version,
-measured by the size of its {\sc jar} file by carrying out correlation tests
-between the size and the defect counts for each project and its
-version. The results, all statistically significant ($p \ll
-0.05$) can be seen in Table~\ref{tbl:jarsizecorr}. The {\it Security
-  High} category stands out by having a remarkably lower effect than
-the other categories, even {\it Security Low} that nearly tops the
-list.
+We explored the relation between defects with the size of a project
+version, measured by the size of its {\sc jar} file by carrying out
+correlation tests between the size and the defect counts for each
+project and version. The results, all statistically significant ($p
+\ll 0.05$) can be seen in Table~\ref{tbl:jarsizecorr}. The {\it
+  Security High} category stands out by having a remarkably lower
+effect than the other categories, even {\it Security Low} that nearly
+tops the list.
 
 \begin{table}[t]
     \centering
-    \caption{Correlations between jar size and Defects Count}
+    \caption{Correlations between {\sc jar} size and Defects Count}
     \label{tbl:jarsizecorr}
     \input{jarsizecorr.tex}
 \end{table}

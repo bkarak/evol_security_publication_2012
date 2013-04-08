@@ -65,7 +65,7 @@ with open("bugsperversion.tex", "w") as bugsperversion_tex:
     start = r"""
 \begin{tabular}{lcc}
 \hline \\
-Category & Pearson Correlation & $p$-value \\ \hline 
+Category & Spearman Correlation & $p$-value \\ \hline 
 """
     bugsperversion_tex.write(start)
     for i, row in enumerate(bug_counts_matrix):
