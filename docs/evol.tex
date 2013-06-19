@@ -1,4 +1,4 @@
-\documentclass[conference]{llncs}
+\documentclass{sig-alternate}
 
 \usepackage{url}
 \usepackage{amsmath}
@@ -12,18 +12,42 @@
 
 \title{Dismal Code: Studying the Evolution of Security Bugs}
 
-\author{Dimitris Mitropoulos \and Vassilios Karakoidas \and Panos Louridas \and Georgios Gousios \and Diomidis Spinellis }
-\institute{ Department of Management Science and Technology\\
-			Athens University of Economics and Business\\
-      		\email{\{dimitro, bkarak, louridas, dds\}@aueb.gr}\\
-			Software Engineering Research Group\\
-			Delft University of Technology\\
-			\email{G.Gousios@tudelft.nl}}
+\numberofauthors{5} 
+
+\author{
+% 1st. author
+\alignauthor
+Dimitris Mitropoulos\\
+       \affaddr{Department of Management Science and Technology}\\
+       \affaddr{Athens University of Economics and Business}\\
+       \email{dimitro@aueb.gr}
+% 2nd. author
+\alignauthor
+Vassilios Karakoidas\\
+       \affaddr{Department of Management Science and Technology}\\
+       \affaddr{Athens University of Economics and Business}\\
+       \email{bkarak@aueb.gr}
+% 3rd. author
+\alignauthor
+Panos Louridas\\
+       \affaddr{Department of Management Science and Technology}\\
+       \affaddr{Athens University of Economics and Business}\\
+       \email{louridas@aueb.gr}
+\and  % use '\and' if you need 'another row' of author names
+% 4th. author
+\alignauthor Georgios Gousios\\
+       \affaddr{Software Engineering Research Group}\\
+       \affaddr{Delft University of Technology}\\
+       \email{G.Gousios@tudelft.nl}
+% 5th. author
+\alignauthor Diomidis Spinellis\\
+       \affaddr{Department of Management Science and Technology}\\
+       \affaddr{Athens University of Economics and Business}\\
+       \email{dds@aueb.gr}
+}
 
 \maketitle
-
 \begin{abstract}
-%\boldmath
 Security bugs are critical programming errors that can lead to serious
 vulnerabilities in software. Such bugs may allow an attacker to take over
 an application, steal data or prevent the application from working at all.
@@ -49,11 +73,10 @@ Finally, even if bugs seem to have similar behaviour,
 severe security bugs seem to be unassociated with other bug categories.
 \end{abstract}
 
-\begin{keywords}
-Security Bugs, Static Analysis, Software Evolution, Software
-Security, Maven, FindBugs.
-\end{keywords}
 
+\keywords{Security Bugs, Static Analysis, Software Evolution, Software
+Security, Maven, FindBugs.
+}
 \section{Introduction}
 
 A security bug is a programming error that introduces a potentially exploitable
@@ -740,8 +763,7 @@ and Ruby's RubyGems.\footnote{\url{http://rubygems.org/}}
 
 Our data and code will be publicly available upon publication.
 
-\section*{Acknowledgements}
-
+\section{Acknowledgments}
 This research has been co-financed by the European Union (European Social Fund
 --– {\sc esf}) and Greek national funds through the Operational Program
 ``Education and Lifelong Learning'' of the National Strategic Reference Framework –
@@ -752,9 +774,7 @@ The project has been also co-financed by the European Regional Development Fund 
 and national funds and is a part of the Operational Programme ``Competitiveness \&
 Entrepreneurship" ({\sc opce} II), Measure ``{\sc cooperation}" (Action I).
 
-\bibliographystyle{splncs}
-\bibliography{evol} 
+\bibliographystyle{abbrv}
+\bibliography{evol}  
 
 \end{document}
-
-
