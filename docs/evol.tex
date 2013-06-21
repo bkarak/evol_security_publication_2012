@@ -288,7 +288,7 @@ In addition, we implemented a series of audits in the worker scripts that
 checked if the {\sc jar}s are valid in terms of implementation. For instance,
 for every {\sc jar} the worker checked if there were any {\it .class} files
 before invoking FindBugs. After the project filtering, we narrowed down
-our data set to 17,055 projects with 115,214 versions.
+our data set to 17,505 projects with 115,214 versions.
 Table~\ref{tbl:repository} summarises the data set information and
 provides the basic descriptive statistic measurements. The distribution of version
 count among the selected projects is presented in Figure \ref{fig:version-count}.
@@ -331,11 +331,11 @@ programming languages, ecosystems, and development cultures.
 \section{Results and Analysis}
 \label{sec:res}
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \caption{Bug Categorisation According to FindBugs}
 \label{tbl:bug-cat}
-\begin{tabular}{l p{23em}}
+\begin{tabular}{l p{35em}}
 \hline
 Category & Description\\
 \hline
@@ -357,7 +357,7 @@ Security & Involves input validation issues, unauthorized database connections
 and others. \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 Our findings can be analysed at two levels. First, we discuss some
 primary observations concerning the security bugs of the Maven repository as a whole.
@@ -505,7 +505,7 @@ established, nine in total.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=\textwidth]{bugsversionscorr}
+  \includegraphics[scale=0.35]{bugsversionscorr}
   \caption{Histograms of correlations between bug counts and version
     ordinals per project. In brackets the total population size and
     the number of no correlation instances.}
