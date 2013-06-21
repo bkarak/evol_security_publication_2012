@@ -118,7 +118,7 @@ In this case, such bugs could give rise to a wide
 range of security and privacy issues, like
 the access of sensitive information,
 the destruction or modification of data, and
-denial of service.
+denial of service.	
 Moreover, security bug disclosures lead to a negative and significant change
 in market value for a software vendor~\cite{TW07}.
 Hence, one of the basic pursuits in every new software release should
@@ -221,6 +221,15 @@ the public Maven repository.
 %\end{threeparttable}
 %\end{table}
 
+Maven is a build automation tool used primarily for Java projects and it is
+hosted by the Apache Software Foundation.\footnote{\url{http://www.apache.org/}}
+To describe the software project being built, its dependencies
+on other external modules, the build order, and required plug-ins Maven uses
+{\sc xml}. To build a software component, it dynamically downloads Java libraries
+and Maven plug-ins from the Maven central repository,
+and stores them in a local cache. The repository can be updated with
+new projects and also with new versions of existing projects.
+
 First, we scanned the Maven repository for appropriate {\sc jar}s and created a
 list that included them. We discuss the {\sc jar} selection process in the next 
 section. With the {\sc jar} list at hand, we created a series of processing tasks
@@ -244,19 +253,20 @@ the data processing architecture can be seen in Figure~\ref{fig:arch}.
 \subsection{Data Provenance}
 \label{sec:data}
 
-Maven is a build automation tool used primarily for Java projects and it is
-hosted by the Apache Software Foundation.\footnote{\url{http://www.apache.org/}}
-To describe the software project being built, its dependencies
-on other external modules, the build order, and required plug-ins Maven uses
-{\sc xml}. To build a software component, it dynamically downloads Java libraries
-and Maven plug-ins from the Maven central repository,
-and stores them in a local cache. The repository can be updated with
-new projects and also with new versions of existing projects.
-
 Initially, we obtained a snapshot (January 2012) of the Maven repository and
 handled it locally to retrieve a list of all the names of the project versions
 that existed in it. A project version can be uniquely identified by the triplet:
 {\it group id}, {\it artifact id} and {\it version}.
+
+FindBugs is an open source static analysis tool that
+searches for software bugs. It works by examining the compiled Java virtual
+machine bytecodes of the programs it checks, using the bytecode engineering
+library ({\sc bcel}).
+To detect a bug, FindBugs uses various formal methods like
+{\it control flow} and {\it data flow
+analysis}. It has also other detectors that employ {\it visitor patterns} over
+classes and methods by using {\it state machines} to reason about values stored
+in variables or on the stack.
 Since FindBugs analyses applications written in the Java
 programming language, and the Maven repository
 hosts projects from languages other than Java such as Scala, Groovy,
