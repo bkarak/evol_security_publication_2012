@@ -99,7 +99,7 @@ a static analysis tool that examines bytecode to detect software bugs and has al
 research~\cite{AP10,HP07,HP04,HW08,SHP06}.
 Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the
-{\it Maven Central Repository}\footnote{\url{http://search.maven.org/}}
+{\it Maven Central Repository}\footnote{\url{http://mvnrepository.com/}}
 (approximately 265GB of data---see Section~\ref{sec:data}).
 Then we observed the changes that involved the security bugs and their characteristics.
 This research builds upon our earlier work on the topic~\cite{MGS12}.
@@ -337,6 +337,9 @@ written in the Java programming language and hosted on Maven,
 a threat to the external validity of our work
 is the fact that our results may not be applicable to other
 programming languages, ecosystems, and development cultures.
+In particular, a large class of security problems such as
+buffer overflows~\cite{K11} do not apply in our study since
+Java enforces bound checking at runtime.
 
 \section{Results and Analysis}
 \label{sec:res}
@@ -448,6 +451,10 @@ we provide results separately for this subcategory which we call {\it Security H
 The remaining bugs of the {\it Security} category
 are grouped together with the bugs of the {\it Malicious Code} category
 in another subcategory that we call {\it Security Low}.
+Note that this categorization was done specifically for this research to point out the
+behaviour of bugs that currently top the corresponding lists of most
+security providers.\footnote{\url{http://cwe.mitre.org/top25/index.html}}
+
 
 {\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow".
 To examine Linus's Law in relation to the rate of the
