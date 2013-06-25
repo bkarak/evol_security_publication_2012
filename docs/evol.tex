@@ -301,7 +301,7 @@ before invoking FindBugs. After the project filtering, we narrowed down
 our data set to 17,505 projects with 115,214 versions.
 Table~\ref{tbl:repository} summarises the data set information and
 provides the basic descriptive statistic measurements. The distribution of version
-count among the selected projects is presented in Figure \ref{fig:version-count}.
+count among the selected projects is presented in Figure~\ref{fig:version-count}.
 
 \begin{figure*}[t]
 	\centering
@@ -330,7 +330,7 @@ In addition, reported security bugs may not be applicable to an
 application's typical use context.
 For instance, FindBugs could report an {\sc sql} injection vulnerability~\cite{RL12}
 in an application that receives no external input.
-In this particular context, this would be a false positive alarm.
+In this particular context, this would be a false positive alarm~\cite{AP10}.
 
 Furthermore, given that our analysis is done on open-source projects
 written in the Java programming language and hosted on Maven,
@@ -457,8 +457,10 @@ security providers.\footnote{\url{http://cwe.mitre.org/top25/index.html}}
 
 
 {\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow".
-To examine Linus's Law in relation to the rate of the
-security bugs~\cite{MW10}, and highlight the
+In a context like this, we expect that
+the project versions that are dependencies to many other projects,
+would have a small number of security
+bugs. To examine this variation of the Linus's Law and highlight the
 {\it domino effect}~\cite{TH04} we did the
 following: during the experiment we retrieved the
 dependencies of every version. Based on this information we created a graph
@@ -481,9 +483,10 @@ examined the security bugs of the fifty most popular nodes based on their PageRa
 Contrary to Linus's Law, thirty three of them contained bugs coming from the
 {\it Security Low} subcategory, while two of them contained severe bugs.
 Twenty five of them were latest versions at the time. This also highlights
-the domino effect. No matter how well a programmer secures a software component
-it won't matter if he or she is using vulnerable code fragments coming
-from another library.
+the domino effect.
+%No matter how well a programmer secures a software component
+%it won't matter if he or she is using vulnerable code fragments coming
+%from another library.
 
 \subsection{Analysis}
 \label{sec:analysis}
