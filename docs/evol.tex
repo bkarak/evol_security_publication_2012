@@ -523,15 +523,6 @@ correlation could be established, either positive or negative. The
 explained by the small number of correlations that could be
 established, nine in total.
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics[scale=0.35]{bugsversionscorr}
-  \caption{Histograms of correlations between bug counts and version
-    ordinals per project. In brackets the total population size and
-    the number of no correlation instances.}
-  \label{fig:bugsversionscorr}
-\end{figure*}
-
 Overall, Table~\ref{tbl:bugsperversion} and
 Figure~\ref{fig:bugsversionscorr} suggest that \textbf{we cannot say that
 across projects defect counts increase or decrease significantly
@@ -548,9 +539,14 @@ Note also the spectacular changes of introducing or removing thousands
 of defects; this may be the result of doing and undoing a pervasive
 code change that falls foul of some bug identification rule.
 
-\begin{figure*}[t]
+\begin{figure*}[p]
   \centering
-  \includegraphics[width=\textwidth]{bugdiffs}
+  \includegraphics[scale=0.30]{bugsversionscorr}
+  \caption{Histograms of correlations between bug counts and version
+    ordinals per project. In brackets the total population size and
+    the number of no correlation instances.}
+  \centering
+  \includegraphics[scale=0.35]{bugdiffs}
   \caption{Changes in bug counts between versions.}
   \label{fig:bugdiffs}
 \end{figure*}
@@ -620,7 +616,7 @@ upon projects in swarms of different kinds. Bugs of the {\it Security
 associated with other bugs, or only weakly so. Perhaps it takes a
 special kind of blunder to make it a security hazard.
 
-\begin{table}[t]
+\begin{table*}[t]
     \centering
     \caption{Correlation matrix}
     \label{tbl:corrmatrix}
@@ -628,7 +624,7 @@ special kind of blunder to make it a security hazard.
     \\
     \small The matrix presents pairwise correlations between the
         different bug categories.
-\end{table}
+\end{table*}
 
 \begin{figure*}[t]
   \centering
