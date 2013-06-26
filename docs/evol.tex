@@ -89,8 +89,9 @@ inspection of the program's source or object code without executing
 it. 
 
 In this
-paper we present how we used a large software ecosystem to analyse how different
-types of security vulnerabilities are related to the evolving software packages.
+paper we present how we used a large software ecosystem to analyse the
+relationship of different types of security vulnerabilities to 
+evolving software packages.
 For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
 research~\cite{AP10,HP07,HW08,SHP06}.
@@ -134,7 +135,7 @@ between the size of a project release and the number of security bugs that it co
 knowing the that research has produced contradictory results on this
 issue~\cite{BP84,SYTP85,NBZ06,GKMS00}.
 Finally, we examined the Maven ecosystem as a whole from a security
-perspective. Its structure gave us the opportunity to see if a project version that is a dependency to
+perspective. Its structure gave us the opportunity to see if a project version that is a dependency of
 a large number of others contains a low rate of security bugs~\cite{MW10}.
 %In this case we can strengthen the relationship between Linus' Law and
 %software security as Meneely et al. have already indicated~\cite{MW10}.
@@ -179,10 +180,7 @@ and end up with a conclusion and directions for future work (Section \ref{sec:co
 There are numerous methods for mining software repositories in the context
 of software evolution~\cite{KCM07}. In this section we focus on the ones
 that highlight the relationship between software bugs and evolution and try to
-extract useful conclusions. The key idea behind this is
-similar to ours: the combination of information like bug descriptions,
-documentation and others with the information retrieved from either the source
-or object code of a project version.
+extract useful conclusions. 
 
 {\it Refactoring identification} through software evolution is an approach used to
 relate refactorings with software bugs. Wei{\ss}gerber et al. found that a high
@@ -196,21 +194,21 @@ refactorings aid bug fixes.
 {\it Micro patterns}, proposed by Kim et al.~\cite{KPW06}
 detect bug-prone patterns among source code. Micro patterns describe programming
 idioms like inheritance, data management, immutability and others. The approach
-involves the examination of all revisions of three open-source projects to extract bug
+involved the examination of all revisions of three open-source projects to extract bug
 introduction rates for each pattern. Gil et al.~\cite{GM05} analysed the
 prevalence of micro patterns across five Sun {\sc jdk} versions to conclude that
 pattern prevalence tends to be the same in software collections.
 
 {\it Querying techniques} are used to answer a broad range of questions
 regarding the evolution history of a project~\cite{HG05}. Bhattacharya et
-al.~\cite{BN11,B11} proposed a framework that is based upon
+al.~\cite{BN11,B11} proposed a framework that is based on
 recursively enumerable languages. The framework can correlate software
 bugs with developers in various ways. For instance, return the list of
 bugs fixed by a specific developer. Fischer et al.~\cite{FPG03} proposed
 an approach for populating a release history database that combines code
 information with bug tracking data. In this way, a developer can couple files
-that contain common bugs, estimate code maturity with respect to the bugs
-and others. The ``Ultimate Debian Database''~\cite{NZ10} is an {\sc sql}-based
+that contain common bugs, estimate code maturity with respect to the bugs,
+etc. The ``Ultimate Debian Database''~\cite{NZ10} is an {\sc sql}-based
 framework that integrates information about the Debian project from various
 sources to answer queries related to software bugs and source code.
 
@@ -219,7 +217,7 @@ the critical components of a project~\cite{D08}. This is done by using an
 evolutionary meta-model~\cite{DL08}. The same approach was
 also used by Zimmermann et al.~\cite{ZNA08} to check the correlation
 of bugs with software properties like code complexity, process quality and others
-and predict future properties.
+and to predict future properties.
 
 The evolution of software artifacts has also been analysed to {\it reduce the false
 alarms} of the various static analysis tools. To achieve this, Spacco et
@@ -228,14 +226,12 @@ former, they tried to pair sets of bugs between versions in order to find
 similar patterns. In the latter, they computed a signature for every bug. This
 signature contained elements like the name of the class where the bug was found,
 the method and others. Then they searched for similar signatures between
-versions. In their research they also studied the evolution of 116 sequential
+versions. In their research they studied the evolution of 116 sequential
 builds of the Sun Java Sevelopment Kit ({\sc jdk}). Their findings indicated that
 high priority bugs are fixed over time. To improve the precision of bug
 detection, Kim et al.~\cite{KE07b,KE07} proposed a history-based warning
 prioritization algorithm by mining the history of bug-fixes of three
-different projects. The algorithm was based on the following hypothesis: if a
-bug that belongs to a specific category is eliminated by a code change, then
-this warning category is important. Working towards the same direction, Heckman
+different projects. Working towards the same direction, Heckman
 et al.~\cite{HW09,HW08} have introduced benchmarks that use specific
 correlation algorithms and classification techniques to evaluate alert
 prioritization approaches.
@@ -269,8 +265,8 @@ hackers in releasing exploits for vulnerabilities, patching and others. In
 their findings they highlighted the most exploited defects and showed that
 the percentage of remotely exploitable vulnerabilities has gradually increased
 over the years. Finally, Edwards et al.~\cite{EC12} have recently conducted
-a similar study to ours in which they have considered only four projects.
-Their results demonstrate that the number of exploitable bugs, does not
+a study similar  to ours in which they have considered only four projects.
+Their results demonstrate that the number of exploitable bugs does not
 always improve with each new release and that the rate of discovery of
 exploitable bugs begins to drop three to five years after the
 initial release.
@@ -278,9 +274,10 @@ initial release.
 \section{Methodology}
 \label{sec:meth}
 
-Our experiment involved the collection of the metric results of the FindBugs
-tool. Before and during the experiment, we performed a number of functional
-fits on the data coming from the Maven repository, for reasons that we will describe below.
+Our experiment involved the collection of the metric results of the
+FindBugs tool. Before and during the experiment, we performed a number
+of filters on the data coming from the Maven repository, for reasons
+that we will describe below.
 
 \subsection{Experiment}
 \label{sec:exp}
@@ -289,8 +286,8 @@ The goal of our experiment was to retrieve all the bugs that FindBugs reports,
 from all the project versions existing on the Maven repository (in the Maven
 repository, versions are {\it actual} releases). The experiment involved four entities:
 a number of {\it workers} (a custom Python script), a {\it task queue}
-mechanism (Rabbit{\sc mq} - version 3.0.1),\footnote{\url{http://www.rabbitmq.com/}}
-a {\it data repository} (Mongo{\sc db} - version 2.2),\footnote{\url{http://www.mongodb.org/}}
+mechanism (Rabbit{\sc mq}---version 3.0.1),
+a {\it data repository} (Mongo{\sc db}---version 2.2),
 and the {\it code repository}, which in our case it was
 the public Maven repository.
 
@@ -313,13 +310,9 @@ the public Maven repository.
 %\end{table}
 
 Maven is a build automation tool used primarily for Java projects and it is
-hosted by the Apache Software Foundation.\footnote{\url{http://www.apache.org/}}
-To describe the software project being built, its dependencies
-on other external modules, the build order, and required plug-ins Maven uses
-{\sc xml}. To build a software component, it dynamically downloads Java libraries
-and Maven plug-ins from the Maven central repository,
-and stores them in a local cache. The repository can be updated with
-new projects and also with new versions of existing projects.
+hosted by the Apache Software Foundation.
+It uses {\sc xml} to describe the software project being built, its dependencies
+on other external modules, the build order, and required plug-ins. 
 
 First, we scanned the Maven repository for appropriate {\sc jar}s and created a
 list that included them. We discuss the {\sc jar} selection process in the next 
@@ -357,8 +350,7 @@ handled it locally to retrieve a list of all the names of the project versions
 that existed in it. A project version can be uniquely identified by the triplet:
 {\it group id}, {\it artifact id} and {\it version}.
 
-FindBugs is an open source static analysis tool that
-searches for software bugs. It works by examining the compiled Java virtual
+FindBugs works by examining the compiled Java virtual
 machine bytecodes of the programs it checks, using the bytecode engineering
 library ({\sc bcel}).
 To detect a bug, FindBugs uses various formal methods like
@@ -369,7 +361,7 @@ in variables or on the stack.
 Since FindBugs analyses applications written in the Java
 programming language, and the Maven repository
 hosts projects from languages other than Java such as Scala, Groovy,
-Clojure etc. we filtered out such projects by performing a series of checks in
+Clojure, etc., we filtered out such projects by performing a series of checks in
 the repository data and metadata.
 
 In addition, we implemented a series of audits in the worker scripts that
@@ -486,7 +478,8 @@ and 45,559 coming from the second.
 
 \begin{table*}[t]
 \centering
-\caption{Number of Project Releases that Contain at Least One Severe Security Bug}
+\caption{Number of Project Releases that Contain at Least One Security
+  High Bug}
 \label{tbl:sev}
 \leavevmode
 	\begin{tabular}{p{31em} r}
@@ -528,11 +521,11 @@ literature~\cite{SH09}.
 \end{figure}
 
 Another observation involves bugs that we could call {\it
-severe} and they are a subset of the {\it Security} category.
+Security High} and they are a subset of the {\it Security} category.
 Such bugs are related to vulnerabilities that appear due to the lack of user-input
 validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12} and
 Cross-Site Scripting~\cite{WS08}.
-Note that to exploit such vulnerabilities, a malicious user does
+To exploit such vulnerabilities, a malicious user does
 not have to know anything about the application internals. For all the other
 bugs, another program should be written to incorporate references to
 mutable objects, access non-final fields, etc.
@@ -545,18 +538,16 @@ of releases where at least one of these bugs exists. In essence, 5,501 releases
 least one severe security bug. Given the fact that other projects include these
 versions as their dependencies, they are automatically rendered vulnerable if
 they use the code fragments that include the defects.
-In the following section
-we provide results separately for this subcategory which we call {\it Security High}.
 The remaining bugs of the {\it Security} category
 are grouped together with the bugs of the {\it Malicious Code} category
 in another subcategory that we call {\it Security Low}.
-Note that this categorization was done specifically for this research to point out the
+This categorization was done specifically to point out the
 behaviour of bugs that currently top the corresponding lists of most
 security providers.\footnote{\url{http://cwe.mitre.org/top25/index.html}}
 
-{\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow".
+{\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow''.
 In a context like this, we expect that
-the project versions that are dependencies to many other projects,
+the project versions that are dependencies to many other projects
 would have a small number of security
 bugs. To examine this variation of the Linus's Law and highlight the
 {\it domino effect}~\cite{TH04} we did the
@@ -579,7 +570,8 @@ are not represented in the graph. After creating the graph, we ran the PageRank
 algorithm~\cite{BP98} on it and retrieved all PageRanks for every node. Then we
 examined the security bugs of the fifty most popular nodes based on their PageRank.
 Contrary to Linus's Law, thirty three of them contained bugs coming from the
-{\it Security Low} subcategory, while two of them contained severe bugs.
+{\it Security Low} subcategory, while two of them contained {\it
+  Security High} bugs.
 Twenty five of them were latest versions at the time. This also highlights
 the domino effect.
 %No matter how well a programmer secures a software component
@@ -628,9 +620,9 @@ project versions. In most cases, a bug count does not change between
 versions; but when it does change, it may change upwards or downwards.
 Note also the spectacular changes of introducing or removing thousands
 of defects; this may be the result of doing and undoing a pervasive
-code change that falls foul of some bug identification rule.
+code change that runs foul of some bug identification rule.
 
-\begin{table}[t]
+\begin{table}[tphp]
     \centering
     \caption{Correlations between Version and Defects Count}
     \label{tbl:bugsperversion}
@@ -654,19 +646,20 @@ code change that falls foul of some bug identification rule.
 
 To examine the relation between the persistence of different kinds of
 bugs, and of security bugs in particular, we used as a persistence
-indicator the number of versions a bug remains open in a project.
-To ``tag" a bug we created a bug identifier by using
-the type of the bug, the method name and the class name in which
-the bug was found in. We chose not to use the line number
-of the location of the bug since it could change from version
-to version and after a possible code refactoring.
-We grouped the persistence numbers by bug categories and then performed a
-Mann-Whitney $U$~\cite{HM98} test among all bug category pairs. The results are
-presented in Table~\ref{tbl:bug_persistence}. Cells in brackets show
-pairs where no statistically significant difference was found.
+indicator the number of versions a bug remains open in a project. To
+``tag" a bug we created a bug identifier by using the type of the bug,
+the method name and the class name in which the bug was found in. We
+chose not to use the line number of the location of the bug since it
+could change from version to version and after a possible code
+refactoring. We grouped the persistence numbers by bug categories and
+then performed a Mann-Whitney $U$~\cite{HM98} test among all bug
+category pairs. The results are presented in
+Table~\ref{tbl:bug_persistence} (at the end of this paper). Cells in
+brackets show pairs where no statistically significant difference was
+found.
 
 In general, although the average number of versions bugs in different
-bug categories remained opened was statistically different in many
+bug categories that remained open was statistically different in many
 cases, the difference is not spectacular. \textbf{In all cases a bug persists
 on average between two and three versions}, with the difference being
 in the decimal digits.
@@ -685,13 +678,19 @@ tops the list.
 Given that, we could say that it would be productive to search for and fix
 security bugs even if a project grows bigger.
 
+\begin{table}[hbt]
+    \centering
+    \caption{Correlations between {\sc jar} size and Defects Count}
+    \label{tbl:jarsizecorr}
+    \input{jarsizecorr.tex}
+\end{table}
+
 \subsubsection{Security Bugs {\sc vs} Other Bug Categories}
 
 To see whether bugs flock together we performed pairwise correlations
 between all bug categories. We calculated the correlations between the
 number of distinct bugs that appeared in a project throughout its
-lifetime. The results can be seen in % Table~\ref{tbl:corrmatrix} and
-Figure~\ref{fig:corrplot}. We found significant, but not always
+lifetime, see Figure~\ref{fig:corrplot}. We found significant, but not always
 strong, correlations between all pairs. In general, the {\it Security
   High} category showed the weakest correlations with the other
 categories. Our results show that in general \textbf{bugs do flock together}.
@@ -718,36 +717,13 @@ special kind of blunder to make it a security hazard.
   \label{fig:corrplot}
 \end{figure}
 
-\begin{landscape}
-  \begin{table}
-    \setlength{\extrarowheight}{0.10cm}
-    \caption{Bug Persistence Comparison}
-    \label{tbl:bug_persistence}
-    \resizebox{0.95\columnwidth}{!}{
-    \input{bug_persistence.tex}}\\
-    The matrix presents pairwise Mann-Whitney $U$ test results
-    between the different bug categories. Each cell contains the test
-    result (the value of $U$), the $p$-value, the average for each
-    category and the sample size for each category. Cells in brackets show
-    pairs where no statistically significant difference was found.
-  \end{table}
-\end{landscape}
-
-\begin{table}[t]
-    \centering
-    \caption{Correlations between {\sc jar} size and Defects Count}
-    \label{tbl:jarsizecorr}
-    \input{jarsizecorr.tex}
-\end{table}
-
 \section{Conclusions and Future Work}
 \label{sec:con}
 
-In this work we analyzed a large software repository to examine the
-behavior of security bugs. Specifically, we analysed more than 260GB
-of interdependent project versions to see how security bugs evolve
-over time, their persistence, their relation with other bug
-categories, and their relationship with size in terms of bytecode.
+We analysed more than 260GB of interdependent project versions to see
+how security bugs evolve over time, their persistence, their relation
+with other bug categories, and their relationship with size in terms
+of bytecode.
 
 Our primary hypothesis was that security bugs, and especially severe
 ones, would be corrected as projects evolve. We found that, although
@@ -768,7 +744,7 @@ bug categories existing in a large ecosystem. Finally, we highlighted the
 domino effect, and showed evidence that indicates that Linus's Law does not
 apply in the case of the security bugs.
 
-Contrary to the approaches that examine all versions
+Contrary to the approaches that examine versions
 formed after every change that has been committed to the repository,
 our observations are made from a different perspective.
 The versions examined in this work were actual releases
@@ -782,11 +758,11 @@ Furthermore, the fact that projects have their own idiosyncrasies concerning
 security bugs, could help us answer questions like: what are the common
 characteristics of the projects where security bugs increase over time?
 
-Future work on our approach could also involve the observation of other ecosystems, that
-serve different languages, in the same manner such as, Python's PyPY
-(Python Package Index),\footnote{\url{https://pypi.python.org/pypi}}
-Perl's {\sc cpan} (Comprehensive Perl Archive Network),\footnote{\url{http://www.cpan.org/}}
-and Ruby's RubyGems.\footnote{\url{http://rubygems.org/}}
+Future work on our approach could also involve the observation of
+other ecosystems, that serve different languages, in the same manner
+such as, Python's PyPY (Python Package Index), Perl's {\sc cpan}
+(Comprehensive Perl Archive Network), and Ruby's
+RubyGems.
 
 Our data and code will be publicly available upon publication.
 
@@ -803,5 +779,20 @@ Entrepreneurship" ({\sc opce} II), Measure ``{\sc cooperation}" (Action I).
 
 \bibliographystyle{abbrv}
 \bibliography{evol}  
+
+\begin{landscape}
+  \begin{table}
+    \setlength{\extrarowheight}{0.10cm}
+    \caption{Bug Persistence Comparison}
+    \label{tbl:bug_persistence}
+    \resizebox{0.95\columnwidth}{!}{
+    \input{bug_persistence.tex}}\\
+    The matrix presents pairwise Mann-Whitney $U$ test results
+    between the different bug categories. Each cell contains the test
+    result (the value of $U$), the $p$-value, the average for each
+    category and the sample size for each category. Cells in brackets show
+    pairs where no statistically significant difference was found.
+  \end{table}
+\end{landscape}
 
 \end{document}
