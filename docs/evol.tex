@@ -552,8 +552,13 @@ code change that falls foul of some bug identification rule.
 
 To examine the relation between the persistence of different kinds of
 bugs, and of security bugs in particular, we used as a persistence
-indicator the number of versions a bug remains open in a project. We
-grouped the persistence numbers by bug categories and then performed a
+indicator the number of versions a bug remains open in a project.
+To ``tag" a bug we created a bug identifier by using
+the type of the bug, the method name and the class name in which
+the bug was found in. We chose not to use the line number
+of the location of the bug since it could change from version
+to version and after a possible code refactoring.
+We grouped the persistence numbers by bug categories and then performed a
 Mann-Whitney $U$~\cite{HM98} test among all bug category pairs. The results are
 presented in Table~\ref{tbl:bug_persistence}. Cells in brackets show
 pairs where no statistically significant difference was found.
@@ -574,6 +579,9 @@ project and version. The results, all statistically significant ($p
   Security High} category stands out by having a remarkably lower
 effect than the other categories}, even {\it Security Low} that nearly
 tops the list.
+% dds proposed the following:
+Given that, we could say that it would be productive to search for and fix
+security bugs even if a project grows bigger.
 
 \subsubsection{Security Bugs {\sc vs} Other Bug Categories}
 
@@ -750,7 +758,8 @@ we found that security
 bugs are not eliminated in a way that is particularly different from the other bugs.
 Also, having an average of two to three versions persistence in a sample where 60\%
 of the projects have three versions, is not a positive result especially in the
-case of the {\it Security High} bugs. Concerning the relation between severe security bugs and a project's size
+case of the {\it Security High} bugs. Concerning the relation between
+severe security bugs and a project's size
 we showed that they are not proportionally related. Furthermore, the
 pairwise correlations between all categories indicated that even though all the other
 categories are related, severe bugs do not appear together with the other bugs.
