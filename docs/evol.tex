@@ -82,7 +82,7 @@ weakness could lead to a security breach with unfortunate consequences in
 different layers, like databases, native code, applications, libraries and
 others. Despite the significant effort to detect and eliminate such
 bugs~\cite{SZ12}, little attention has been paid to study them in relation to
-software evolution~\cite{L96,LRWPT97,IB06,RGMA06}. 
+software evolution~\cite{L96,LRWPT97}. 
 One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
 inspection of the program's source or object code without executing
@@ -93,7 +93,7 @@ paper we present how we used a large software ecosystem to analyse how different
 types of security vulnerabilities are related to the evolving software packages.
 For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
-research~\cite{AP10,HP07,HP04,HW08,SHP06}.
+research~\cite{AP10,HP07,HW08,SHP06}.
 Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the
 {\it Maven Central Repository}\footnote{\url{http://mvnrepository.com/}}
@@ -168,10 +168,112 @@ are related with performance, coding practices, and product stability.
 \end{itemize}
 
 In the rest of this paper we
+outline related work (Section \ref{sec:rel}),
 describe the processing of our data and our experiment (Section \ref{sec:meth}),
 present and discuss the results we obtained (Section \ref{sec:res}),
-outline related work (Section \ref{sec:rel}),
 and end up with a conclusion and directions for future work (Section \ref{sec:con}).
+
+\section{Related Work}
+\label{sec:rel}
+
+There are numerous methods for mining software repositories in the context
+of software evolution~\cite{KCM07}. In this section we focus on the ones
+that highlight the relationship between software bugs and evolution and try to
+extract useful conclusions. The key idea behind this is
+similar to ours: the combination of information like bug descriptions,
+documentation and others with the information retrieved from either the source
+or object code of a project version.
+
+{\it Refactoring identification} through software evolution is an approach used to
+relate refactorings with software bugs. Wei{\ss}gerber et al. found that a high
+ratio of refactorings is usually followed by an increasing ratio of bug
+reports~\cite{WD06}. In addition, they indicated that software bugs are sometimes introduced
+after an incomplete refactoring~\cite{GW05}.
+Ratzinger et al.~\cite{RSG08} showed that the number of bugs decreases, when the number of
+refactorings increases. Finally, Kim M. et al.~\cite{KCK11} indicated that {\sc api}-level
+refactorings aid bug fixes.
+
+{\it Micro patterns}, proposed by Kim et al.~\cite{KPW06}
+detect bug-prone patterns among source code. Micro patterns describe programming
+idioms like inheritance, data management, immutability and others. The approach
+involves the examination of all revisions of three open-source projects to extract bug
+introduction rates for each pattern. Gil et al.~\cite{GM05} analysed the
+prevalence of micro patterns across five Sun {\sc jdk} versions to conclude that
+pattern prevalence tends to be the same in software collections.
+
+{\it Querying techniques} are used to answer a broad range of questions
+regarding the evolution history of a project~\cite{HG05}. Bhattacharya et
+al.~\cite{BN11,B11} proposed a framework that is based upon
+recursively enumerable languages. The framework can correlate software
+bugs with developers in various ways. For instance, return the list of
+bugs fixed by a specific developer. Fischer et al.~\cite{FPG03} proposed
+an approach for populating a release history database that combines code
+information with bug tracking data. In this way, a developer can couple files
+that contain common bugs, estimate code maturity with respect to the bugs
+and others. The ``Ultimate Debian Database''~\cite{NZ10} is an {\sc sql}-based
+framework that integrates information about the Debian project from various
+sources to answer queries related to software bugs and source code.
+
+D'Ambros et al. have used {\it bug history analysis} to detect
+the critical components of a project~\cite{D08}. This is done by using an
+evolutionary meta-model~\cite{DL08}. The same approach was
+also used by Zimmermann et al.~\cite{ZNA08} to check the correlation
+of bugs with software properties like code complexity, process quality and others
+and predict future properties.
+
+The evolution of software artifacts has also been analysed to {\it reduce the false
+alarms} of the various static analysis tools. To achieve this, Spacco et
+al.~\cite{SHP06} introduced {\it pairing} and {\it warning signatures}. In the
+former, they tried to pair sets of bugs between versions in order to find
+similar patterns. In the latter, they computed a signature for every bug. This
+signature contained elements like the name of the class where the bug was found,
+the method and others. Then they searched for similar signatures between
+versions. In their research they also studied the evolution of 116 sequential
+builds of the Sun Java Sevelopment Kit ({\sc jdk}). Their findings indicated that
+high priority bugs are fixed over time. To improve the precision of bug
+detection, Kim et al.~\cite{KE07b,KE07} proposed a history-based warning
+prioritization algorithm by mining the history of bug-fixes of three
+different projects. The algorithm was based on the following hypothesis: if a
+bug that belongs to a specific category is eliminated by a code change, then
+this warning category is important. Working towards the same direction, Heckman
+et al.~\cite{HW09,HW08} have introduced benchmarks that use specific
+correlation algorithms and classification techniques to evaluate alert
+prioritization approaches.
+
+Lu et al.~\cite{LAAL13} studied the {\it evolution of file-system code}.
+Specifically, they analysed the changes of Linux file-system patches to extract
+bug patterns and categorize bugs based on their impact. Their findings
+indicated that the number of file-system bugs does not die down over time. By
+categorizing bugs they also showed the frequency of specific bugs in specific
+components.
+
+Completing the above approaches, our work focuses on the subset of security bugs.
+Focusing on such bugs is not a new idea. Massacci et al.~\cite{MNN11} observed
+the evolution of software defects by examining six major versions of Firefox.
+To achieve this they created a database schema that contained information
+coming from the ``Mozilla Firefox-related Security Advisories'' ({\sc mfsa})
+list,\footnote{\url{http://www.mozilla.org/projects/security/known-vulnerabilities.html}}
+Bugzilla entries and others. Their findings indicated that security bugs are
+persistent over time. They also showed that there are many web users that use
+old versions of Firefox, meaning that old attacks will continue to work.
+Zaman et al.~\cite{ZAH11} focused again on Firefox to study the relation of
+security bugs with performance bugs. This was also done by analysing the project's
+Bugzilla. Their research presented evidence that security bugs require more experienced developers
+to be fixed. In addition, they suggested that security bug fixes are more complex than the
+fixes of performance and other bugs.
+Shahzad et al.~\cite{SSL12} analysed large sets of vulnerability data-sets to observe
+various features of the vulnerabilities that they considered critical. Such features
+were the functionality and the criticality of the defects. Their analysis
+included the observation of vulnerability disclosures, the behavior of
+hackers in releasing exploits for vulnerabilities, patching and others. In
+their findings they highlighted the most exploited defects and showed that
+the percentage of remotely exploitable vulnerabilities has gradually increased
+over the years. Finally, Edwards et al.~\cite{EC12} have recently conducted
+a similar study to ours in which they have considered only four projects.
+Their results demonstrate that the number of exploitable bugs, does not
+always improve with each new release and that the rate of discovery of
+exploitable bugs begins to drop three to five years after the
+initial release.
 
 \section{Methodology}
 \label{sec:meth}
@@ -182,14 +284,6 @@ fits on the data coming from the Maven repository, for reasons that we will desc
 
 \subsection{Experiment}
 \label{sec:exp}
-
-\begin{figure}[t]
-  \begin{center}
-    \includegraphics[scale=0.75]{figures/arch.pdf}
-  \end{center}
-  \caption{The Data Processing Architecture}
-  \label{fig:arch}
-\end{figure}
 
 The goal of our experiment was to retrieve all the bugs that FindBugs reports,
 from all the project versions existing on the Maven repository (in the Maven
@@ -247,6 +341,14 @@ was notified and the next task was requested. This process was executed for
 all the available {\sc jar}s in the task queue. A schematic representation of
 the data processing architecture can be seen in Figure~\ref{fig:arch}.
 
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[scale=0.75]{figures/arch.pdf}
+  \end{center}
+  \caption{The Data Processing Architecture}
+  \label{fig:arch}
+\end{figure}
+
 \subsection{Data Provenance}
 \label{sec:data}
 
@@ -270,6 +372,24 @@ hosts projects from languages other than Java such as Scala, Groovy,
 Clojure etc. we filtered out such projects by performing a series of checks in
 the repository data and metadata.
 
+In addition, we implemented a series of audits in the worker scripts that
+checked if the {\sc jar}s are valid in terms of implementation. For instance,
+for every {\sc jar} the worker checked if there were any {\it .class} files
+before invoking FindBugs. After the project filtering, we narrowed down
+our data set to 17,505 projects with 115,214 versions.
+Table~\ref{tbl:repository} summarises the data set information and
+provides the basic descriptive statistic measurements. The distribution of version
+count among the selected projects is presented in Figure~\ref{fig:version-count}.
+
+The statistical measurements presented in Table~\ref{tbl:repository}
+indicate that we have 17,505 projects and the data set's median is 3,
+which means that almost 50\% (8,753 projects) of the project
+population have 1 to 3 versions. In general, most projects have a few
+number of versions, there are some projects with ten versions and
+only a few with hundreds of versions. The maximum number of versions
+for a project is 338. The 3$^{rd}$ quartile measurement also indicated
+that 75\% (13,129) of the projects have a maximum of 8 versions.
+
 \begin{table}[t]
 \centering
 \caption{Descriptive Statistics Measurements for the Maven Repository}
@@ -291,30 +411,12 @@ Range (over versions) & 337\\
 \end{tabular}
 \end{table}
 
-In addition, we implemented a series of audits in the worker scripts that
-checked if the {\sc jar}s are valid in terms of implementation. For instance,
-for every {\sc jar} the worker checked if there were any {\it .class} files
-before invoking FindBugs. After the project filtering, we narrowed down
-our data set to 17,505 projects with 115,214 versions.
-Table~\ref{tbl:repository} summarises the data set information and
-provides the basic descriptive statistic measurements. The distribution of version
-count among the selected projects is presented in Figure~\ref{fig:version-count}.
-
 \begin{figure}[t]
 	\centering
 	\includegraphics[scale=0.42]{version_count.pdf}
 	\caption{Distribution of Version Count Among Project Population}
 	\label{fig:version-count}
 \end{figure}
-
-The statistical measurements presented in Table~\ref{tbl:repository}
-indicate that we have 17,505 projects and the data set's median is 3,
-which means that almost 50\% (8,753 projects) of the project
-population have 1 to 3 versions. In general, most projects have a few
-number of versions, there are some projects with ten versions and
-only a few with hundreds of versions. The maximum number of versions
-for a project is 338. The 3$^{rd}$ quartile measurement also indicated
-that 75\% (13,129) of the projects have a maximum of 8 versions.
 
 \subsection{Threats to Validity}
 \label{sec:threats}
@@ -340,6 +442,10 @@ Java enforces bound checking at runtime.
 
 \section{Results and Analysis}
 \label{sec:res}
+
+Our findings can be analysed at two levels. First, we discuss some
+primary observations concerning the security bugs of the Maven repository as a whole.
+Then, we provide a comprehensive analysis of the results and highlight our key findings.
 
 \begin{table*}[t]
 \centering
@@ -369,10 +475,6 @@ and others. \\
 \end{tabular}
 \end{table*}
 
-Our findings can be analysed at two levels. First, we discuss some
-primary observations concerning the security bugs of the Maven repository as a whole.
-Then, we provide a comprehensive analysis of the results and highlight our key findings.
-
 \subsection{Overview and Initial Results}
 \label{sec:overview}
 
@@ -387,7 +489,7 @@ and 45,559 coming from the second.
 \caption{Number of Project Releases that Contain at Least One Severe Security Bug}
 \label{tbl:sev}
 \leavevmode
-	\begin{tabular}{p{24em} r}
+	\begin{tabular}{p{31em} r}
 	\hline
 	Bug Description & Number of Project Releases\\
  	\hline
@@ -491,13 +593,6 @@ Here, we present our key findings concerning the evolution of security bugs.
 
 \subsubsection{How Security Bugs Evolve Over Time}
 
-\begin{table}[t]
-    \centering
-    \caption{Correlations between Version and Defects Count}
-    \label{tbl:bugsperversion}
-    \input{bugsperversion.tex}
-\end{table}
-
 The relation between bugs and time can be traced from the number of
 bugs per category in each project version. We can then calculate the
 Spearman correlations between the defects count and the ordinal
@@ -534,6 +629,13 @@ versions; but when it does change, it may change upwards or downwards.
 Note also the spectacular changes of introducing or removing thousands
 of defects; this may be the result of doing and undoing a pervasive
 code change that falls foul of some bug identification rule.
+
+\begin{table}[t]
+    \centering
+    \caption{Correlations between Version and Defects Count}
+    \label{tbl:bugsperversion}
+    \input{bugsperversion.tex}
+\end{table}
 
 \begin{figure*}[p]
   \centering
@@ -638,108 +740,6 @@ special kind of blunder to make it a security hazard.
     \input{jarsizecorr.tex}
 \end{table}
 
-\section{Related Work}
-\label{sec:rel}
-
-There are numerous methods for mining software repositories in the context
-of software evolution~\cite{KCM07}. In this section we focus on the ones
-that highlight the relationship between software bugs and evolution and try to
-extract useful conclusions. The key idea behind this is
-similar to ours: the combination of information like bug descriptions,
-documentation and others with the information retrieved from either the source
-or object code of a project version.
-
-{\it Refactoring identification} through software evolution is an approach used to
-relate refactorings with software bugs. Wei{\ss}gerber et al. found that a high
-ratio of refactorings is usually followed by an increasing ratio of bug
-reports~\cite{WD06}. In addition, they indicated that software bugs are sometimes introduced
-after an incomplete refactoring~\cite{GW05}.
-Ratzinger et al.~\cite{RSG08} showed that the number of bugs decreases, when the number of
-refactorings increases. Finally, Kim M. et al.~\cite{KCK11} indicated that {\sc api}-level
-refactorings aid bug fixes.
-
-{\it Micro patterns}, proposed by Kim et al.~\cite{KPW06}
-detect bug-prone patterns among source code. Micro patterns describe programming
-idioms like inheritance, data management, immutability and others. The approach
-involves the examination of all revisions of three open-source projects to extract bug
-introduction rates for each pattern. Gil et al.~\cite{GM05} analysed the
-prevalence of micro patterns across five Sun {\sc jdk} versions to conclude that
-pattern prevalence tends to be the same in software collections.
-
-{\it Querying techniques} are used to answer a broad range of questions
-regarding the evolution history of a project~\cite{HG05}. Bhattacharya et
-al.~\cite{BN11,B11} proposed a framework that is based upon
-recursively enumerable languages. The framework can correlate software
-bugs with developers in various ways. For instance, return the list of
-bugs fixed by a specific developer. Fischer et al.~\cite{FPG03} proposed
-an approach for populating a release history database that combines code
-information with bug tracking data. In this way, a developer can couple files
-that contain common bugs, estimate code maturity with respect to the bugs
-and others. The ``Ultimate Debian Database''~\cite{NZ10} is an {\sc sql}-based
-framework that integrates information about the Debian project from various
-sources to answer queries related to software bugs and source code.
-
-D'Ambros et al. have used {\it bug history analysis} to detect
-the critical components of a project~\cite{D08}. This is done by using an
-evolutionary meta-model~\cite{DL08}. The same approach was
-also used by Zimmermann et al.~\cite{ZNA08} to check the correlation
-of bugs with software properties like code complexity, process quality and others
-and predict future properties.
-
-The evolution of software artifacts has also been analysed to {\it reduce the false
-alarms} of the various static analysis tools. To achieve this, Spacco et
-al.~\cite{SHP06} introduced {\it pairing} and {\it warning signatures}. In the
-former, they tried to pair sets of bugs between versions in order to find
-similar patterns. In the latter, they computed a signature for every bug. This
-signature contained elements like the name of the class where the bug was found,
-the method and others. Then they searched for similar signatures between
-versions. In their research they also studied the evolution of 116 sequential
-builds of the Sun Java Sevelopment Kit ({\sc jdk}). Their findings indicated that
-high priority bugs are fixed over time. To improve the precision of bug
-detection, Kim et al.~\cite{KE07b,KE07} proposed a history-based warning
-prioritization algorithm by mining the history of bug-fixes of three
-different projects. The algorithm was based on the following hypothesis: if a
-bug that belongs to a specific category is eliminated by a code change, then
-this warning category is important. Working towards the same direction, Heckman
-et al.~\cite{HW09,HW08} have introduced benchmarks that use specific
-correlation algorithms and classification techniques to evaluate alert
-prioritization approaches.
-
-Lu et al.~\cite{LAAL13} studied the {\it evolution of file-system code}.
-Specifically, they analysed the changes of Linux file-system patches to extract
-bug patterns and categorize bugs based on their impact. Their findings
-indicated that the number of file-system bugs does not die down over time. By
-categorizing bugs they also showed the frequency of specific bugs in specific
-components.
-
-Completing the above approaches, our work focuses on the subset of security bugs.
-Focusing on such bugs is not a new idea. Massacci et al.~\cite{MNN11} observed
-the evolution of software defects by examining six major versions of Firefox.
-To achieve this they created a database schema that contained information
-coming from the ``Mozilla Firefox-related Security Advisories'' ({\sc mfsa})
-list,\footnote{\url{http://www.mozilla.org/projects/security/known-vulnerabilities.html}}
-Bugzilla entries and others. Their findings indicated that security bugs are
-persistent over time. They also showed that there are many web users that use
-old versions of Firefox, meaning that old attacks will continue to work.
-Zaman et al.~\cite{ZAH11} focused again on Firefox to study the relation of
-security bugs with performance bugs. This was also done by analysing the project's
-Bugzilla. Their research presented evidence that security bugs require more experienced developers
-to be fixed. In addition, they suggested that security bug fixes are more complex than the
-fixes of performance and other bugs.
-Shahzad et al.~\cite{SSL12} analysed large sets of vulnerability data-sets to observe
-various features of the vulnerabilities that they considered critical. Such features
-were the functionality and the criticality of the defects. Their analysis
-included the observation of vulnerability disclosures, the behavior of
-hackers in releasing exploits for vulnerabilities, patching and others. In
-their findings they highlighted the most exploited defects and showed that
-the percentage of remotely exploitable vulnerabilities has gradually increased
-over the years. Finally, Edwards et al.~\cite{EC12} have recently conducted
-a similar study to ours in which they have considered only four projects.
-Their results demonstrate that the number of exploitable bugs, does not
-always improve with each new release and that the rate of discovery of
-exploitable bugs begins to drop three to five years after the
-initial release.
-
 \section{Conclusions and Future Work}
 \label{sec:con}
 
@@ -792,8 +792,8 @@ Our data and code will be publicly available upon publication.
 
 \section{Acknowledgments}
 This research has been co-financed by the European Union (European Social Fund
---– {\sc esf}) and Greek national funds through the Operational Program
-``Education and Lifelong Learning'' of the National Strategic Reference Framework –
+- {\sc esf}) and Greek national funds through the Operational Program
+``Education and Lifelong Learning'' of the National Strategic Reference Framework -
 Research Funding Program: Heracleitus II. Investing in knowledge society
 through the {\sc esf}.
 
