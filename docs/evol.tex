@@ -303,12 +303,12 @@ Table~\ref{tbl:repository} summarises the data set information and
 provides the basic descriptive statistic measurements. The distribution of version
 count among the selected projects is presented in Figure~\ref{fig:version-count}.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 	\centering
-	\includegraphics[scale=0.45]{version_count.pdf}
+	\includegraphics[scale=0.42]{version_count.pdf}
 	\caption{Distribution of Version Count Among Project Population}
 	\label{fig:version-count}
-\end{figure*}
+\end{figure}
 
 The statistical measurements presented in Table~\ref{tbl:repository}
 indicate that we have 17,505 projects and the data set's median is 3,
@@ -421,12 +421,12 @@ literature~\cite{SH09}.
 % This goes along with the relationship between the size of an artifact and it's
 % bugs that is presented in the upcoming section.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 	\centering
-	\includegraphics[scale=0.45]{bug_percent}
+	\includegraphics[scale=0.39]{bug_percent}
 	\caption{Bug Percentage in Maven Repository}
 	\label{fig:bug-per} 
-\end{figure*}
+\end{figure}
 
 Another observation involves bugs that we could call {\it
 severe} and they are a subset of the {\it Security} category.
@@ -545,6 +545,7 @@ code change that falls foul of some bug identification rule.
   \caption{Histograms of correlations between bug counts and version
     ordinals per project. In brackets the total population size and
     the number of no correlation instances.}
+  \label{fig:bugsversionscorr}
   \centering
   \includegraphics[scale=0.35]{bugdiffs}
   \caption{Changes in bug counts between versions.}
@@ -605,7 +606,7 @@ tops the list.
 To see whether bugs flock together we performed pairwise correlations
 between all bug categories. We calculated the correlations between the
 number of distinct bugs that appeared in a project throughout its
-lifetime. The results can be seen in Table~\ref{tbl:corrmatrix} and
+lifetime. The results can be seen in % Table~\ref{tbl:corrmatrix} and
 Figure~\ref{fig:corrplot}. We found significant, but not always
 strong, correlations between all pairs. In general, the {\it Security
   High} category showed the weakest correlations with the other
@@ -616,22 +617,22 @@ upon projects in swarms of different kinds. Bugs of the {\it Security
 associated with other bugs, or only weakly so. Perhaps it takes a
 special kind of blunder to make it a security hazard.
 
-\begin{table*}[t]
-    \centering
-    \caption{Correlation matrix}
-    \label{tbl:corrmatrix}
-    \input{corrmatrix.tex}
-    \\
-    \small The matrix presents pairwise correlations between the
-        different bug categories.
-\end{table*}
+%\begin{table*}[t]
+%    \centering
+%    \caption{Correlation matrix}
+%    \label{tbl:corrmatrix}
+%    \input{corrmatrix.tex}
+%    \\
+%    \small The matrix presents pairwise correlations between the
+%        different bug categories.
+%\end{table*}
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \includegraphics[scale=0.6]{corrplot.pdf}
+  \includegraphics[scale=0.47]{corrplot.pdf}
   \caption{Correlation matrix plot for bug categories}
   \label{fig:corrplot}
-\end{figure*}
+\end{figure}
 
 \section{Related Work}
 \label{sec:rel}
