@@ -16,20 +16,17 @@
 
 \author{
 % 1st. author
-\alignauthor
-Dimitris Mitropoulos\\
+\alignauthor Dimitris Mitropoulos\\
        \affaddr{Department of Management Science and Technology}\\
        \affaddr{Athens University of Economics and Business}\\
        \email{dimitro@aueb.gr}
 % 2nd. author
-\alignauthor
-Vassilios Karakoidas\\
+\alignauthor Vassilios Karakoidas\\
        \affaddr{Department of Management Science and Technology}\\
        \affaddr{Athens University of Economics and Business}\\
        \email{bkarak@aueb.gr}
 % 3rd. author
-\alignauthor
-Panos Louridas\\
+\alignauthor Panos Louridas\\
        \affaddr{Department of Management Science and Technology}\\
        \affaddr{Athens University of Economics and Business}\\
        \email{louridas@aueb.gr}
@@ -455,7 +452,6 @@ Note that this categorization was done specifically for this research to point o
 behaviour of bugs that currently top the corresponding lists of most
 security providers.\footnote{\url{http://cwe.mitre.org/top25/index.html}}
 
-
 {\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow".
 In a context like this, we expect that
 the project versions that are dependencies to many other projects,
@@ -568,21 +564,6 @@ cases, the difference is not spectacular. \textbf{In all cases a bug persists
 on average between two and three versions}, with the difference being
 in the decimal digits.
 
-\begin{landscape}
-  \begin{table}
-    \setlength{\extrarowheight}{0.10cm}
-    \caption{Bug Persistence Comparison}
-    \label{tbl:bug_persistence}
-    \resizebox{0.95\columnwidth}{!}{
-    \input{bug_persistence.tex}}\\
-    The matrix presents pairwise Mann-Whitney $U$ test results
-    between the different bug categories. Each cell contains the test
-    result (the value of $U$), the $p$-value, the average for each
-    category and the sample size for each category. Cells in brackets show
-    pairs where no statistically significant difference was found.
-  \end{table}
-\end{landscape}
-
 \subsubsection{The Relation of Defects with the size of a {\sc jar}}
 
 We explored the relation between defects with the size of a project
@@ -593,13 +574,6 @@ project and version. The results, all statistically significant ($p
   Security High} category stands out by having a remarkably lower
 effect than the other categories}, even {\it Security Low} that nearly
 tops the list.
-
-\begin{table}[t]
-    \centering
-    \caption{Correlations between {\sc jar} size and Defects Count}
-    \label{tbl:jarsizecorr}
-    \input{jarsizecorr.tex}
-\end{table}
 
 \subsubsection{Security Bugs {\sc vs} Other Bug Categories}
 
@@ -633,6 +607,28 @@ special kind of blunder to make it a security hazard.
   \caption{Correlation matrix plot for bug categories}
   \label{fig:corrplot}
 \end{figure}
+
+\begin{landscape}
+  \begin{table}
+    \setlength{\extrarowheight}{0.10cm}
+    \caption{Bug Persistence Comparison}
+    \label{tbl:bug_persistence}
+    \resizebox{0.95\columnwidth}{!}{
+    \input{bug_persistence.tex}}\\
+    The matrix presents pairwise Mann-Whitney $U$ test results
+    between the different bug categories. Each cell contains the test
+    result (the value of $U$), the $p$-value, the average for each
+    category and the sample size for each category. Cells in brackets show
+    pairs where no statistically significant difference was found.
+  \end{table}
+\end{landscape}
+
+\begin{table}[t]
+    \centering
+    \caption{Correlations between {\sc jar} size and Defects Count}
+    \label{tbl:jarsizecorr}
+    \input{jarsizecorr.tex}
+\end{table}
 
 \section{Related Work}
 \label{sec:rel}
