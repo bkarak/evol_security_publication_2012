@@ -77,12 +77,12 @@ Security, Maven, FindBugs.
 \section{Introduction}
 
 A security bug is a programming error that introduces a potentially exploitable
-weakness into a computer system~\cite{SSL12,TJBD11,M06}. This
+weakness into a computer system~\cite{SSL12}. This
 weakness could lead to a security breach with unfortunate consequences in
 different layers, like databases, native code, applications, libraries and
 others. Despite the significant effort to detect and eliminate such
-bugs~\cite{SZ12}, little attention has been paid to study them in relation to
-software evolution~\cite{L96,LRWPT97}. 
+bugs, little attention has been paid to study them in relation to
+software evolution~\cite{LRWPT97}. 
 One of the most common approaches to identify security bugs is
 {\it static analysis}~\cite{CW07}. This kind of analysis involves the
 inspection of the program's source or object code without executing
@@ -94,7 +94,7 @@ relationship of different types of security vulnerabilities to
 evolving software packages.
 For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
-research~\cite{AP10,HP07,HW08,SHP06}.
+research~\cite{AP10,HP07,SHP06}.
 Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the
 {\it Maven Central Repository}\footnote{\url{http://mvnrepository.com/}}
@@ -107,7 +107,7 @@ software defects. This is because compared to other bug categories,
 failures due to security bugs have two distinct features:
 they can severely affect an organization's infrastructure~\cite{SZ12}, and
 they can cause significant financial damage to
-an organization~\cite{TH04,BCL08,R06}. 
+an organization~\cite{TH04,BCL08}. 
 Specifically,
 whereas a software bug can cause a software artifact to fail,
 a security bug can allow a malicious user to alter the execution
@@ -133,10 +133,10 @@ bugs with other bug categories.
 In the same manner, we tried to examine the relationship
 between the size of a project release and the number of security bugs that it contains,
 knowing the that research has produced contradictory results on this
-issue~\cite{BP84,SYTP85,NBZ06,GKMS00}.
+issue~\cite{SYTP85,NBZ06,GKMS00}.
 Finally, we examined the Maven ecosystem as a whole from a security
 perspective. Its structure gave us the opportunity to see if a project version that is a dependency of
-a large number of others contains a low rate of security bugs~\cite{MW10}.
+a large number of others contains a low rate of security bugs.
 %In this case we can strengthen the relationship between Linus' Law and
 %software security as Meneely et al. have already indicated~\cite{MW10}.
 
@@ -478,8 +478,8 @@ and 45,559 coming from the second.
 
 \begin{table*}[t]
 \centering
-\caption{Number of Project Releases that Contain at Least One Security
-  High Bug}
+\caption{Number of Project Releases that Contain at Least One ``Security
+  High" Bug}
 \label{tbl:sev}
 \leavevmode
 	\begin{tabular}{p{31em} r}
@@ -523,8 +523,8 @@ literature~\cite{SH09}.
 Another observation involves bugs that we could call {\it
 Security High} and they are a subset of the {\it Security} category.
 Such bugs are related to vulnerabilities that appear due to the lack of user-input
-validation and can lead to damaging attacks like {\sc sql} injection~\cite{RL12} and
-Cross-Site Scripting~\cite{WS08}.
+validation and can lead to damaging attacks like {\sc sql} injection and
+Cross-Site Scripting~\cite{RL12}.
 To exploit such vulnerabilities, a malicious user does
 not have to know anything about the application internals. For all the other
 bugs, another program should be written to incorporate references to
@@ -664,7 +664,7 @@ cases, the difference is not spectacular. \textbf{In all cases a bug persists
 on average between two and three versions}, with the difference being
 in the decimal digits.
 
-\subsubsection{The Relation of Defects with the size of a {\sc jar}}
+\subsubsection{The Relation of Defects with the size of a JAR}
 
 We explored the relation between defects with the size of a project
 version, measured by the size of its {\sc jar} file by carrying out
@@ -675,8 +675,8 @@ project and version. The results, all statistically significant ($p
 effect than the other categories}, even {\it Security Low} that nearly
 tops the list.
 % dds proposed the following:
-Given that, we could say that it would be productive to search for and fix
-security bugs even if a project grows bigger.
+%Given that, we could say that it would be productive to search for and fix
+%security bugs even if a project grows bigger.
 
 \begin{table}[hbt]
     \centering
