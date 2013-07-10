@@ -14,51 +14,24 @@
 
 \numberofauthors{5} 
 
-\author{
-% 1st. author
-\alignauthor Dimitris Mitropoulos\\
-       \affaddr{Department of Management Science and Technology}\\
-       \affaddr{Athens University of Economics and Business}\\
-       \email{dimitro@aueb.gr}
-% 2nd. author
-\alignauthor Vassilios Karakoidas\\
-       \affaddr{Department of Management Science and Technology}\\
-       \affaddr{Athens University of Economics and Business}\\
-       \email{bkarak@aueb.gr}
-% 3rd. author
-\alignauthor Panos Louridas\\
-       \affaddr{Department of Management Science and Technology}\\
-       \affaddr{Athens University of Economics and Business}\\
-       \email{louridas@aueb.gr}
-\and  % use '\and' if you need 'another row' of author names
-% 4th. author
-\alignauthor Georgios Gousios\\
-       \affaddr{Software Engineering Research Group}\\
-       \affaddr{Delft University of Technology}\\
-       \email{G.Gousios@tudelft.nl}
-% 5th. author
-\alignauthor Diomidis Spinellis\\
-       \affaddr{Department of Management Science and Technology}\\
-       \affaddr{Athens University of Economics and Business}\\
-       \email{dds@aueb.gr}
-}
-
 \maketitle
 \begin{abstract}
-Security bugs are critical programming errors that can lead to serious
+{\bf Background.} Security bugs are critical programming errors that can lead to serious
 vulnerabilities in software. Such bugs may allow an attacker to take over
-an application, steal data or prevent the application from working at all.
-We used the projects stored in the Maven repository to study the
+an application, steal data or prevent the application from working at all.\\
+{\bf Aim.} We used the projects stored in the Maven repository to study the
 characteristics of security bugs individually and in relation to other software
-bugs. In particular, we analyzed every project version of the repository by using a
-popular static analysis tool. Then, by taking advantage of
-the repository's project history and dependency data we studied
+bugs. Specifically, we studied
 the evolution of security bugs through time. In addition, we examined
 their persistence and their relationship with
 a) the size of the corresponding version, and
-b) other bug categories.
-Our findings indicate that there is no simple rule governing the number of
-security bugs as a project evolves.
+b) other bug categories.\\
+{\bf Method.} We analyzed every project version of the Maven repository by
+using FindBugs, a popular static analysis tool.
+To see how security bugs evolve over time we took advantage of
+the repository's project history and dependency data.\\
+{\bf Results.} Our results indicate that there is no simple rule governing
+the number of security bugs as a project evolves.
 In particular, we cannot say that across projects security-related
 defect counts increase or decrease significantly over time.
 Furthermore, security bugs are not eliminated in a
@@ -67,7 +40,13 @@ In addition, the relation of security bugs with a project's size
 appears to be different from the relation of the bugs
 coming from other categories.
 Finally, even if bugs seem to have similar behaviour,
-severe security bugs seem to be unassociated with other bug categories.
+severe security bugs seem to be unassociated with other bug categories.\\
+{\bf Conclusions.} Our findings indicate that further research should be done
+to analyze the evolution of security bugs. Given the fact that our experiment
+included only Java projects, similar research could be done for another
+ecosystem. Finally, the fact that projects have their own idiosyncrasies
+concerning security bugs, could help us find the common characteristics
+of the projects where security bugs increase over time.
 \end{abstract}
 
 
@@ -100,7 +79,7 @@ versions of all the projects that exist in the
 {\it Maven Central Repository}\footnote{\url{http://mvnrepository.com/}}
 (approximately 265GB of data---see Section~\ref{sec:data}).
 Then we observed the changes that involved the security bugs and their characteristics.
-This research builds upon our earlier work on the topic~\cite{MGS12}.
+%This research builds upon our earlier work on the topic~\cite{MGS12}.
 
 We chose to focus our study on security bugs rather than other types of
 software defects. This is because compared to other bug categories,
@@ -229,7 +208,7 @@ the method and others. Then they searched for similar signatures between
 versions. In their research they studied the evolution of 116 sequential
 builds of the Sun Java Sevelopment Kit ({\sc jdk}). Their findings indicated that
 high priority bugs are fixed over time. To improve the precision of bug
-detection, Kim et al.~\cite{KE07b,KE07} proposed a history-based warning
+detection, Kim et al.~\cite{KE07b} proposed a history-based warning
 prioritization algorithm by mining the history of bug-fixes of three
 different projects. Working towards the same direction, Heckman
 et al.~\cite{HW09,HW08} have introduced benchmarks that use specific
