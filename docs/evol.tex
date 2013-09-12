@@ -261,7 +261,7 @@ over time. In particular, they measured the rate at which new code
 has been introduced and the rate at which defects have been reported over
 a 7.5 year period and fifteen releases.
 Even though the authors present statistical evidence
-of a decrease in the rate at which vulnerabilities are being reported
+of a decrease in the rate at which vulnerabilities are being reported,
 defects seem to appear persistent for a period of at least 2.6 years.
 Massacci et al.~\cite{MNN11} observed
 the evolution of software defects by examining six major versions of Firefox.
@@ -545,8 +545,10 @@ Such bugs are related to vulnerabilities that appear due to the lack of user-inp
 validation and can lead to damaging attacks like {\sc sql} injection and
 Cross-Site Scripting~\cite{RL12}.
 To exploit such vulnerabilities, a malicious user does
-not have to know anything about the application internals. For all the other
-bugs, another program should be written to incorporate references to
+not have to know anything about the application internals. For almost
+all the other security bugs (coming from the {\it Malicious Code}
+category and the rest of the {\it Security} category bugs),
+another program should be written to incorporate references to
 mutable objects, access non-final fields, etc.
 Also, as bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
 if an application has bugs coming from the {\it Security High} category,
@@ -560,7 +562,10 @@ they use the code fragments that include the defects.
 The remaining bugs of the {\it Security} category
 are grouped together with the bugs of the {\it Malicious Code} category
 in another subcategory that we call {\it Security Low}.
-This categorization was done specifically to point out the
+This category contains for the most part, bugs
+that imply violations of good {\sc oop} (object-oriented programming)
+design (i.e. keeping variables private to classes and others).
+The above categorization was done specifically to point out the
 behaviour of bugs that currently top the corresponding lists of most
 security providers.\footnote{\url{http://cwe.mitre.org/top25/index.html}}
 
@@ -692,7 +697,11 @@ project and version. The results, all statistically significant ($p
 \ll 0.05$) can be seen in Table~\ref{tbl:jarsizecorr}.  \textbf{The {\it
   Security High} category stands out by having a remarkably lower
 effect than the other categories}, even {\it Security Low} that nearly
-tops the list.
+tops the list. As we mentioned earlier, bugs that belong to the
+{\it Security High} category are related with
+user-input validation issues. Hence, even if a programmer adds
+code to a new version, if this code does not requires user
+input the possibility of such bug is minimal. 
 % dds proposed the following:
 %Given that, we could say that it would be productive to search for and fix
 %security bugs even if a project grows bigger.
@@ -755,8 +764,11 @@ Also, having an average of two to three versions persistence in a sample where 6
 of the projects have three versions, is not a positive result especially in the
 case of the {\it Security High} bugs. Concerning the relation between
 severe security bugs and a project's size
-we showed that they are not proportionally related. Furthermore, the
-pairwise correlations between all categories indicated that even though all the other
+we showed that they are not proportionally related.
+Given that, we could say that it would be productive to search for and fix
+security bugs even if a project grows bigger.
+Furthermore, the pairwise correlations between all categories
+indicated that even though all the other
 categories are related, severe bugs do not appear together with the other bugs.
 Also, it is interesting to see that security bugs were one of the top two
 bug categories existing in a large ecosystem. Finally, we highlighted the
@@ -776,11 +788,18 @@ or dependencies of others.
 Furthermore, the fact that projects have their own idiosyncrasies concerning
 security bugs, could help us answer questions like: what are the common
 characteristics of the projects where security bugs increase over time?
+In addition, by examining source code repositories more closely we could see how
+different development styles (i.e. size of commits, number of developers)
+affect projects.
 
-Future work on our approach could also involve the observation of
-other ecosystems, that serve different languages, in the same manner
-such as, Python's PyPY (Python Package Index), Perl's {\sc cpan}
-(Comprehensive Perl Archive Network), and Ruby's
+By selecting an large ecosystem that includes applications written only
+in Java, we excluded by default measurements that involve vulnerabilities like
+the infamous buffer overflow defects~\cite{K11}. Still, by examining software
+artefacts with similar characteristics facilitates the formation of
+an experiment. Thus, future work on our approach could also involve
+the observation of other ecosystems, that serve different languages,
+in the same manner such as, Python's PyPY (Python Package Index),
+Perl's {\sc cpan} (Comprehensive Perl Archive Network), and Ruby's
 RubyGems.
 
 Our data and code will be publicly available upon publication.
@@ -792,9 +811,9 @@ This research has been co-financed by the European Union (European Social Fund
 Research Funding Program: Heracleitus II. Investing in knowledge society
 through the {\sc esf}.
 
-The project has been also co-financed by the European Regional Development Fund ({\sc erdf})
-and national funds and is a part of the Operational Programme ``Competitiveness \&
-Entrepreneurship" ({\sc opce} II), Measure ``{\sc cooperation}" (Action I).
+%The project has been also co-financed by the European Regional Development Fund ({\sc erdf})
+%and national funds and is a part of the Operational Programme ``Competitiveness \&
+%Entrepreneurship" ({\sc opce} II), Measure ``{\sc cooperation}" (Action I).
 
 \bibliographystyle{abbrv}
 \bibliography{evol}  
