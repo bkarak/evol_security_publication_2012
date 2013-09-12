@@ -14,6 +14,38 @@
 
 \numberofauthors{5} 
 
+\author{
+% 1st. author
+\alignauthor
+Dimitris Mitropoulos\\
+       \affaddr{Department of Management Science and Technology}\\
+       \affaddr{Athens University of Economics and Business}\\
+       \email{dimitro@aueb.gr}
+% 2nd. author
+\alignauthor
+Vassilios Karakoidas\\
+       \affaddr{Department of Management Science and Technology}\\
+       \affaddr{Athens University of Economics and Business}\\
+       \email{bkarak@aueb.gr}
+% 3rd. author
+\alignauthor
+Panos Louridas\\
+       \affaddr{Department of Management Science and Technology}\\
+       \affaddr{Athens University of Economics and Business}\\
+       \email{louridas@aueb.gr}
+\and  % use '\and' if you need 'another row' of author names
+% 4th. author
+\alignauthor Georgios Gousios\\
+       \affaddr{Software Engineering Research Group}\\
+       \affaddr{Delft University of Technology}\\
+       \email{G.Gousios@tudelft.nl}
+% 5th. author
+\alignauthor Diomidis Spinellis\\
+       \affaddr{Department of Management Science and Technology}\\
+       \affaddr{Athens University of Economics and Business}\\
+       \email{dds@aueb.gr}
+}
+
 \maketitle
 \begin{abstract}
 {\bf Background.} Security bugs are critical programming errors that can lead to serious
@@ -67,8 +99,7 @@ One of the most common approaches to identify security bugs is
 inspection of the program's source or object code without executing
 it. 
 
-In this
-paper we present how we used a large software ecosystem to analyse the
+In this paper we present how we used a large software ecosystem to analyse the
 relationship of different types of security vulnerabilities to 
 evolving software packages.
 For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
@@ -223,7 +254,16 @@ categorizing bugs they also showed the frequency of specific bugs in specific
 components.
 
 Completing the above approaches, our work focuses on the subset of security bugs.
-Focusing on such bugs is not a new idea. Massacci et al.~\cite{MNN11} observed
+Focusing on such bugs is not a new idea.
+Ozment and Schechter~\cite{OS06} examined the code base of the Open{\sc bsd}
+operating system to determine whether its security is increasing
+over time. In particular, they measured the rate at which new code
+has been introduced and the rate at which defects have been reported over
+a 7.5 year period and fifteen releases.
+Even though the authors present statistical evidence
+of a decrease in the rate at which vulnerabilities are being reported
+defects seem to appear persistent for a period of at least 2.6 years.
+Massacci et al.~\cite{MNN11} observed
 the evolution of software defects by examining six major versions of Firefox.
 To achieve this they created a database schema that contained information
 coming from the ``Mozilla Firefox-related Security Advisories'' ({\sc mfsa})
