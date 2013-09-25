@@ -1,4 +1,6 @@
-\documentclass{sig-alternate}
+\documentclass[letterpaper,twocolumn,10pt]{article}
+\usepackage{usenix,epsfig,endnotes}
+%\documentclass{sig-alternate}
 
 \usepackage{url}
 \usepackage{amsmath}
@@ -9,48 +11,41 @@
 \usepackage{array}
 \usepackage{color}
 
-\usepackage{ulem}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
 
 \begin{document}
 
-\title{Dismal Code: Studying the Evolution of Security Bugs}
+\date{}
 
-\numberofauthors{5} 
+\title{\Large \bf Dismal Code: Studying the Evolution of Security Bugs}
 
 \author{
-% 1st. author
-\alignauthor
-Dimitris Mitropoulos\\
-       \affaddr{Department of Management Science and Technology}\\
-       \affaddr{Athens University of Economics and Business}\\
-       \email{dimitro@aueb.gr}
-% 2nd. author
-\alignauthor
-Vassilios Karakoidas\\
-       \affaddr{Department of Management Science and Technology}\\
-       \affaddr{Athens University of Economics and Business}\\
-       \email{bkarak@aueb.gr}
-% 3rd. author
-\alignauthor
-Panos Louridas\\
-       \affaddr{Department of Management Science and Technology}\\
-       \affaddr{Athens University of Economics and Business}\\
-       \email{louridas@aueb.gr}
-\and  % use '\and' if you need 'another row' of author names
-% 4th. author
-\alignauthor Georgios Gousios\\
-       \affaddr{Software Engineering Research Group}\\
-       \affaddr{Delft University of Technology}\\
-       \email{G.Gousios@tudelft.nl}
-% 5th. author
-\alignauthor Diomidis Spinellis\\
-       \affaddr{Department of Management Science and Technology}\\
-       \affaddr{Athens University of Economics and Business}\\
-       \email{dds@aueb.gr}
-}
+{\rm Dimitris Mitropoulos}\\
+Department of Management Science and Technology,
+Athens University of Economics and Business
+\and
+{\rm Vassilios Karakoidas}\\
+Department of Management Science and Technology,
+Athens University of Economics and Business
+\and
+{\rm Panos Louridas}\\
+Department of Management Science and Technology,
+Athens University of Economics and Business
+\and
+{\rm Georgios Gousios}\\
+Software Engineering Research Group,
+Delft University of Technology
+\and
+{\rm Diomidis Spinellis}\\
+Department of Management Science and Technology,
+Athens University of Economics and Business
+} 
 
 \maketitle
-\begin{abstract}
+\thispagestyle{empty}
+
+\subsection*{Abstract}
 {\bf Background.} Security bugs are critical programming errors that can lead to serious
 vulnerabilities in software. Such bugs may allow an attacker to take over
 an application, steal data or prevent the application from working at all.\\
@@ -82,12 +77,7 @@ included only Java projects, similar research could be done for another
 ecosystem. Finally, the fact that projects have their own idiosyncrasies
 concerning security bugs, could help us find the common characteristics
 of the projects where security bugs increase over time.
-\end{abstract}
 
-
-\keywords{Security Bugs, Static Analysis, Software Evolution, Software
-Security, Maven, FindBugs.
-}
 \section{Introduction}
 
 A security bug is a programming error that introduces a potentially exploitable
@@ -105,12 +95,12 @@ it.
 In this paper we present how we used a large software ecosystem to analyse the
 relationship of different types of security vulnerabilities to 
 evolving software packages.
-For our research we used {\it FindBugs},\footnote{\url{http://findbugs.sourceforge.net/}}
+For our research we used {\it FindBugs},\endnote{\url{http://findbugs.sourceforge.net/}}
 a static analysis tool that examines bytecode to detect software bugs and has already been used in
 research~\cite{AP10,HP07,SHP06}.
 Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the
-{\it Maven Central Repository}\footnote{\url{http://mvnrepository.com/}}
+{\it Maven Central Repository}\endnote{\url{http://mvnrepository.com/}}
 (approximately 265GB of data---see Section~\ref{sec:data}).
 Then we observed the changes that involved the security bugs and their characteristics.
 %This research builds upon our earlier work on the topic~\cite{MGS12}.
@@ -270,7 +260,7 @@ Massacci et al.~\cite{MNN11} observed
 the evolution of software defects by examining six major versions of Firefox.
 To achieve this they created a database schema that contained information
 coming from the ``Mozilla Firefox-related Security Advisories'' ({\sc mfsa})
-list,\footnote{\url{http://www.mozilla.org/projects/security/known-vulnerabilities.html}}
+list,\endnote{\url{http://www.mozilla.org/projects/security/known-vulnerabilities.html}}
 Bugzilla entries and others. Their findings indicated that security bugs are
 persistent over time. They also showed that there are many web users that use
 old versions of Firefox, meaning that old attacks will continue to work.
@@ -554,7 +544,7 @@ the {\it Malicious Code} category and the rest of
 the {\it Security} category bugs),
 another program should be written to incorporate references to
 mutable objects, access non-final fields, etc.
-Also, as bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
+Also, as bug descriptions indicate,\endnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
 if an application has bugs coming from the {\it Security High} category,
 it might have more vulnerabilities that FindBugs doesn't report.
 Table~\ref{tbl:sev} presents the number
@@ -571,7 +561,7 @@ that imply violations of good {\sc oop} (object-oriented programming)
 design (i.e. keeping variables private to classes and others).
 The above categorization was done specifically to point out the
 behaviour of bugs that currently top the corresponding lists of most
-security providers.\footnote{\url{http://cwe.mitre.org/top25/index.html}}
+security providers.\endnote{\url{http://cwe.mitre.org/top25/index.html}}
 
 {\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow''.
 In a context like this, we expect that
@@ -757,7 +747,7 @@ issues might be needed.
 We analysed more than 260GB of interdependent project versions to see
 how security bugs evolve over time, their persistence, their relation
 with other bug categories, and their relationship with size in terms
-of bytecode.\footnote{Our data and code are available online at:
+of bytecode.\endnote{Our data and code are available online at:
 \url{https://github.com/bkarak/evol_security_publication_2012}}
 
 Our primary hypothesis was that security bugs, and especially severe
@@ -820,7 +810,8 @@ through the {\sc esf}.
 %and national funds and is a part of the Operational Programme ``Competitiveness \&
 %Entrepreneurship" ({\sc opce} II), Measure ``{\sc cooperation}" (Action I).
 
-\bibliographystyle{abbrv}
+
+{\footnotesize \bibliographystyle{acm}
 \bibliography{evol}  
 
 \begin{landscape}

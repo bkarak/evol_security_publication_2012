@@ -7,7 +7,7 @@ pdf:
 
 clean:
 	-rm -f *.aux
-	-rm -f *.bbl *.blg *.log *.out *.dvi *~ *.spl
+	-rm -f *.bbl *.ent *.blg *.log *.out *.dvi *~ *.spl
 	-rm -f evol.pdf
 
 count-words:
