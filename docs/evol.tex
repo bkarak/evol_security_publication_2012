@@ -7,6 +7,9 @@
 \usepackage{threeparttable}
 \usepackage{pdflscape}
 \usepackage{array}
+\usepackage{color}
+
+\usepackage{ulem}
 
 \begin{document}
 
@@ -545,9 +548,10 @@ Such bugs are related to vulnerabilities that appear due to the lack of user-inp
 validation and can lead to damaging attacks like {\sc sql} injection and
 Cross-Site Scripting~\cite{RL12}.
 To exploit such vulnerabilities, a malicious user does
-not have to know anything about the application internals. For almost
-all the other security bugs (coming from the {\it Malicious Code}
-category and the rest of the {\it Security} category bugs),
+not have to know anything about the application internals.
+For almost all the other security bugs (coming from
+the {\it Malicious Code} category and the rest of
+the {\it Security} category bugs),
 another program should be written to incorporate references to
 mutable objects, access non-final fields, etc.
 Also, as bug descriptions indicate,\footnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
@@ -698,10 +702,10 @@ project and version. The results, all statistically significant ($p
   Security High} category stands out by having a remarkably lower
 effect than the other categories}, even {\it Security Low} that nearly
 tops the list. As we mentioned earlier, bugs that belong to the
-{\it Security High} category are related with
+{\it Security High} category are related to
 user-input validation issues. Hence, even if a programmer adds
-code to a new version, if this code does not requires user
-input the possibility of such bug is minimal. 
+code to a new version, if this code does not require user
+input, the possibility of such bug is minimal. 
 % dds proposed the following:
 %Given that, we could say that it would be productive to search for and fix
 %security bugs even if a project grows bigger.
@@ -726,7 +730,9 @@ We do not find projects with only a certain kind of bug; bugs come
 upon projects in swarms of different kinds. Bugs of the {\it Security
   High} category, though, are different: they are either not
 associated with other bugs, or only weakly so. Perhaps it takes a
-special kind of blunder to make it a security hazard.
+special kind of blunder to make it a security hazard. Thus, to find such
+defects, code reviewers with experience in software security
+issues might be needed.
 
 %\begin{table*}[t]
 %    \centering
