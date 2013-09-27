@@ -46,7 +46,9 @@ Athens University of Economics and Business}\\
 } 
 
 \maketitle
+%\thispagestyle{empty}
 \thispagestyle{empty}
+\pagestyle{empty}
 
 \subsection*{Abstract}
 {\bf Background.} Security bugs are critical programming errors that can lead to serious
@@ -399,7 +401,6 @@ that 75\% (13,129) of the projects have a maximum of 8 versions.
 
 \begin{table}[t]
 \centering
-\caption{Descriptive Statistics Measurements for the Maven Repository}
 \label{tbl:repository}
 \begin{tabular}{l r}
 \hline
@@ -416,6 +417,7 @@ Range (over versions) & 337\\
 3$^{rd}$ Quartile (over versions) & 8\\
 \hline
 \end{tabular}
+\caption{Descriptive Statistics Measurements for the Maven Repository}
 \end{table}
 
 \begin{figure}[t]
@@ -456,7 +458,6 @@ Then, we provide a comprehensive analysis of the results and highlight our key f
 
 \begin{table*}[t]
 \centering
-\caption{Bug Categorisation According to FindBugs}
 \label{tbl:bug-cat}
 \begin{tabular}{l p{29em}}
 \hline
@@ -480,6 +481,7 @@ Security & Involves input validation issues, unauthorized database connections
 and others. \\
 \hline
 \end{tabular}
+\caption{Bug Categorisation According to FindBugs}
 \end{table*}
 
 \subsection{Overview and Initial Results}
@@ -493,8 +495,6 @@ and 45,559 coming from the second.
 
 \begin{table*}[t]
 \centering
-\caption{Number of Project Releases that Contain at Least One ``Security
-  High" Bug}
 \label{tbl:sev}
 \leavevmode
 	\begin{tabular}{p{31em} r}
@@ -512,6 +512,8 @@ and 45,559 coming from the second.
 	{\sc xss}: Servlet reflected cross site scripting vulnerability & 142\\
 	\hline
 	\end{tabular}
+\caption{Number of Project Releases that Contain at Least One ``Security
+  High" Bug}
 \end{table*}
 
 Our first results involve the most popular bugs in the Maven repository.
@@ -815,7 +817,9 @@ through the {\sc esf}.
 
 
 {\footnotesize \bibliographystyle{acm}
-\bibliography{evol}  
+\bibliography{evol}
+
+\theendnotes
 
 \begin{landscape}
   \begin{table}
