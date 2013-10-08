@@ -106,7 +106,7 @@ research~\cite{AP10,HP07,SHP06}.
 Specifically, we ran FindBugs on all the project
 versions of all the projects that exist in the
 {\it Maven Central Repository}\endnote{\url{http://mvnrepository.com/}}
-(approximately 265GB of data---see Section~\ref{sec:data}).
+(approximately 265{\sc gb} of data---see Section~\ref{sec:data}).
 Then we observed the changes that involved the security bugs and their characteristics.
 %This research builds upon our earlier work on the topic~\cite{MGS12}.
 
@@ -329,7 +329,11 @@ the public Maven repository.
 Maven is a build automation tool used primarily for Java projects and it is
 hosted by the Apache Software Foundation.
 It uses {\sc xml} to describe the software project being built, its dependencies
-on other external modules, the build order, and required plug-ins. 
+on other external modules, the build order, and required plug-ins.
+To build a software component, it dynamically downloads Java libraries
+and Maven plug-ins from the Maven central repository,
+and stores them in a local cache. The repository can be updated with
+new projects and also with new versions of existing projects. 
 
 First, we scanned the Maven repository for appropriate {\sc jar}s and created a
 list that included them. We discuss the {\sc jar} selection process in the next 
