@@ -359,7 +359,7 @@ the data processing architecture can be seen in Figure~\ref{fig:arch}.
   \begin{center}
     \includegraphics[scale=0.73]{figures/arch.pdf}
   \end{center}
-  \caption{The Data Processing Architecture}
+  \caption{The data processing architecture.}
   \label{fig:arch}
 \end{figure}
 
@@ -405,6 +405,7 @@ that 75\% (13,129) of the projects have a maximum of 8 versions.
 
 \begin{table}[t]
 \centering
+\caption{Descriptive statistics measurements for the Maven repository.}
 \label{tbl:repository}
 \begin{tabular}{l r}
 \hline
@@ -421,13 +422,12 @@ Range (over versions) & 337\\
 3$^{rd}$ Quartile (over versions) & 8\\
 \hline
 \end{tabular}
-\caption{Descriptive Statistics Measurements for the Maven Repository}
 \end{table}
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[scale=0.37]{version_count.pdf}
-	\caption{Distribution of Version Count Among Project Population}
+	\caption{Distribution of version count among project population.}
 	\label{fig:version-count}
 \end{figure}
 
@@ -462,6 +462,7 @@ Then, we provide a comprehensive analysis of the results and highlight our key f
 
 \begin{table*}[t]
 \centering
+\caption{Bug categorisation according to FindBugs.}
 \label{tbl:bug-cat}
 \begin{tabular}{l p{29em}}
 \hline
@@ -485,7 +486,6 @@ Security & Involves input validation issues, unauthorized database connections
 and others. \\
 \hline
 \end{tabular}
-\caption{Bug Categorisation According to FindBugs}
 \end{table*}
 
 \subsection{Overview and Initial Results}
@@ -496,29 +496,6 @@ Table~\ref{tbl:bug-cat}). Two of them involve security issues: {\it Security} an
 Malicious Code}. From the total number of releases, 4,353 of them contained
 at least one bug coming from the first category
 and 45,559 coming from the second.
-
-\begin{table*}[t]
-\centering
-\label{tbl:sev}
-\leavevmode
-	\begin{tabular}{p{31em} r}
-	\hline
-	Bug Description & Number of Project Releases\\
- 	\hline
-	{\sc hrs}: {\sc http} cookie formed from untrusted input & 151\\
-	{\sc hrs}: {\sc http} response splitting vulnerability & 1,579\\
-	{\sc pt}: absolute path traversal in servlet  & 103\\
-	{\sc pt}: relative path traversal in servlet & 57\\
-	{\sc sql}: non-constant string passed to execute method on an {\sc sql} statement & 1,875\\
-	{\sc sql}: a prepared statement is generated from a non-constant String & 1,486\\
-	{\sc xss}: {\sc jsp} reflected cross site scripting vulnerability & 18\\
-	{\sc xss}: Servlet reflected cross site scripting vulnerability in error page & 90\\
-	{\sc xss}: Servlet reflected cross site scripting vulnerability & 142\\
-	\hline
-	\end{tabular}
-\caption{Number of Project Releases that Contain at Least One ``Security
-  High" Bug}
-\end{table*}
 
 Our first results involve the most popular bugs in the Maven repository.
 Figure~\ref{fig:bug-per} shows how software bugs are distributed among the
@@ -537,7 +514,7 @@ literature~\cite{SH09}.
 \begin{figure}[t]
 	\centering
 	\includegraphics[scale=0.35]{bug_percent}
-	\caption{Bug Percentage in Maven Repository}
+	\caption{Bug percentage in Maven repository.}
 	\label{fig:bug-per} 
 \end{figure}
 
@@ -556,7 +533,7 @@ mutable objects, access non-final fields, etc.
 Also, as bug descriptions indicate,\endnote{\url{http://findbugs.sourceforge.net/bugDescriptions.html}}
 if an application has bugs coming from the {\it Security High} category,
 it might have more vulnerabilities that FindBugs doesn't report.
-Table~\ref{tbl:sev} presents the number
+Table~\ref{tbl:severe} presents the number
 of releases where at least one of these bugs exists. In essence, 5,501 releases
 ($\approx 4,77\% $), contained at
 least one severe security bug. Given the fact that other projects include these
@@ -571,6 +548,29 @@ design (i.e. keeping variables private to classes and others).
 The above categorization was done specifically to point out the
 behaviour of bugs that currently top the corresponding lists of most
 security providers.\endnote{\url{http://cwe.mitre.org/top25/index.html}}
+
+\begin{table*}[t]
+\centering
+\caption{Number of project releases that contain at least one ``Security
+  High" bug.}
+\label{tbl:severe}
+\leavevmode
+	\begin{tabular}{p{31em} r}
+	\hline
+	Bug Description & Number of Project Releases\\
+ 	\hline
+	{\sc hrs}: {\sc http} cookie formed from untrusted input & 151\\
+	{\sc hrs}: {\sc http} response splitting vulnerability & 1,579\\
+	{\sc pt}: absolute path traversal in servlet  & 103\\
+	{\sc pt}: relative path traversal in servlet & 57\\
+	{\sc sql}: non-constant string passed to execute method on an {\sc sql} statement & 1,875\\
+	{\sc sql}: a prepared statement is generated from a non-constant String & 1,486\\
+	{\sc xss}: {\sc jsp} reflected cross site scripting vulnerability & 18\\
+	{\sc xss}: Servlet reflected cross site scripting vulnerability in error page & 90\\
+	{\sc xss}: Servlet reflected cross site scripting vulnerability & 142\\
+	\hline
+	\end{tabular}
+\end{table*}
 
 {\it Linus's Law} states that ``given enough eyeballs, all bugs are shallow''.
 In a context like this, we expect that
@@ -651,7 +651,7 @@ code change that runs foul of some bug identification rule.
 
 \begin{table}[tphp]
     \centering
-    \caption{Correlations between Version and Defects Count}
+    \caption{Correlations between version and defects count.}
     \label{tbl:bugsperversion}
     \input{bugsperversion.tex}
 \end{table}
@@ -711,7 +711,7 @@ input, the possibility of such bug is minimal.
 
 \begin{table}[hbt]
     \centering
-    \caption{Correlations between {\sc jar} size and Defects Count}
+    \caption{Correlations between {\sc jar} size and defects count.}
     \label{tbl:jarsizecorr}
     \input{jarsizecorr.tex}
 \end{table}
@@ -746,14 +746,14 @@ issues might be needed.
 \begin{figure}[t]
   \centering
   \includegraphics[scale=0.43]{corrplot.pdf}
-  \caption{Correlation matrix plot for bug categories}
+  \caption{Correlation matrix plot for bug categories.}
   \label{fig:corrplot}
 \end{figure}
 
 \section{Conclusions and Future Work}
 \label{sec:con}
 
-We analysed more than 260GB of interdependent project versions to see
+We analysed more than 260{\sc gb} of interdependent project versions to see
 how security bugs evolve over time, their persistence, their relation
 with other bug categories, and their relationship with size in terms
 of bytecode.\endnote{Our data and code are available online at:
@@ -801,7 +801,7 @@ affect projects.
 By selecting an large ecosystem that includes applications written only
 in Java, we excluded by default measurements that involve vulnerabilities like
 the infamous buffer overflow defects~\cite{K11}. Still, by examining software
-artefacts with similar characteristics facilitates the formation of
+artifacts with similar characteristics facilitates the formation of
 an experiment. Thus, future work on our approach could also involve
 the observation of other ecosystems, that serve different languages,
 in the same manner such as, Python's PyPY (Python Package Index),
@@ -828,7 +828,7 @@ through the {\sc esf}.
 \begin{landscape}
   \begin{table}
     \setlength{\extrarowheight}{0.10cm}
-    \caption{Bug Persistence Comparison}
+    \caption{Bug persistence comparison.}
     \label{tbl:bug_persistence}
     \resizebox{0.95\columnwidth}{!}{
     \input{bug_persistence.tex}}\\
